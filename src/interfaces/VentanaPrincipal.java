@@ -1,5 +1,7 @@
 package interfaces;
 
+import java.awt.event.*;
+
 import javax.swing.*;
 
 public class VentanaPrincipal extends JFrame {
@@ -28,6 +30,18 @@ public class VentanaPrincipal extends JFrame {
 	private static void agregarBotones(JPanel panel) {
 		JButton salir = new JButton("Salir");
 		JButton hola = new JButton("Hola");
+		
+		salir.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				System.exit(ABORT);
+			}
+		});
+		
+		hola.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				System.out.println("hola desde la consola");
+			}
+		});
 		
 		panel.add(hola);
 		panel.add(salir);
