@@ -21,4 +21,17 @@ public class Estacion {
 		this.estado = EstadoEstacion.OPERATIVA;
 		this.mantenimientos = new ArrayList<TareaDeMantenimiento>();
 	}
+	
+	public void cambiarEstado() {
+		
+		if(this.estado == EstadoEstacion.OPERATIVA) {
+			TareaDeMantenimiento tarea = new TareaDeMantenimiento();
+			this.mantenimientos.add(tarea);
+			this.estado = EstadoEstacion.EN_MANTENIMIENTO;
+			return;
+		}
+	}
+	public void cambiarEstado(String obs) {
+		
+	}
 }
