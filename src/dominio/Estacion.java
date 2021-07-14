@@ -1,5 +1,7 @@
 package dominio;
 
+import java.util.List;
+
 public class Estacion {
 	
 	private String id_estacion;
@@ -7,4 +9,6 @@ public class Estacion {
 	private String horario_apertura;
 	private String horario_cierre;
 	private EstadoEstacion estado;
+	private List<TareaDeMantenimiento> mantenimientos;
+	
 }
