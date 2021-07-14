@@ -9,5 +9,6 @@ public class Boleto {
 	private Cliente cliente;
 	private Estacion origen;
 	private Estacion destino;
+	private Camino camino;
 	
 }
