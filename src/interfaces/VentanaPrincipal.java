@@ -1,5 +1,6 @@
 package interfaces;
 
+import java.awt.BorderLayout;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -43,11 +44,27 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 		
+		
 		panel.add(hola);
 		panel.add(salir);
+
 	}
+	
 	private static void agregarLabel(JPanel panel) {
-		panel.add(new JLabel("hola muy buenas tardes lector"));
+		JLabel txt = new JLabel("haceme click");
+		txt.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				JDialog dialog = new JDialog();
+				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				dialog.add(new JLabel("VENTANA EMERGENTE"),BorderLayout.CENTER);
+				dialog.pack();
+				dialog.setSize(200,400);
+				dialog.setLocation(200,200);
+				dialog.setVisible(true);
+			}
+		});
+		panel.add(txt);
 	}
+	
 	
 }
