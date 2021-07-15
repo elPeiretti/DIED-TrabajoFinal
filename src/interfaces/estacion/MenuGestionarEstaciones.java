@@ -1,4 +1,4 @@
-package interfaces;
+package interfaces.estacion;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
@@ -22,7 +22,7 @@ public class MenuGestionarEstaciones extends JPanel {
 	public MenuGestionarEstaciones() {
 		
 		JButton jb_buscar = new JButton("Buscar");
-		jb_buscar.setBounds(454, 59, 67, 23);
+		jb_buscar.setBounds(118, 219, 67, 23);
 		jb_buscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -36,7 +36,7 @@ public class MenuGestionarEstaciones extends JPanel {
 		add(jb_buscar);
 		
 		JButton jb_alta = new JButton("Dar de Alta");
-		jb_alta.setBounds(438, 171, 89, 23);
+		jb_alta.setBounds(353, 81, 89, 23);
 		jb_alta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -48,14 +48,14 @@ public class MenuGestionarEstaciones extends JPanel {
 		add(jb_alta);
 		
 		JButton jb_modificar = new JButton("Modificar");
-		jb_modificar.setBounds(438, 239, 77, 23);
+		jb_modificar.setBounds(365, 178, 77, 23);
 		jb_modificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		
 		JButton jb_eliminar = new JButton("Eliminar");
-		jb_eliminar.setBounds(438, 205, 73, 23);
+		jb_eliminar.setBounds(364, 127, 73, 23);
 		add(jb_eliminar);
 		
 		jtf_cierre = new JTextField();
