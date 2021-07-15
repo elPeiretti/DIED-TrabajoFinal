@@ -7,6 +7,11 @@ import javax.swing.*;
 
 public class VentanaPrincipal extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2017141174165126162L;
+
 	public VentanaPrincipal() {
 		super("Ventana Principal");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);

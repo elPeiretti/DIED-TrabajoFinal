@@ -9,6 +9,11 @@ import javax.swing.JTextField;
 
 public class MenuEdicionLineaDeTransporte extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 82309887738866888L;
+	
 	private JTextField jtf_nombre;
 	private JTextField jtf_horario_apertura;
 	private JButton jb_guardar_cambios;
@@ -16,7 +21,7 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 	private JLabel lbl_nombre;
 	private JLabel lbl_color;
 	private JLabel lbl_estado;
-	private JComboBox jcb_estado;
+	private JComboBox<String> jcb_estado;
 	/**
 	 * Create the panel.
 	 */
@@ -53,8 +58,8 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 		lbl_estado.setBounds(70, 150, 46, 14);
 		add(lbl_estado);
 		
-		jcb_estado = new JComboBox();
-		jcb_estado.setModel(new DefaultComboBoxModel(new String[] {"Activa", "No Activa"}));
+		jcb_estado = new JComboBox<String>();
+		jcb_estado.setModel(new DefaultComboBoxModel<String>(new String[] {"Activa", "No Activa"}));
 		jcb_estado.setMaximumRowCount(2);
 		jcb_estado.setBounds(183, 145, 86, 24);
 		add(jcb_estado);

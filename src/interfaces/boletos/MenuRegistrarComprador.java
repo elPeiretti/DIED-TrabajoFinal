@@ -6,6 +6,11 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 
 public class MenuRegistrarComprador extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 457210643685330418L;
+	
 	private JTextField jtf_nombre_cliente;
 	private JTextField jtf_email_cliente;
 	private JLabel lbl_nombre_cliente;

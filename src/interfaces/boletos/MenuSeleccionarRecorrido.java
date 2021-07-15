@@ -1,27 +1,22 @@
 package interfaces.boletos;
 
-import java.awt.Color;
-
-import javax.swing.AbstractListModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.border.LineBorder;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class MenuSeleccionarRecorrido extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4060984994480535340L;
+	
 	private JTable jtable_recorridos;
 	private JLabel lbl_estacion_origen;
-	private JComboBox jcb_estacion_origen;
-	private JComboBox jcb_estacion_destino;
+	private JComboBox<String> jcb_estacion_origen;
+	private JComboBox<String> jcb_estacion_destino;
 	private JLabel lbl_estacion_destino;
 	private JButton jb_siguiente;
 	private JButton jb_cancelar;
@@ -36,11 +31,11 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		lbl_estacion_origen.setBounds(20, 16, 92, 14);
 		add(lbl_estacion_origen);
 		
-		jcb_estacion_origen = new JComboBox();
+		jcb_estacion_origen = new JComboBox<String>();
 		jcb_estacion_origen.setBounds(109, 11, 99, 24);
 		add(jcb_estacion_origen);
 		
-		jcb_estacion_destino = new JComboBox();
+		jcb_estacion_destino = new JComboBox<String>();
 		jcb_estacion_destino.setBounds(329, 11, 99, 24);
 		add(jcb_estacion_destino);
 		

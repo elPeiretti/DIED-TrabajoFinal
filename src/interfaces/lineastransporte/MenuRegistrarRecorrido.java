@@ -1,13 +1,10 @@
 package interfaces.lineastransporte;
 
 import javax.swing.JPanel;
-import javax.swing.JFormattedTextField;
-import javax.swing.DropMode;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
-import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.DefaultComboBoxModel;
@@ -18,12 +15,17 @@ import javax.swing.AbstractListModel;
 import javax.swing.ListSelectionModel;
 
 public class MenuRegistrarRecorrido extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8877632157246809361L;
+	
 	private JTextField jtf_costo;
 	private JLabel lbl_estacion_origen;
-	private JComboBox jcb_estacion_origen;
+	private JComboBox<String> jcb_estacion_origen;
 	private JButton jb_agregar_trayecto;
 	private JLabel lbl_estacion_destino;
-	private JComboBox jcb_estacion_destino;
+	private JComboBox<String> jcb_estacion_destino;
 	private JSpinner jspin_distancia;
 	private JLabel lbl_distancia;
 	private JLabel lbl_duracion;
@@ -31,7 +33,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 	private JLabel lbl_capacidad_maxima;
 	private JSpinner jspin_capacidad_maxima;
 	private JLabel lbl_costo;
-	private JComboBox jcb_estado;
+	private JComboBox<String> jcb_estado;
 	private JLabel lbl_estado;
 	private JList jlist_trayectos;
 	private JButton jb_guardar_recorrido;
@@ -47,7 +49,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 		lbl_estacion_origen.setBounds(20, 16, 92, 14);
 		add(lbl_estacion_origen);
 		
-		jcb_estacion_origen = new JComboBox();
+		jcb_estacion_origen = new JComboBox<String>();
 		jcb_estacion_origen.setBounds(109, 11, 99, 24);
 		add(jcb_estacion_origen);
 		
@@ -56,7 +58,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 		jb_agregar_trayecto.setBounds(248, 109, 173, 23);
 		add(jb_agregar_trayecto);
 		
-		jcb_estacion_destino = new JComboBox();
+		jcb_estacion_destino = new JComboBox<String>();
 		jcb_estacion_destino.setBounds(329, 11, 99, 24);
 		add(jcb_estacion_destino);
 		
@@ -103,8 +105,8 @@ public class MenuRegistrarRecorrido extends JPanel {
 		lbl_costo.setBounds(227, 80, 57, 14);
 		add(lbl_costo);
 		
-		jcb_estado = new JComboBox();
-		jcb_estado.setModel(new DefaultComboBoxModel(new String[] {"Activa", "Inactiva"}));
+		jcb_estado = new JComboBox<String>();
+		jcb_estado.setModel(new DefaultComboBoxModel<String>(new String[] {"Activa", "Inactiva"}));
 		jcb_estado.setMaximumRowCount(2);
 		jcb_estado.setBounds(109, 108, 99, 24);
 		add(jcb_estado);

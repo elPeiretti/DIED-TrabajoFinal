@@ -6,6 +6,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class MenuPrincipal extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6659076339767881277L;
+	
 	private JButton jb_registrar_venta;
 	private JButton jb_algoritmos_estaciones;
 	private JButton jb_gestionar_lineas;

@@ -9,6 +9,11 @@ import javax.swing.DefaultComboBoxModel;
 
 public class MenuEdicionEstacion extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8724189951605684229L;
+	
 	private JTextField jtf_nombre;
 	private JTextField jtf_horario_apertura;
 	private JTextField jtf_horario_cierre;
@@ -18,7 +23,7 @@ public class MenuEdicionEstacion extends JPanel {
 	private JLabel lbl_horario_apertura;
 	private JLabel lbl_horario_cierre;
 	private JLabel lbl_estado;
-	private JComboBox jcb_estado;
+	private JComboBox<String> jcb_estado;
 	/**
 	 * Create the panel.
 	 */
@@ -64,8 +69,8 @@ public class MenuEdicionEstacion extends JPanel {
 		lbl_estado.setBounds(70, 198, 46, 14);
 		add(lbl_estado);
 		
-		jcb_estado = new JComboBox();
-		jcb_estado.setModel(new DefaultComboBoxModel(new String[] {"Operativa", "En Mantenimiento"}));
+		jcb_estado = new JComboBox<String>();
+		jcb_estado.setModel(new DefaultComboBoxModel<String>(new String[] {"Operativa", "En Mantenimiento"}));
 		jcb_estado.setMaximumRowCount(2);
 		jcb_estado.setBounds(183, 193, 86, 24);
 		add(jcb_estado);

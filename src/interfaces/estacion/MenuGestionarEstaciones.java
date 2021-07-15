@@ -7,8 +7,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.JList;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.border.LineBorder;
@@ -17,6 +15,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 public class MenuGestionarEstaciones extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4997700988942456105L;
+	
 	private JTextField jtf_nombre;
 	private JTextField jtf_apertura;
 	private JTextField jtf_cierre;
@@ -24,7 +27,7 @@ public class MenuGestionarEstaciones extends JPanel {
 	private JButton jb_alta;
 	private JButton jb_regresar;
 	private JButton jb_eliminar;
-	private JComboBox jcb_estado;
+	private JComboBox<String> jcb_estado;
 	private JButton jb_modificar;
 	private JLabel lbl_horario_cierre;
 	private JLabel lbl_nombre;
@@ -84,8 +87,8 @@ public class MenuGestionarEstaciones extends JPanel {
 		add(jtf_apertura);
 		jtf_apertura.setColumns(10);
 		
-		jcb_estado = new JComboBox();
-		jcb_estado.setModel(new DefaultComboBoxModel(new String[] {"Operativa", "En Mantenimiento"}));
+		jcb_estado = new JComboBox<String>();
+		jcb_estado.setModel(new DefaultComboBoxModel<String>(new String[] {"Operativa", "En Mantenimiento"}));
 		jcb_estado.setMaximumRowCount(2);
 		jcb_estado.setBounds(331, 6, 95, 24);
 		add(jcb_estado);

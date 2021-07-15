@@ -8,12 +8,17 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
 public class MenuAlgoritmos extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7369278906871564582L;
+	
 	private JButton jb_prox_mantenimiento;
 	private JButton jb_page_rank;
 	private JButton jb_flujo_max;
-	private JComboBox jcb_estacion_destino;
+	private JComboBox<String> jcb_estacion_destino;
 	private JLabel lbl_estacion_destino;
-	private JComboBox jcb_estacion_origen;
+	private JComboBox<String> jcb_estacion_origen;
 	private JLabel lbl_estacion_origen;
 
 	/**
@@ -38,7 +43,7 @@ public class MenuAlgoritmos extends JPanel {
 		jb_prox_mantenimiento.setBounds(263, 180, 185, 54);
 		add(jb_prox_mantenimiento);
 		
-		jcb_estacion_origen = new JComboBox();
+		jcb_estacion_origen = new JComboBox<String>();
 		jcb_estacion_origen.setBounds(10, 88, 115, 24);
 		add(jcb_estacion_origen);
 		
@@ -46,7 +51,7 @@ public class MenuAlgoritmos extends JPanel {
 		lbl_estacion_origen.setBounds(23, 65, 99, 14);
 		add(lbl_estacion_origen);
 		
-		jcb_estacion_destino = new JComboBox();
+		jcb_estacion_destino = new JComboBox<String>();
 		jcb_estacion_destino.setBounds(10, 145, 115, 24);
 		add(jcb_estacion_destino);
 		
