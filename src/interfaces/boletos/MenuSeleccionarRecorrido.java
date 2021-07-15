@@ -65,13 +65,13 @@ public class MenuSeleccionarRecorrido extends JPanel {
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				Object.class, Integer.class, Double.class
+				Integer.class, Integer.class, Double.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 			boolean[] columnEditables = new boolean[] {
-				true, false, false
+				false, true, true
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];

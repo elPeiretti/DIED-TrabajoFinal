@@ -11,6 +11,10 @@ import javax.swing.SwingConstants;
 import javax.swing.JList;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 public class MenuGestionarEstaciones extends JPanel {
 	private JTextField jtf_nombre;
@@ -22,10 +26,11 @@ public class MenuGestionarEstaciones extends JPanel {
 	private JButton jb_eliminar;
 	private JComboBox jcb_estado;
 	private JButton jb_modificar;
-	private JLabel lbl_cierre;
+	private JLabel lbl_horario_cierre;
 	private JLabel lbl_nombre;
-	private JLabel lbl_apertura;
+	private JLabel lbl_horario_apertura;
 	private JLabel lbl_estado;
+	private JTable jtable_estaciones;
 
 	/**
 	 * Create the panel.
@@ -33,7 +38,7 @@ public class MenuGestionarEstaciones extends JPanel {
 	public MenuGestionarEstaciones() {
 		
 		jb_buscar = new JButton("Buscar");
-		jb_buscar.setBounds(118, 219, 67, 23);
+		jb_buscar.setBounds(359, 71, 67, 23);
 		jb_buscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -41,66 +46,93 @@ public class MenuGestionarEstaciones extends JPanel {
 		setLayout(null);
 		
 		jtf_nombre = new JTextField();
-		jtf_nombre.setBounds(115, 68, 106, 20);
+		jtf_nombre.setBounds(115, 8, 89, 20);
 		add(jtf_nombre);
 		jtf_nombre.setColumns(10);
 		add(jb_buscar);
 		
 		jb_alta = new JButton("Dar de Alta");
-		jb_alta.setBounds(353, 81, 89, 23);
+		jb_alta.setBounds(260, 71, 89, 23);
 		jb_alta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		
 		jb_regresar = new JButton("Regresar");
-		jb_regresar.setBounds(25, 25, 77, 23);
+		jb_regresar.setBounds(10, 266, 77, 23);
 		add(jb_regresar);
 		add(jb_alta);
 		
 		jb_modificar = new JButton("Modificar");
-		jb_modificar.setBounds(365, 178, 77, 23);
+		jb_modificar.setBounds(360, 266, 77, 23);
 		jb_modificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		
 		jb_eliminar = new JButton("Eliminar");
-		jb_eliminar.setBounds(364, 127, 73, 23);
+		jb_eliminar.setBounds(277, 266, 73, 23);
 		add(jb_eliminar);
 		
 		jtf_cierre = new JTextField();
-		jtf_cierre.setBounds(115, 99, 106, 20);
+		jtf_cierre.setBounds(331, 39, 95, 20);
 		add(jtf_cierre);
 		jtf_cierre.setColumns(10);
 		
 		jtf_apertura = new JTextField();
-		jtf_apertura.setBounds(115, 130, 106, 20);
+		jtf_apertura.setBounds(115, 39, 89, 20);
 		add(jtf_apertura);
 		jtf_apertura.setColumns(10);
 		
 		jcb_estado = new JComboBox();
 		jcb_estado.setModel(new DefaultComboBoxModel(new String[] {"Operativa", "En Mantenimiento"}));
 		jcb_estado.setMaximumRowCount(2);
-		jcb_estado.setBounds(115, 161, 106, 24);
+		jcb_estado.setBounds(331, 6, 95, 24);
 		add(jcb_estado);
 		add(jb_modificar);
 		
-		lbl_cierre = new JLabel("Cierre:");
-		lbl_cierre.setBounds(54, 102, 48, 14);
-		add(lbl_cierre);
+		lbl_horario_cierre = new JLabel("Horario de Cierre:");
+		lbl_horario_cierre.setBounds(214, 42, 106, 14);
+		add(lbl_horario_cierre);
 		
 		lbl_nombre = new JLabel("Nombre:");
-		lbl_nombre.setBounds(57, 71, 48, 14);
+		lbl_nombre.setBounds(10, 11, 48, 14);
 		add(lbl_nombre);
 		
-		lbl_apertura = new JLabel("Apertura:");
-		lbl_apertura.setBounds(54, 133, 48, 14);
-		add(lbl_apertura);
+		lbl_horario_apertura = new JLabel("Horario de Apertura:");
+		lbl_horario_apertura.setBounds(10, 42, 106, 14);
+		add(lbl_horario_apertura);
 		
 		lbl_estado = new JLabel("Estado:");
-		lbl_estado.setBounds(54, 166, 48, 14);
+		lbl_estado.setBounds(214, 11, 48, 14);
 		add(lbl_estado);
+		
+		jtable_estaciones = new JTable();
+		jtable_estaciones.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Nombre", "Estado", "Horario de apertura", "Horario de cierre"
+			}
+		) {
+			Class[] columnTypes = new Class[] {
+				String.class, String.class, String.class, String.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		jtable_estaciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		jtable_estaciones.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		jtable_estaciones.setFillsViewportHeight(true);
+		jtable_estaciones.setBounds(26, 105, 400, 150);
+		add(jtable_estaciones);
 
 	}
 }
