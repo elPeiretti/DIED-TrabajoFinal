@@ -19,6 +19,12 @@ import javax.swing.table.DefaultTableModel;
 
 public class MenuSeleccionarRecorrido extends JPanel {
 	private JTable jtable_recorridos;
+	private JLabel lbl_estacion_origen;
+	private JComboBox jcb_estacion_origen;
+	private JComboBox jcb_estacion_destino;
+	private JLabel lbl_estacion_destino;
+	private JButton jb_siguiente;
+	private JButton jb_cancelar;
 
 	/**
 	 * Create the panel.
@@ -26,27 +32,27 @@ public class MenuSeleccionarRecorrido extends JPanel {
 	public MenuSeleccionarRecorrido() {
 		setLayout(null);
 		
-		JLabel lbl_estacion_origen = new JLabel("Estacion origen:");
+		lbl_estacion_origen = new JLabel("Estacion origen:");
 		lbl_estacion_origen.setBounds(20, 16, 92, 14);
 		add(lbl_estacion_origen);
 		
-		JComboBox jcb_estacion_origen = new JComboBox();
+		jcb_estacion_origen = new JComboBox();
 		jcb_estacion_origen.setBounds(109, 11, 99, 24);
 		add(jcb_estacion_origen);
 		
-		JComboBox jcb_estacion_destino = new JComboBox();
+		jcb_estacion_destino = new JComboBox();
 		jcb_estacion_destino.setBounds(329, 11, 99, 24);
 		add(jcb_estacion_destino);
 		
-		JLabel lbl_estacion_destino = new JLabel("Estacion destino:");
+		lbl_estacion_destino = new JLabel("Estacion destino:");
 		lbl_estacion_destino.setBounds(227, 16, 92, 14);
 		add(lbl_estacion_destino);
 		
-		JButton jb_siguiente = new JButton("Siguiente");
+		jb_siguiente = new JButton("Siguiente");
 		jb_siguiente.setBounds(311, 254, 117, 23);
 		add(jb_siguiente);
 		
-		JButton jb_cancelar = new JButton("Cancelar");
+		jb_cancelar = new JButton("Cancelar");
 		jb_cancelar.setBounds(23, 254, 89, 23);
 		add(jb_cancelar);
 		
