@@ -78,8 +78,10 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		JLabel lbl_estado = new JLabel("Estado:");
 		lbl_estado.setBounds(54, 131, 48, 14);
 		add(lbl_estado);
+		
+		JButton jb_registrar_recorrido = new JButton("Registrar recorrido");
+		jb_registrar_recorrido.setBounds(319, 219, 123, 23);
+		add(jb_registrar_recorrido);
 
 	}
-	
-
 }

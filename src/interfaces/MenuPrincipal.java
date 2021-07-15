@@ -12,29 +12,29 @@ public class MenuPrincipal extends JPanel {
 	 */
 	public MenuPrincipal() {
 		
-		JButton btnNewButton = new JButton("Gestionar Estaciones");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton jb_gestionar_estaciones = new JButton("Gestionar Estaciones");
+		jb_gestionar_estaciones.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		
-		JButton btnNewButton_1 = new JButton("Gestionar Lineas de Transporte");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButton jb_gestionar_lineas = new JButton("Gestionar Lineas de Transporte");
+		jb_gestionar_lineas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		
-		JButton btnNewButton_2 = new JButton("Registrar Venta");
-		add(btnNewButton_2);
+		JButton jb_registrar_venta = new JButton("Registrar Venta");
+		add(jb_registrar_venta);
 		
-		JButton btnNewButton_3 = new JButton("Algoritmos Estaciones");
-		btnNewButton_3.addActionListener(new ActionListener() {
+		JButton jb_algoritmos_estaciones = new JButton("Algoritmos Estaciones");
+		jb_algoritmos_estaciones.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		add(btnNewButton_3);
-		add(btnNewButton_1);
-		add(btnNewButton);
+		add(jb_algoritmos_estaciones);
+		add(jb_gestionar_lineas);
+		add(jb_gestionar_estaciones);
 
 	}
 
