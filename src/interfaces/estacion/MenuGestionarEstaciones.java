@@ -14,7 +14,13 @@ import java.awt.Color;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+import excepciones.DatosDeEstacionIncorrectosException;
+import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.JTextPane;
+import javax.swing.UIManager;
 
 public class MenuGestionarEstaciones extends JPanel {
 	/**
@@ -37,6 +43,7 @@ public class MenuGestionarEstaciones extends JPanel {
 	private JLabel lbl_estado;
 	private JTable jtable_estaciones;
 	private VentanaPrincipal ventana_contenedora;
+	private JTextPane jtp_errores;
 
 	/**
 	 * Create the panel.
@@ -118,6 +125,12 @@ public class MenuGestionarEstaciones extends JPanel {
 		jtable_estaciones.setFillsViewportHeight(true);
 		jtable_estaciones.setBounds(26, 105, 400, 150);
 		
+		jtp_errores = new JTextPane();
+		jtp_errores.setEditable(false);
+		jtp_errores.setForeground(Color.RED);
+		jtp_errores.setBackground(UIManager.getColor("Button.background"));
+		jtp_errores.setBounds(10, 323, 416, 66);
+		
 		this.agregarActionListener();
 		add(lbl_estado);
 		add(lbl_horario_apertura);
@@ -133,7 +146,8 @@ public class MenuGestionarEstaciones extends JPanel {
 		add(jb_buscar);
 		add(jtf_nombre);
 		add(jtable_estaciones);
-
+		add(jtp_errores);
+	
 	}
 	
 	private void agregarActionListener() {
@@ -148,5 +162,18 @@ public class MenuGestionarEstaciones extends JPanel {
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.EDIT_ESTACION);
 			}
 		});
+		
+		jb_alta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					GestorValidaciones.validarEstacion(jtf_nombre.getText(),jtf_apertura.getText(),jtf_cierre.getText());
+					jtp_errores.setText("");
+				}
+				catch(DatosDeEstacionIncorrectosException exp) {
+					jtp_errores.setText(exp.errores);
+				}
+			}
+		});
+		
 	}
 }
