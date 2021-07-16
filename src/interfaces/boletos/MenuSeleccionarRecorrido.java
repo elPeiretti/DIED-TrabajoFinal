@@ -7,6 +7,11 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import interfaces.VentanaPrincipal;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 public class MenuSeleccionarRecorrido extends JPanel {
 	/**
 	 * 
@@ -20,36 +25,38 @@ public class MenuSeleccionarRecorrido extends JPanel {
 	private JLabel lbl_estacion_destino;
 	private JButton jb_siguiente;
 	private JButton jb_cancelar;
+	private VentanaPrincipal ventana_contenedora;
 
 	/**
 	 * Create the panel.
 	 */
-	public MenuSeleccionarRecorrido() {
+	public MenuSeleccionarRecorrido(VentanaPrincipal contenedor) {
+		this.ventana_contenedora = contenedor;
 		setLayout(null);
 		
 		lbl_estacion_origen = new JLabel("Estacion origen:");
 		lbl_estacion_origen.setBounds(20, 16, 92, 14);
-		add(lbl_estacion_origen);
+		
 		
 		jcb_estacion_origen = new JComboBox<String>();
 		jcb_estacion_origen.setBounds(109, 11, 99, 24);
-		add(jcb_estacion_origen);
+		
 		
 		jcb_estacion_destino = new JComboBox<String>();
 		jcb_estacion_destino.setBounds(329, 11, 99, 24);
-		add(jcb_estacion_destino);
+		
 		
 		lbl_estacion_destino = new JLabel("Estacion destino:");
 		lbl_estacion_destino.setBounds(227, 16, 92, 14);
-		add(lbl_estacion_destino);
+		
 		
 		jb_siguiente = new JButton("Siguiente");
 		jb_siguiente.setBounds(311, 254, 117, 23);
-		add(jb_siguiente);
+		
 		
 		jb_cancelar = new JButton("Cancelar");
 		jb_cancelar.setBounds(23, 254, 89, 23);
-		add(jb_cancelar);
+		
 		
 		jtable_recorridos = new JTable();
 		jtable_recorridos.setModel(new DefaultTableModel(
@@ -78,7 +85,23 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		jtable_recorridos.getColumnModel().getColumn(2).setResizable(false);
 		jtable_recorridos.getColumnModel().getColumn(2).setPreferredWidth(70);
 		jtable_recorridos.setBounds(30, 43, 400, 200);
+		
+		this.agregarActionListener();
+		add(jcb_estacion_origen);
+		add(jb_cancelar);
+		add(jb_siguiente);
+		add(lbl_estacion_destino);
+		add(jcb_estacion_destino);
+		add(lbl_estacion_origen);
 		add(jtable_recorridos);
 
+	}
+	
+	private void agregarActionListener() {
+		jb_cancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ventana_contenedora.cambiarPanel(VentanaPrincipal.MENU_PPAL);
+			}
+		});
 	}
 }

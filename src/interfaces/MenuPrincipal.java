@@ -2,7 +2,10 @@ package interfaces;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+
 import java.awt.event.ActionListener;
+import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 
 public class MenuPrincipal extends JPanel {
@@ -15,36 +18,53 @@ public class MenuPrincipal extends JPanel {
 	private JButton jb_algoritmos_estaciones;
 	private JButton jb_gestionar_lineas;
 	private JButton jb_gestionar_estaciones;
+	private VentanaPrincipal ventana_contenedora;
 
 	/**
 	 * Create the panel.
 	 */
-	public MenuPrincipal() {
+	public MenuPrincipal(VentanaPrincipal contenedor) {
+		this.ventana_contenedora = contenedor;
 		
 		jb_gestionar_estaciones = new JButton("Gestionar Estaciones");
-		jb_gestionar_estaciones.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		
 		jb_gestionar_lineas = new JButton("Gestionar Lineas de Transporte");
-		jb_gestionar_lineas.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		
 		jb_registrar_venta = new JButton("Registrar Venta");
-		add(jb_registrar_venta);
-		
 		jb_algoritmos_estaciones = new JButton("Algoritmos Estaciones");
-		jb_algoritmos_estaciones.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		this.agregarActionListener();
+		
+		add(jb_registrar_venta);
 		add(jb_algoritmos_estaciones);
 		add(jb_gestionar_lineas);
 		add(jb_gestionar_estaciones);
 
+	}
+	
+	private void agregarActionListener() {
+		jb_gestionar_estaciones.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ventana_contenedora.cambiarPanel(VentanaPrincipal.GEST_ESTACIONES);
+			}
+		});
+		
+		jb_gestionar_lineas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ventana_contenedora.cambiarPanel(VentanaPrincipal.GEST_LINEA);
+			}
+		});
+		
+		jb_registrar_venta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ventana_contenedora.cambiarPanel(VentanaPrincipal.SELEC_RECORRIDO);
+			}
+		});
+		
+		jb_algoritmos_estaciones.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ventana_contenedora.cambiarPanel(VentanaPrincipal.ALGORITMOS);
+			}
+		});
+		
+		
 	}
 
 }
