@@ -133,5 +133,17 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.MENU_PPAL);
 			}
 		});
+		
+		jb_modificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ventana_contenedora.cambiarPanel(VentanaPrincipal.EDIT_LINEA);
+			}
+		});
+		
+		jb_registrar_recorrido.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ventana_contenedora.cambiarPanel(VentanaPrincipal.REG_RECORRIDO);
+			}
+		});
 	}
 }

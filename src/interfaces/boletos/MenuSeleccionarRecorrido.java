@@ -103,5 +103,11 @@ public class MenuSeleccionarRecorrido extends JPanel {
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.MENU_PPAL);
 			}
 		});
+		
+		jb_siguiente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ventana_contenedora.cambiarPanel(VentanaPrincipal.REG_COMPRADOR);
+			}
+		});
 	}
 }

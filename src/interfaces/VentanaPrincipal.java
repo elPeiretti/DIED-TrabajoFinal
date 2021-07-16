@@ -1,6 +1,5 @@
 package interfaces;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -88,6 +87,7 @@ public class VentanaPrincipal extends JFrame {
 		//Primer menu que se muestra es el principal
 		this.cambiarPanel(MENU_PPAL);
 		
+		this.setExtendedState(MAXIMIZED_BOTH); //temporal
 		
 	}
 	
