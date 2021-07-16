@@ -14,7 +14,11 @@ import java.awt.Color;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+import excepciones.DatosDeLineaDeTransporteIncorrectosException;
+import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
+import javax.swing.JTextPane;
+import javax.swing.UIManager;
 
 public class MenuGestionarLineaDeTransporte extends JPanel {
 	
@@ -24,7 +28,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 	private static final long serialVersionUID = -6814597321105357697L;
 	
 	private JTextField jtf_nombre;
-	private JTextField jtf_cierre;
+	private JTextField jtf_color;
 	private JButton jb_buscar;
 	private JButton jb_regresar;
 	private JButton jb_alta;
@@ -35,8 +39,9 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 	private JLabel lbl_nombre;
 	private JLabel lbl_estado;
 	private JButton jb_registrar_recorrido;
-	private JTable table;
+	private JTable jtable_lineas;
 	private VentanaPrincipal ventana_contenedora;
+	private JTextPane jtp_errores;
 	/**
 	 * Create the panel.
 	 */
@@ -63,9 +68,9 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		jb_eliminar = new JButton("Eliminar");
 		jb_eliminar.setBounds(154, 266, 73, 23);
 		
-		jtf_cierre = new JTextField();
-		jtf_cierre.setBounds(205, 13, 89, 20);
-		jtf_cierre.setColumns(10);
+		jtf_color = new JTextField();
+		jtf_color.setBounds(205, 13, 89, 20);
+		jtf_color.setColumns(10);
 		
 		jcb_estado = new JComboBox<String>();
 		jcb_estado.setModel(new DefaultComboBoxModel<String>(new String[] {"Activa", "No Activa"}));
@@ -85,8 +90,8 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		jb_registrar_recorrido.setBounds(314, 266, 123, 23);
 		
 		
-		table = new JTable();
-		table.setModel(new DefaultTableModel(
+		jtable_lineas = new JTable();
+		jtable_lineas.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
@@ -106,9 +111,9 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 				return columnEditables[column];
 			}
 		});
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		table.setBounds(26, 95, 389, 150);
+		jtable_lineas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		jtable_lineas.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		jtable_lineas.setBounds(26, 95, 389, 150);
 		
 		this.agregarActionListener();
 		add(jb_registrar_recorrido);
@@ -117,13 +122,20 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		add(lbl_color);
 		add(jcb_estado);
 		add(jb_modificar);
-		add(jtf_cierre);
+		add(jtf_color);
 		add(jb_eliminar);
 		add(jb_regresar);
 		add(jb_alta);
 		add(jb_buscar);
 		add(jtf_nombre);
-		add(table);
+		add(jtable_lineas);
+		
+		jtp_errores = new JTextPane();
+		jtp_errores.setEditable(false);
+		jtp_errores.setBackground(UIManager.getColor("Button.background"));
+		jtp_errores.setForeground(Color.RED);
+		jtp_errores.setBounds(10, 300, 427, 89);
+		add(jtp_errores);
 
 	}
 	
@@ -136,13 +148,35 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		
 		jb_modificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ventana_contenedora.cambiarPanel(VentanaPrincipal.EDIT_LINEA);
+				if(jtable_lineas.getSelectedRow()!=-1)
+					ventana_contenedora.cambiarPanel(VentanaPrincipal.EDIT_LINEA);
 			}
 		});
 		
 		jb_registrar_recorrido.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ventana_contenedora.cambiarPanel(VentanaPrincipal.REG_RECORRIDO);
+				if(jtable_lineas.getSelectedRow()!=-1)
+					ventana_contenedora.cambiarPanel(VentanaPrincipal.REG_RECORRIDO);
+			}
+		});
+		
+		jb_eliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(jtable_lineas.getSelectedRow()!=-1)
+					//// eliminar de la BD
+					System.out.println("BORRAR");
+			}
+		});
+		
+		jb_alta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					GestorValidaciones.validarLineaDeTransporte(jtf_nombre.getText(),jtf_color.getText());
+					jtp_errores.setText("");
+				}
+				catch(DatosDeLineaDeTransporteIncorrectosException exc) {
+					jtp_errores.setText(exc.errores);
+				}
 			}
 		});
 	}

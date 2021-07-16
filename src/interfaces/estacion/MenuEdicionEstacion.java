@@ -13,6 +13,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTextPane;
+import javax.swing.UIManager;
+
+import excepciones.DatosDeEstacionIncorrectosException;
+import gestores.GestorValidaciones;
+
+import java.awt.Color;
 
 public class MenuEdicionEstacion extends JPanel {
 	
@@ -32,6 +39,7 @@ public class MenuEdicionEstacion extends JPanel {
 	private JLabel lbl_estado;
 	private JComboBox<String> jcb_estado;
 	private VentanaPrincipal ventana_contenedora;
+	private JTextPane jtp_errores;
 	/**
 	 * Create the panel.
 	 */
@@ -85,6 +93,13 @@ public class MenuEdicionEstacion extends JPanel {
 		add(lbl_horario_cierre);
 		add(lbl_estado);
 		add(jcb_estado);
+		
+		jtp_errores = new JTextPane();
+		jtp_errores.setEditable(false);
+		jtp_errores.setForeground(Color.RED);
+		jtp_errores.setBackground(UIManager.getColor("Button.background"));
+		jtp_errores.setBounds(10, 301, 430, 88);
+		add(jtp_errores);
 	}
 	
 	private void agregarActionListener() {
@@ -92,6 +107,20 @@ public class MenuEdicionEstacion extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				//falta logica para recuperar el estado anterior
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.GEST_ESTACIONES);
+			}
+		});
+		
+		jb_guardar_cambios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					GestorValidaciones.validarEstacion(jtf_nombre.getText(),jtf_horario_apertura.getText(),jtf_horario_cierre.getText());
+					jtp_errores.setText("");
+					// falta guardar los cambios en la BD y mostrar el mensaje de OK para luego regresar a la pantalla anterior
+					
+				}
+				catch(DatosDeEstacionIncorrectosException exp) {
+					jtp_errores.setText(exp.errores);
+				}
 			}
 		});
 	}

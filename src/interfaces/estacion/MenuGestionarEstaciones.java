@@ -159,7 +159,16 @@ public class MenuGestionarEstaciones extends JPanel {
 		
 		jb_modificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ventana_contenedora.cambiarPanel(VentanaPrincipal.EDIT_ESTACION);
+				if(jtable_estaciones.getSelectedRow()!=-1)
+					ventana_contenedora.cambiarPanel(VentanaPrincipal.EDIT_ESTACION);
+			}
+		});
+		
+		jb_eliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(jtable_estaciones.getSelectedRow()!=-1)
+					// ELIMINAR DE LA BASE DE DATOS Y DE LA BUSQUEDA
+					System.out.println("BORRAR");
 			}
 		});
 		
@@ -167,6 +176,18 @@ public class MenuGestionarEstaciones extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					GestorValidaciones.validarEstacion(jtf_nombre.getText(),jtf_apertura.getText(),jtf_cierre.getText());
+					jtp_errores.setText("");
+				}
+				catch(DatosDeEstacionIncorrectosException exp) {
+					jtp_errores.setText(exp.errores);
+				}
+			}
+		});
+		
+		jb_buscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					GestorValidaciones.validarHorariosEstacion(jtf_apertura.getText(),jtf_cierre.getText());
 					jtp_errores.setText("");
 				}
 				catch(DatosDeEstacionIncorrectosException exp) {

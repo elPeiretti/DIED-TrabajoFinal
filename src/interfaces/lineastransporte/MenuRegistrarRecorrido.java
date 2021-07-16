@@ -8,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,10 +17,14 @@ import java.awt.event.ActionListener;
 import javax.swing.JList;
 import javax.swing.border.LineBorder;
 
+import excepciones.DatosDeTrayectoIncorrectosException;
+import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
 
 import javax.swing.AbstractListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.JTextPane;
+import javax.swing.UIManager;
 
 public class MenuRegistrarRecorrido extends JPanel {
 	/**
@@ -42,9 +48,11 @@ public class MenuRegistrarRecorrido extends JPanel {
 	private JComboBox<String> jcb_estado;
 	private JLabel lbl_estado;
 	private JList jlist_trayectos;
+	private DefaultListModel<String> jlist_trayectos_contenido;
 	private JButton jb_guardar_recorrido;
 	private JButton jb_cancelar;
 	private VentanaPrincipal ventana_contenedora;
+	private JTextPane jtp_errores;
 
 	/**
 	 * Create the panel.
@@ -57,6 +65,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 		lbl_estacion_origen.setBounds(20, 16, 92, 14);
 		
 		jcb_estacion_origen = new JComboBox<String>();
+		jcb_estacion_origen.setModel(new DefaultComboBoxModel(new String[] {"A", "B"}));
 		jcb_estacion_origen.setBounds(109, 11, 99, 24);
 		
 		jb_agregar_trayecto = new JButton("Agregar trayecto al recorrido");
@@ -64,6 +73,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 		jb_agregar_trayecto.setBounds(248, 109, 173, 23);
 		
 		jcb_estacion_destino = new JComboBox<String>();
+		jcb_estacion_destino.setModel(new DefaultComboBoxModel(new String[] {"A", "D"}));
 		jcb_estacion_destino.setBounds(329, 11, 99, 24);
 		
 		lbl_estacion_destino = new JLabel("Estacion destino:");
@@ -110,15 +120,10 @@ public class MenuRegistrarRecorrido extends JPanel {
 		
 		jlist_trayectos = new JList();
 		jlist_trayectos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		jlist_trayectos.setModel(new AbstractListModel() {
-			String[] values = new String[] {};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
+		
+		jlist_trayectos_contenido = new DefaultListModel<String>();
+		
+		jlist_trayectos.setModel(jlist_trayectos_contenido);
 		jlist_trayectos.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		jlist_trayectos.setBounds(20, 143, 408, 100);
 		
@@ -147,6 +152,13 @@ public class MenuRegistrarRecorrido extends JPanel {
 		add(jcb_estacion_origen);
 		add(lbl_estacion_origen);
 		add(jb_cancelar);
+		
+		jtp_errores = new JTextPane();
+		jtp_errores.setForeground(Color.RED);
+		jtp_errores.setEditable(false);
+		jtp_errores.setBackground(UIManager.getColor("Button.background"));
+		jtp_errores.setBounds(10, 286, 418, 103);
+		add(jtp_errores);
 
 	}
 	
@@ -154,6 +166,28 @@ public class MenuRegistrarRecorrido extends JPanel {
 		jb_cancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.GEST_LINEA);
+			}
+		});
+		
+		jb_agregar_trayecto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String origen = jcb_estacion_origen.getSelectedItem().toString();
+				String destino = jcb_estacion_destino.getSelectedItem().toString();
+				
+				try {
+					GestorValidaciones.validarTrayecto(origen,destino,jtf_costo.getText());
+					jtp_errores.setText("");
+					jlist_trayectos_contenido.addElement(origen+" -> "+destino
+														+", $"+jtf_costo.getText()
+														+", "+jspin_distancia.getValue().toString()+" Km"
+														+", "+jspin_duracion.getValue().toString()+" min"
+														+", "+jspin_capacidad_maxima.getValue().toString()+" personas");
+					
+					// fijar el combobox jcb_origen al destino seleccionado TO DO
+				}
+				catch(DatosDeTrayectoIncorrectosException exc){
+					jtp_errores.setText(exc.errores);
+				}
 			}
 		});
 	}
