@@ -14,6 +14,7 @@ import java.awt.Color;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+import dominio.Estacion;
 import excepciones.DatosDeEstacionIncorrectosException;
 import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
@@ -44,6 +45,7 @@ public class MenuGestionarEstaciones extends JPanel {
 	private JTable jtable_estaciones;
 	private VentanaPrincipal ventana_contenedora;
 	private JTextPane jtp_errores;
+	private DefaultTableModel jtable_estaciones_contenido;
 
 	/**
 	 * Create the panel.
@@ -100,30 +102,19 @@ public class MenuGestionarEstaciones extends JPanel {
 		
 		
 		jtable_estaciones = new JTable();
-		jtable_estaciones.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Nombre", "Estado", "Horario de apertura", "Horario de cierre"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, String.class, String.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-			boolean[] columnEditables = new boolean[] {
-				false, false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
 		jtable_estaciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jtable_estaciones.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		jtable_estaciones.setFillsViewportHeight(true);
 		jtable_estaciones.setBounds(26, 105, 400, 150);
+		
+		jtable_estaciones_contenido = new DefaultTableModel();
+		jtable_estaciones_contenido.addColumn("ID");
+		jtable_estaciones_contenido.addColumn("Nombre");
+		jtable_estaciones_contenido.addColumn("Estado");
+		jtable_estaciones_contenido.addColumn("Horario de apertura");
+		jtable_estaciones_contenido.addColumn("Horario de cierre");
+		
+		jtable_estaciones.setModel(jtable_estaciones_contenido);
 		
 		jtp_errores = new JTextPane();
 		jtp_errores.setEditable(false);
@@ -187,8 +178,13 @@ public class MenuGestionarEstaciones extends JPanel {
 		jb_buscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					GestorValidaciones.validarHorariosEstacion(jtf_apertura.getText(),jtf_cierre.getText());
+					GestorValidaciones.validarFormatoHorariosEstacion(jtf_apertura.getText(),jtf_cierre.getText());
 					jtp_errores.setText("");
+					
+					//llenar la tabla
+					for(Estacion e : GestorJDBC.buscarEstacion("",jtf_nombre.getText(),jtf_apertura.getText(),jtf_cierre.getText(),jcb_estado.getSelectedIndex())) {
+						jtable_estaciones_contenido.addRow(e.asVector());
+					}
 				}
 				catch(DatosDeEstacionIncorrectosException exp) {
 					jtp_errores.setText(exp.errores);

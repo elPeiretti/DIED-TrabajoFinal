@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 /dominio/
->>>>>>> 0bbd7e2fac263a64537129b8220595484f280a98
-/interfaces/
-/gestores/
 /excepciones/
+/gestores/
+/interfaces/

@@ -47,12 +47,14 @@ public class MenuRegistrarRecorrido extends JPanel {
 	private JLabel lbl_costo;
 	private JComboBox<String> jcb_estado;
 	private JLabel lbl_estado;
-	private JList jlist_trayectos;
+	private JList<String> jlist_trayectos;
 	private DefaultListModel<String> jlist_trayectos_contenido;
 	private JButton jb_guardar_recorrido;
 	private JButton jb_cancelar;
 	private VentanaPrincipal ventana_contenedora;
 	private JTextPane jtp_errores;
+	private DefaultComboBoxModel<String> jcb_estacion_origen_contenido;
+	private DefaultComboBoxModel<String> jcb_estacion_destino_contenido;
 
 	/**
 	 * Create the panel.
@@ -65,16 +67,20 @@ public class MenuRegistrarRecorrido extends JPanel {
 		lbl_estacion_origen.setBounds(20, 16, 92, 14);
 		
 		jcb_estacion_origen = new JComboBox<String>();
-		jcb_estacion_origen.setModel(new DefaultComboBoxModel(new String[] {"A", "B"}));
 		jcb_estacion_origen.setBounds(109, 11, 99, 24);
+		
+		jcb_estacion_origen_contenido = new DefaultComboBoxModel<String>();
+		jcb_estacion_origen.setModel(jcb_estacion_origen_contenido);
 		
 		jb_agregar_trayecto = new JButton("Agregar trayecto al recorrido");
 		jb_agregar_trayecto.setBackground(new Color(60, 179, 113));
 		jb_agregar_trayecto.setBounds(248, 109, 173, 23);
 		
 		jcb_estacion_destino = new JComboBox<String>();
-		jcb_estacion_destino.setModel(new DefaultComboBoxModel(new String[] {"A", "D"}));
 		jcb_estacion_destino.setBounds(329, 11, 99, 24);
+		
+		jcb_estacion_destino_contenido = new DefaultComboBoxModel<String>();
+		jcb_estacion_destino.setModel(jcb_estacion_destino_contenido);
 		
 		lbl_estacion_destino = new JLabel("Estacion destino:");
 		lbl_estacion_destino.setBounds(227, 16, 92, 14);
@@ -118,7 +124,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 		lbl_estado = new JLabel("Estado:");
 		lbl_estado.setBounds(20, 113, 46, 14);
 		
-		jlist_trayectos = new JList();
+		jlist_trayectos = new JList<String>();
 		jlist_trayectos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		jlist_trayectos_contenido = new DefaultListModel<String>();
@@ -133,6 +139,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 		jb_cancelar = new JButton("Cancelar");
 		jb_cancelar.setBounds(23, 254, 89, 23);
 		
+		this.llenarComboBoxEstaciones();
 		this.agregarActionListener();
 		add(jb_guardar_recorrido);
 		add(jlist_trayectos);
@@ -162,6 +169,18 @@ public class MenuRegistrarRecorrido extends JPanel {
 
 	}
 	
+	private void llenarComboBoxEstaciones() {
+		// TO DO - BASE DE DATOS
+		
+		
+		
+		
+		for(Estacion e : GestorJDBC.buscarEstacion("","","","",-1)) {
+			jcb_estacion_origen_contenido.addElement(e.getNombre());
+			jcb_estacion_destino_contenido.addElement(e.getNombre());
+		}
+	}
+	
 	private void agregarActionListener() {
 		jb_cancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -183,7 +202,11 @@ public class MenuRegistrarRecorrido extends JPanel {
 														+", "+jspin_duracion.getValue().toString()+" min"
 														+", "+jspin_capacidad_maxima.getValue().toString()+" personas");
 					
-					// fijar el combobox jcb_origen al destino seleccionado TO DO
+					// fijar el combobox jcb_origen al destino seleccionado
+					jcb_estacion_origen_contenido.removeAllElements();
+					jcb_estacion_origen_contenido.addElement(destino);
+					jcb_estacion_origen.setEnabled(false);
+					
 				}
 				catch(DatosDeTrayectoIncorrectosException exc){
 					jtp_errores.setText(exc.errores);

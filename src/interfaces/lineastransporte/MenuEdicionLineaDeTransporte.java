@@ -10,7 +10,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import excepciones.DatosDeLineaDeTransporteIncorrectosException;
+import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
+import javax.swing.JTextPane;
+import javax.swing.UIManager;
+import java.awt.Color;
 
 public class MenuEdicionLineaDeTransporte extends JPanel {
 
@@ -20,7 +25,7 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 	private static final long serialVersionUID = 82309887738866888L;
 	
 	private JTextField jtf_nombre;
-	private JTextField jtf_horario_apertura;
+	private JTextField jtf_color;
 	private JButton jb_guardar_cambios;
 	private JButton jb_cancelar;
 	private JLabel lbl_nombre;
@@ -28,6 +33,7 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 	private JLabel lbl_estado;
 	private JComboBox<String> jcb_estado;
 	private VentanaPrincipal ventana_contenedora;
+	private JTextPane jtp_errores;
 	/**
 	 * Create the panel.
 	 */
@@ -45,9 +51,9 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 		jtf_nombre.setBounds(183, 68, 86, 20);
 		jtf_nombre.setColumns(10);
 		
-		jtf_horario_apertura = new JTextField();
-		jtf_horario_apertura.setBounds(183, 110, 86, 20);
-		jtf_horario_apertura.setColumns(10);
+		jtf_color = new JTextField();
+		jtf_color.setBounds(183, 110, 86, 20);
+		jtf_color.setColumns(10);
 		
 		lbl_nombre = new JLabel("Nombre:");
 		lbl_nombre.setBounds(70, 71, 46, 14);
@@ -63,15 +69,24 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 		jcb_estado.setMaximumRowCount(2);
 		jcb_estado.setBounds(183, 145, 86, 24);
 		
+		jtp_errores = new JTextPane();
+		jtp_errores.setEditable(false);
+		jtp_errores.setForeground(Color.RED);
+		jtp_errores.setBackground(UIManager.getColor("Button.background"));
+		jtp_errores.setBounds(10, 303, 430, 86);
+		
 		this.agregarActionListener();
 		add(lbl_estado);
 		add(lbl_color);
 		add(lbl_nombre);
-		add(jtf_horario_apertura);
+		add(jtf_color);
 		add(jtf_nombre);
 		add(jb_cancelar);
 		add(jb_guardar_cambios);
 		add(jcb_estado);
+		add(jtp_errores);
+		
+		
 	}
 	
 	private void agregarActionListener() {
@@ -80,6 +95,18 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.GEST_LINEA);
 			}
 		});
+		
+		jb_guardar_cambios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					GestorValidaciones.validarLineaDeTransporte(jtf_nombre.getText(),jtf_color.getText(),jcb_estado.getSelectedIndex());
+					jtp_errores.setText("");
+					//agregar a la BD TO DO
+				}
+				catch(DatosDeLineaDeTransporteIncorrectosException exc) {
+					jtp_errores.setText(exc.errores);
+				}
+			}
+		});
 	}
-
 }

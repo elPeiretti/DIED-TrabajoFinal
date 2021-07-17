@@ -2,6 +2,9 @@ package interfaces.lineastransporte;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Vector;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -14,6 +17,7 @@ import java.awt.Color;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+import dominio.LineaDeTransporte;
 import excepciones.DatosDeLineaDeTransporteIncorrectosException;
 import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
@@ -40,6 +44,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 	private JLabel lbl_estado;
 	private JButton jb_registrar_recorrido;
 	private JTable jtable_lineas;
+	private DefaultTableModel jtable_lineas_contenido;
 	private VentanaPrincipal ventana_contenedora;
 	private JTextPane jtp_errores;
 	/**
@@ -91,29 +96,18 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		
 		
 		jtable_lineas = new JTable();
-		jtable_lineas.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Nombre", "Color", "Estado"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, String.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-			boolean[] columnEditables = new boolean[] {
-				false, true, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
 		jtable_lineas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jtable_lineas.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		jtable_lineas.setBounds(26, 95, 389, 150);
+		
+		jtable_lineas_contenido = new DefaultTableModel();
+		jtable_lineas_contenido.addColumn("ID");
+		jtable_lineas_contenido.addColumn("Nombre");
+		jtable_lineas_contenido.addColumn("Color");
+		jtable_lineas_contenido.addColumn("Estado");
+		
+		jtable_lineas.setModel(jtable_lineas_contenido);
+		
 		
 		this.agregarActionListener();
 		add(jb_registrar_recorrido);
@@ -140,6 +134,23 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 	}
 	
 	private void agregarActionListener() {
+		
+		jb_buscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String estado = jcb_estado.getSelectedItem() == null? "" : jcb_estado.getSelectedItem().toString();
+
+				//buscar datos en la BD
+				ArrayList<LineaDeTransporte> lineas = GestorJDBC.buscarLineasDeTransporte(jtf_nombre.getText(),jtf_color.getText(),estado);
+				
+				//llenar tabla
+				for(LineaDeTransporte linea : lineas) {
+					Vector<String> datos = linea.asVector();
+					jtable_lineas_contenido.addRow(datos);
+				}
+				
+			}
+		});
+		
 		jb_regresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.MENU_PPAL);
@@ -163,7 +174,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		jb_eliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(jtable_lineas.getSelectedRow()!=-1)
-					//// eliminar de la BD
+					//// eliminar de la BD TO DO
 					System.out.println("BORRAR");
 			}
 		});
@@ -171,13 +182,15 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		jb_alta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					GestorValidaciones.validarLineaDeTransporte(jtf_nombre.getText(),jtf_color.getText());
+					GestorValidaciones.validarLineaDeTransporte(jtf_nombre.getText(),jtf_color.getText(),jcb_estado.getSelectedIndex());
 					jtp_errores.setText("");
+					//agregar a la BD TO DO
 				}
 				catch(DatosDeLineaDeTransporteIncorrectosException exc) {
 					jtp_errores.setText(exc.errores);
 				}
 			}
 		});
+		
 	}
 }

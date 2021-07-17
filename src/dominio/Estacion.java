@@ -2,6 +2,7 @@ package dominio;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class Estacion {
 
@@ -31,7 +32,18 @@ public class Estacion {
 			return;
 		}
 	}
-	public void cambiarEstado(String obs) {
-		
+
+	public String getNombre() {
+		return nombre;
+	}
+	
+	public Vector<String> asVector(){
+		Vector<String> data = new Vector<String>();
+		data.add(id_estacion);
+		data.add(nombre);
+		data.add(estado.toString());
+		data.add(horario_apertura);
+		data.add(horario_cierre);
+		return data;
 	}
 }

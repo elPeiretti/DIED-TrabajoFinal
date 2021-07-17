@@ -23,7 +23,21 @@ public class GestorValidaciones {
 		}
 	}
 	
+	public static void validarFormatoHorariosEstacion(String h_apertura, String h_cierre) throws DatosDeEstacionIncorrectosException {
+		String errores="";
+		if(!h_apertura.matches("(\\d\\d:\\d\\d)?")) {
+			errores+="Campo 'horario apertura' posee formato invalido (HH:MM)\n";
+		}
+		if(!h_cierre.matches("(\\d\\d:\\d\\d)?")) {
+			errores+="Campo 'horario cierre' posee formato invalido (HH:MM)";
+		}
+		
+		if(!errores.isEmpty())
+			throw new DatosDeEstacionIncorrectosException(errores);
+	}
+	
 	private static String validarHorariosEstacion(String h_apertura, String h_cierre, String errores) {
+		
 		if(h_apertura.isEmpty()) {
 			errores+="Campo 'horario apertura' incompleto\n";
 		}
@@ -36,16 +50,20 @@ public class GestorValidaciones {
 		else if(!h_cierre.matches("\\d\\d:\\d\\d")) {
 			errores+="Campo 'horario cierre' posee formato invalido (HH:MM)";
 		}
+	
 		return errores;
 		
 	}
 	
-	public static void validarLineaDeTransporte(String nombre, String color) throws DatosDeLineaDeTransporteIncorrectosException {
+	public static void validarLineaDeTransporte(String nombre, String color, Integer estado) throws DatosDeLineaDeTransporteIncorrectosException {
 		String errores = "";
 		if(nombre.isEmpty())
 			errores+="Campo 'nombre' Incompleto\n";
 		if(color.isEmpty())
 			errores+="Campo 'color' Incompleto\n";
+		if(estado == -1)
+			errores+="Campo 'estado' Incompleto";
+		
 		
 		if(!errores.isEmpty())
 			throw new DatosDeLineaDeTransporteIncorrectosException(errores);
