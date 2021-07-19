@@ -51,6 +51,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 	private DefaultListModel<LineaDeTransporte> jlist_lineas_contenido;
 	private VentanaPrincipal ventana_contenedora;
 	private JTextPane jtp_errores;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -82,8 +83,8 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		jtf_color.setColumns(10);
 		
 		jcb_estado = new JComboBox<EstadoLinea>();
-		jcb_estado.setModel(new DefaultComboBoxModel<EstadoLinea>(new EstadoLinea[] {EstadoLinea.ACTIVA,EstadoLinea.NO_ACTIVA}));
-		jcb_estado.setMaximumRowCount(2);
+		jcb_estado.setModel(new DefaultComboBoxModel<EstadoLinea>(new EstadoLinea[] {null,EstadoLinea.ACTIVA,EstadoLinea.NO_ACTIVA}));
+		jcb_estado.setMaximumRowCount(3);
 		jcb_estado.setBounds(348, 11, 67, 24);
 		
 		lbl_color = new JLabel("Color:");
@@ -152,6 +153,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		
 		jb_regresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				jlist_lineas_contenido.clear();
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.MENU_PPAL);
 			}
 		});
@@ -176,9 +178,11 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		
 		jb_eliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(jlist_lineas.getSelectedIndex()!=-1)
-					//// eliminar de la BD TO DO
-					System.out.println("BORRAR");
+				if(jlist_lineas.getSelectedIndex()!=-1) {
+					jlist_lineas_contenido.removeElementAt(jlist_lineas.getSelectedIndex());
+					//// eliminar de la BD? TODO
+				}
+					
 			}
 		});
 		
@@ -191,9 +195,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 					GestorValidaciones.validarLineaDeTransporte(nombre,color,estado);
 					jtp_errores.setText("");
 					
-					LineaDeTransporte lt = GestorEntidades.crearLineaDeTransporte(nombre,color,estado);
-					
-					//GestorJDBC.agregarLineaDeTransporte(lt) TO DO
+					//GestorJDBC.agregarLineaDeTransporte(GestorEntidades.crearLineaDeTransporte(nombre,color,estado)); TODO
 				}
 				catch(DatosDeLineaDeTransporteIncorrectosException exc) {
 					jtp_errores.setText(exc.errores);

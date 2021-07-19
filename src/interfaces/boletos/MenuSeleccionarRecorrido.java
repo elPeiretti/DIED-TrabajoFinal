@@ -15,6 +15,7 @@ import interfaces.VentanaPrincipal;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 
@@ -34,6 +35,7 @@ public class MenuSeleccionarRecorrido extends JPanel {
 	private VentanaPrincipal ventana_contenedora;
 	private DefaultTableModel jtable_recorridos_contenido;
 	private JButton jb_buscar;
+	private List<Camino> caminos_en_tabla;
 
 	/**
 	 * Create the panel.
@@ -74,6 +76,7 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		jtable_recorridos = new JTable();
 		jtable_recorridos.setModel(jtable_recorridos_contenido);
 		jtable_recorridos.setBounds(23, 79, 407, 164);
+		jtable_recorridos.setAutoCreateRowSorter(true);
 		
 		jb_buscar = new JButton("Buscar");
 		jb_buscar.setBounds(329, 46, 99, 23);
@@ -94,14 +97,18 @@ public class MenuSeleccionarRecorrido extends JPanel {
 	private void agregarActionListener() {
 		jb_cancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				jtable_recorridos_contenido.setRowCount(0);
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.MENU_PPAL);
 			}
 		});
 		
 		jb_siguiente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(jtable_recorridos.getSelectedRow()!=-1)
+				Integer i = jtable_recorridos.getSelectedRow();
+				if(i!=-1) {
+					MenuRegistrarComprador.camino_seleccionado = caminos_en_tabla.get(i);
 					ventana_contenedora.cambiarPanel(VentanaPrincipal.REG_COMPRADOR);
+				}
 			}
 		});
 		
@@ -110,19 +117,23 @@ public class MenuSeleccionarRecorrido extends JPanel {
 				Estacion origen = (Estacion) jcb_estacion_origen.getSelectedItem();
 				Estacion destino = (Estacion) jcb_estacion_destino.getSelectedItem();
 				if(origen != null && destino != null)
-					buscarCaminosYCompletarTabla(origen,destino);
+					buscarCaminosYCompletarTabla(origen,destino,jtable_recorridos_contenido, caminos_en_tabla);
 			}
-		});
-		
-		
+		});		
+
 	}
 	
-	private static void buscarCaminosYCompletarTabla(Estacion origen, Estacion destino) {
-		//List<Camino> c = GestorEntidades.getCaminosDesdeHasta(origen,destino); TO DO
+	private static void buscarCaminosYCompletarTabla(Estacion origen, Estacion destino, DefaultTableModel contenido_tabla, List<Camino> caminos_en_tabla) {
+		List<Camino> recorridos = GestorEntidades.getTrayectosDesdeHasta(origen,destino); //TODO
+
+		for(Camino c : recorridos) {
+			contenido_tabla.addRow(GestorEntidades.getVectorDeDatosDeCamino(c));
+			caminos_en_tabla.add(c);
+		}
 	}
 	
 	private void llenarComboBox() {
-		/*for(Estacion e : GestorJDBC.buscarEstacion("","","","",-1)) {
+		/*for(Estacion e : GestorJDBC.buscarEstacion("","","","",null)) {
 			jcb_estacion_origen.addItem(e);
 			jcb_estacion_destino.addItem(e);
 		}*/

@@ -21,6 +21,7 @@ import javax.swing.JList;
 import javax.swing.border.LineBorder;
 
 import dominio.Estacion;
+import dominio.EstadoEstacion;
 import dominio.LineaDeTransporte;
 import dominio.Trayecto;
 import excepciones.DatosDeTrayectoIncorrectosException;
@@ -53,7 +54,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 	private JLabel lbl_capacidad_maxima;
 	private JSpinner jspin_capacidad_maxima;
 	private JLabel lbl_costo;
-	private JComboBox<String> jcb_estado;
+	private JComboBox<EstadoEstacion> jcb_estado;
 	private JLabel lbl_estado;
 	private JList<Trayecto> jlist_trayectos;
 	private DefaultListModel<Trayecto> jlist_trayectos_contenido;
@@ -64,6 +65,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 	private DefaultComboBoxModel<Estacion> jcb_estacion_origen_contenido;
 	private DefaultComboBoxModel<Estacion> jcb_estacion_destino_contenido;
 	protected static LineaDeTransporte linea_seleccionada;
+	private JButton jb_eliminar_ultimo;
 
 	/**
 	 * Create the panel.
@@ -126,9 +128,9 @@ public class MenuRegistrarRecorrido extends JPanel {
 		lbl_costo = new JLabel("Costo [$]:");
 		lbl_costo.setBounds(227, 80, 57, 14);
 		
-		jcb_estado = new JComboBox<String>();
-		jcb_estado.setModel(new DefaultComboBoxModel<String>(new String[] {"Activa", "Inactiva"}));
-		jcb_estado.setMaximumRowCount(2);
+		jcb_estado = new JComboBox<EstadoEstacion>();
+		jcb_estado.setModel(new DefaultComboBoxModel<EstadoEstacion>(new EstadoEstacion[] {EstadoEstacion.OPERATIVA, EstadoEstacion.EN_MANTENIMIENTO}));
+		jcb_estado.setMaximumRowCount(3);
 		jcb_estado.setBounds(109, 108, 99, 24);
 		
 		lbl_estado = new JLabel("Estado:");
@@ -148,6 +150,16 @@ public class MenuRegistrarRecorrido extends JPanel {
 		
 		jb_cancelar = new JButton("Cancelar");
 		jb_cancelar.setBounds(23, 254, 89, 23);
+		
+		jtp_errores = new JTextPane();
+		jtp_errores.setForeground(Color.RED);
+		jtp_errores.setEditable(false);
+		jtp_errores.setBackground(UIManager.getColor("Button.background"));
+		jtp_errores.setBounds(10, 286, 418, 103);
+		
+		jb_eliminar_ultimo = new JButton("Eliminar ultimo trayecto");
+		jb_eliminar_ultimo.setBounds(129, 254, 173, 23);
+		jb_eliminar_ultimo.setEnabled(false);
 		
 		this.llenarComboBoxEstaciones();
 		this.agregarActionListener();
@@ -169,13 +181,8 @@ public class MenuRegistrarRecorrido extends JPanel {
 		add(jcb_estacion_origen);
 		add(lbl_estacion_origen);
 		add(jb_cancelar);
-		
-		jtp_errores = new JTextPane();
-		jtp_errores.setForeground(Color.RED);
-		jtp_errores.setEditable(false);
-		jtp_errores.setBackground(UIManager.getColor("Button.background"));
-		jtp_errores.setBounds(10, 286, 418, 103);
 		add(jtp_errores);
+		add(jb_eliminar_ultimo);
 
 	}
 	
@@ -190,7 +197,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 		
 		//// for debugging purposes
 		for(char x='A';x<'F';x++) {
-			Estacion e = GestorEntidades.crearEstacion(""+x,"13:00","20:00");
+			Estacion e = GestorEntidades.crearEstacion(""+x,"13:00","20:00",EstadoEstacion.OPERATIVA);
 			jcb_estacion_origen_contenido.addElement(e);
 			jcb_estacion_destino_contenido.addElement(e);
 		}
@@ -199,6 +206,8 @@ public class MenuRegistrarRecorrido extends JPanel {
 	private void agregarActionListener() {
 		jb_cancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				jcb_estacion_origen.setEnabled(true);
+				jb_eliminar_ultimo.setEnabled(false);
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.GEST_LINEA);
 			}
 		});
@@ -234,11 +243,27 @@ public class MenuRegistrarRecorrido extends JPanel {
 					jcb_estacion_origen_contenido.removeAllElements();
 					jcb_estacion_origen_contenido.addElement(destino);
 					jcb_estacion_origen.setEnabled(false);
+					jb_eliminar_ultimo.setEnabled(true);
 					
 				}
 				catch(DatosDeTrayectoIncorrectosException exc){
 					jtp_errores.setText(exc.errores);
 				}
+			}
+		});
+		
+		jb_eliminar_ultimo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				jlist_trayectos_contenido.remove(jlist_trayectos_contenido.getSize());
+				if(jlist_trayectos_contenido.getSize()==0)
+					jb_eliminar_ultimo.setEnabled(false);
+			}
+		});
+		
+		jb_guardar_recorrido.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO
+				//GestorJDBC.guardarRecorridoDeLinea(linea_seleccionada,jlist_trayectos_contenido.toArray)
 			}
 		});
 	}

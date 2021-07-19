@@ -1,13 +1,17 @@
 package gestores;
 
 import dominio.Estacion;
+import dominio.EstadoEstacion;
 import dominio.EstadoLinea;
 import excepciones.*;
 
 public class GestorValidaciones {
 	
-	public static void validarEstacion(String nombre, String h_apertura, String h_cierre) throws DatosDeEstacionIncorrectosException {
+	public static void validarEstacion(String nombre, String h_apertura, String h_cierre, EstadoEstacion estado) throws DatosDeEstacionIncorrectosException {
 		String errores="";
+		
+		if(estado == null)
+			errores+="Campo 'Estado' Incompleto\n";
 		
 		if(nombre.isEmpty()) {
 			errores+="Campo 'nombre' Incompleto\n";
@@ -86,6 +90,16 @@ public class GestorValidaciones {
 		
 		if(!errores.isEmpty())
 			throw new DatosDeTrayectoIncorrectosException(errores);
+	}
+	public static void validarCliente(String nombre, String email) throws DatosDeClienteIncorrectosException {
+		String errores="";
+		if(nombre.isEmpty())
+			errores+="El campo 'nombre' no puede estar vacio\n";
+		if(email.isEmpty())
+			errores+="El campo 'E-mail' no puede estar vacio\n";
+		
+		if(!errores.isEmpty())
+			throw new DatosDeClienteIncorrectosException(errores);
 	}
 
 }

@@ -16,8 +16,10 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
+import dominio.Estacion;
 import dominio.EstadoEstacion;
 import excepciones.DatosDeEstacionIncorrectosException;
+import gestores.GestorEntidades;
 import gestores.GestorValidaciones;
 
 import java.awt.Color;
@@ -106,18 +108,21 @@ public class MenuEdicionEstacion extends JPanel {
 	private void agregarActionListener() {
 		jb_regresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//falta logica para recuperar el estado anterior
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.GEST_ESTACIONES);
 			}
 		});
 		
 		jb_guardar_cambios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String nombre = jtf_nombre.getText();
+				String apertura = jtf_horario_apertura.getText();
+				String cierre = jtf_horario_cierre.getText();
+				EstadoEstacion estado = (EstadoEstacion)jcb_estado.getSelectedItem();
 				try {
-					GestorValidaciones.validarEstacion(jtf_nombre.getText(),jtf_horario_apertura.getText(),jtf_horario_cierre.getText());
+					GestorValidaciones.validarEstacion(nombre,apertura,cierre,estado);
 					jtp_errores.setText("");
-					// falta guardar los cambios en la BD y mostrar el mensaje de OK para luego regresar a la pantalla anterior
-					
+					GestorEntidades.actualizarEstacion(MenuGestionarEstaciones.estacion_seleccionada,nombre,apertura,cierre,estado);
+					//GestorJDBC.actualizarEstacion(MenuGestionarEstaciones.estacion_seleccionada
 				}
 				catch(DatosDeEstacionIncorrectosException exp) {
 					jtp_errores.setText(exp.errores);

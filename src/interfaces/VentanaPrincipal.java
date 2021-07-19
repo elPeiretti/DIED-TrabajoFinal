@@ -64,7 +64,7 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	public VentanaPrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 640, 480);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -87,8 +87,6 @@ public class VentanaPrincipal extends JFrame {
 		//Primer menu que se muestra es el principal
 		this.cambiarPanel(MENU_PPAL);
 		
-		this.setExtendedState(MAXIMIZED_BOTH); //temporal
-		
 	}
 	
 	public void agregarPaneles() {
@@ -105,6 +103,9 @@ public class VentanaPrincipal extends JFrame {
 	
 	public void cambiarPanel(String panel) {
 		CardLayout c = (CardLayout) contentPane.getLayout();
+		if(panel.equals(REG_COMPRADOR))
+			m_reg_compr.inicializarLabels();
+		
 		c.show(contentPane,panel);
 	}
 	

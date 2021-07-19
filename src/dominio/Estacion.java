@@ -14,12 +14,12 @@ public class Estacion {
 	private EstadoEstacion estado;
 	private List<TareaDeMantenimiento> mantenimientos;
 	
-	public Estacion(String nombre, String horario_apertura, String horario_cierre) {
+	public Estacion(String nombre, String horario_apertura, String horario_cierre, EstadoEstacion estadi) {
 		this.id_estacion = "EST"+(++ultimo_id).toString();
 		this.nombre = nombre;
 		this.horario_apertura = horario_apertura;
 		this.horario_cierre = horario_cierre;
-		this.estado = EstadoEstacion.OPERATIVA;
+		this.estado = estado;
 		this.mantenimientos = new ArrayList<TareaDeMantenimiento>();
 	}
 	
@@ -50,4 +50,21 @@ public class Estacion {
 	public String toString() {
 		return this.nombre;
 	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;		
+	}
+
+	public void setHorario_apertura(String horario_apertura) {
+		this.horario_apertura = horario_apertura;
+	}
+
+	public void setHorario_cierre(String horario_cierre) {
+		this.horario_cierre = horario_cierre;
+	}
+
+	public void setEstado(EstadoEstacion estado) {
+		this.estado = estado;
+	}
+	
 }
