@@ -16,6 +16,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
+import dominio.EstadoEstacion;
 import excepciones.DatosDeEstacionIncorrectosException;
 import gestores.GestorValidaciones;
 
@@ -37,7 +38,7 @@ public class MenuEdicionEstacion extends JPanel {
 	private JLabel lbl_horario_apertura;
 	private JLabel lbl_horario_cierre;
 	private JLabel lbl_estado;
-	private JComboBox<String> jcb_estado;
+	private JComboBox<EstadoEstacion> jcb_estado;
 	private VentanaPrincipal ventana_contenedora;
 	private JTextPane jtp_errores;
 	/**
@@ -77,8 +78,8 @@ public class MenuEdicionEstacion extends JPanel {
 		lbl_estado = new JLabel("Estado:");
 		lbl_estado.setBounds(70, 198, 46, 14);
 	
-		jcb_estado = new JComboBox<String>();
-		jcb_estado.setModel(new DefaultComboBoxModel<String>(new String[] {"Operativa", "En Mantenimiento"}));
+		jcb_estado = new JComboBox<EstadoEstacion>();
+		jcb_estado.setModel(new DefaultComboBoxModel<EstadoEstacion>(new EstadoEstacion[] {EstadoEstacion.OPERATIVA, EstadoEstacion.EN_MANTENIMIENTO}));
 		jcb_estado.setMaximumRowCount(2);
 		jcb_estado.setBounds(183, 193, 86, 24);
 		

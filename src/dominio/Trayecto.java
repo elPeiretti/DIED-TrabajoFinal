@@ -4,7 +4,7 @@ public class Trayecto {
 
 	private static Integer ultimo_id=0;
 	private String id_trayecto;
-	private Double distancia;
+	private Integer distancia;
 	private Integer duracion;
 	private Integer cant_max_pasajeros;
 	private EstadoTrayecto estado;
@@ -12,7 +12,7 @@ public class Trayecto {
 	private Estacion origen;
 	private Estacion destino;
 	
-	public Trayecto(Double distancia, Integer duracion, Integer cant_max_pasajeros, Double costo, Estacion origen, Estacion destino) {
+	public Trayecto(Integer distancia, Integer duracion, Integer cant_max_pasajeros, Double costo, Estacion origen, Estacion destino) {
 		this.id_trayecto = "TRAY"+(++ultimo_id).toString();
 		this.distancia = distancia;
 		this.duracion = duracion;
@@ -21,6 +21,14 @@ public class Trayecto {
 		this.costo = costo;
 		this.origen = origen;
 		this.destino = destino;
+	}
+	
+	public String toString() {
+		return origen.getNombre()+" --> "+destino.getNombre()
+				+" | $"+costo.toString()
+				+", "+distancia.toString()+" [km], "
+				+duracion.toString()+" [min], "
+				+cant_max_pasajeros.toString()+" pasajeros";
 	}
 	
 }

@@ -15,6 +15,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import dominio.Estacion;
+import dominio.EstadoEstacion;
 import excepciones.DatosDeEstacionIncorrectosException;
 import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
@@ -36,7 +37,7 @@ public class MenuGestionarEstaciones extends JPanel {
 	private JButton jb_alta;
 	private JButton jb_regresar;
 	private JButton jb_eliminar;
-	private JComboBox<String> jcb_estado;
+	private JComboBox<EstadoEstacion> jcb_estado;
 	private JButton jb_modificar;
 	private JLabel lbl_horario_cierre;
 	private JLabel lbl_nombre;
@@ -83,8 +84,8 @@ public class MenuGestionarEstaciones extends JPanel {
 		jtf_apertura.setBounds(115, 39, 89, 20);
 		jtf_apertura.setColumns(10);
 		
-		jcb_estado = new JComboBox<String>();
-		jcb_estado.setModel(new DefaultComboBoxModel<String>(new String[] {"Operativa", "En Mantenimiento"}));
+		jcb_estado = new JComboBox<EstadoEstacion>();
+		jcb_estado.setModel(new DefaultComboBoxModel<EstadoEstacion>(new EstadoEstacion[] {EstadoEstacion.OPERATIVA, EstadoEstacion.EN_MANTENIMIENTO}));
 		jcb_estado.setMaximumRowCount(2);
 		jcb_estado.setBounds(331, 6, 95, 24);
 		
@@ -168,6 +169,8 @@ public class MenuGestionarEstaciones extends JPanel {
 				try {
 					GestorValidaciones.validarEstacion(jtf_nombre.getText(),jtf_apertura.getText(),jtf_cierre.getText());
 					jtp_errores.setText("");
+					
+					//dar de alta TO DO
 				}
 				catch(DatosDeEstacionIncorrectosException exp) {
 					jtp_errores.setText(exp.errores);
@@ -182,9 +185,9 @@ public class MenuGestionarEstaciones extends JPanel {
 					jtp_errores.setText("");
 					
 					//llenar la tabla
-					for(Estacion e : GestorJDBC.buscarEstacion("",jtf_nombre.getText(),jtf_apertura.getText(),jtf_cierre.getText(),jcb_estado.getSelectedIndex())) {
+					/*for(Estacion e : GestorJDBC.buscarEstacion("",jtf_nombre.getText(),jtf_apertura.getText(),jtf_cierre.getText(),jcb_estado.getSelectedIndex())) {
 						jtable_estaciones_contenido.addRow(e.asVector());
-					}
+					}*/
 				}
 				catch(DatosDeEstacionIncorrectosException exp) {
 					jtp_errores.setText(exp.errores);

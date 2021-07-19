@@ -8,17 +8,21 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+import dominio.EstadoLinea;
 import dominio.LineaDeTransporte;
 import excepciones.DatosDeLineaDeTransporteIncorrectosException;
+import gestores.GestorEntidades;
 import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
 import javax.swing.JTextPane;
@@ -37,14 +41,14 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 	private JButton jb_regresar;
 	private JButton jb_alta;
 	private JButton jb_eliminar;
-	private JComboBox<String> jcb_estado;
+	private JComboBox<EstadoLinea> jcb_estado;
 	private JButton jb_modificar;
 	private JLabel lbl_color;
 	private JLabel lbl_nombre;
 	private JLabel lbl_estado;
 	private JButton jb_registrar_recorrido;
-	private JTable jtable_lineas;
-	private DefaultTableModel jtable_lineas_contenido;
+	private JList<LineaDeTransporte> jlist_lineas;
+	private DefaultListModel<LineaDeTransporte> jlist_lineas_contenido;
 	private VentanaPrincipal ventana_contenedora;
 	private JTextPane jtp_errores;
 	/**
@@ -77,8 +81,8 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		jtf_color.setBounds(205, 13, 89, 20);
 		jtf_color.setColumns(10);
 		
-		jcb_estado = new JComboBox<String>();
-		jcb_estado.setModel(new DefaultComboBoxModel<String>(new String[] {"Activa", "No Activa"}));
+		jcb_estado = new JComboBox<EstadoLinea>();
+		jcb_estado.setModel(new DefaultComboBoxModel<EstadoLinea>(new EstadoLinea[] {EstadoLinea.ACTIVA,EstadoLinea.NO_ACTIVA}));
 		jcb_estado.setMaximumRowCount(2);
 		jcb_estado.setBounds(348, 11, 67, 24);
 		
@@ -95,18 +99,14 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		jb_registrar_recorrido.setBounds(314, 266, 123, 23);
 		
 		
-		jtable_lineas = new JTable();
-		jtable_lineas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		jtable_lineas.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		jtable_lineas.setBounds(26, 95, 389, 150);
+		jlist_lineas = new JList<LineaDeTransporte>();
+		jlist_lineas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		jlist_lineas.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		jlist_lineas.setBounds(26, 95, 389, 150);
 		
-		jtable_lineas_contenido = new DefaultTableModel();
-		jtable_lineas_contenido.addColumn("ID");
-		jtable_lineas_contenido.addColumn("Nombre");
-		jtable_lineas_contenido.addColumn("Color");
-		jtable_lineas_contenido.addColumn("Estado");
+		jlist_lineas_contenido = new DefaultListModel<LineaDeTransporte>();
 		
-		jtable_lineas.setModel(jtable_lineas_contenido);
+		jlist_lineas.setModel(jlist_lineas_contenido);
 		
 		
 		this.agregarActionListener();
@@ -122,7 +122,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		add(jb_alta);
 		add(jb_buscar);
 		add(jtf_nombre);
-		add(jtable_lineas);
+		add(jlist_lineas);
 		
 		jtp_errores = new JTextPane();
 		jtp_errores.setEditable(false);
@@ -140,13 +140,12 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 				String estado = jcb_estado.getSelectedItem() == null? "" : jcb_estado.getSelectedItem().toString();
 
 				//buscar datos en la BD
-				ArrayList<LineaDeTransporte> lineas = GestorJDBC.buscarLineasDeTransporte(jtf_nombre.getText(),jtf_color.getText(),estado);
+				/*ArrayList<LineaDeTransporte> lineas = GestorJDBC.buscarLineasDeTransporte(jtf_nombre.getText(),jtf_color.getText(),estado);
 				
 				//llenar tabla
 				for(LineaDeTransporte linea : lineas) {
-					Vector<String> datos = linea.asVector();
-					jtable_lineas_contenido.addRow(datos);
-				}
+					jlist_lineas_contenido.addElement(linea);
+				}*/
 				
 			}
 		});
@@ -159,21 +158,25 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		
 		jb_modificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(jtable_lineas.getSelectedRow()!=-1)
+				if(jlist_lineas.getSelectedIndex()!=-1) {
 					ventana_contenedora.cambiarPanel(VentanaPrincipal.EDIT_LINEA);
+					MenuRegistrarRecorrido.linea_seleccionada=jlist_lineas.getSelectedValue();
+				}
 			}
 		});
 		
 		jb_registrar_recorrido.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(jtable_lineas.getSelectedRow()!=-1)
+				if(jlist_lineas.getSelectedIndex()!=-1){
 					ventana_contenedora.cambiarPanel(VentanaPrincipal.REG_RECORRIDO);
+					MenuRegistrarRecorrido.linea_seleccionada=jlist_lineas.getSelectedValue();
+				}
 			}
 		});
 		
 		jb_eliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(jtable_lineas.getSelectedRow()!=-1)
+				if(jlist_lineas.getSelectedIndex()!=-1)
 					//// eliminar de la BD TO DO
 					System.out.println("BORRAR");
 			}
@@ -182,9 +185,15 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		jb_alta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					GestorValidaciones.validarLineaDeTransporte(jtf_nombre.getText(),jtf_color.getText(),jcb_estado.getSelectedIndex());
+					String nombre = jtf_nombre.getText();
+					String color = jtf_color.getText();
+					EstadoLinea estado = (EstadoLinea) jcb_estado.getSelectedItem();
+					GestorValidaciones.validarLineaDeTransporte(nombre,color,estado);
 					jtp_errores.setText("");
-					//agregar a la BD TO DO
+					
+					LineaDeTransporte lt = GestorEntidades.crearLineaDeTransporte(nombre,color,estado);
+					
+					//GestorJDBC.agregarLineaDeTransporte(lt) TO DO
 				}
 				catch(DatosDeLineaDeTransporteIncorrectosException exc) {
 					jtp_errores.setText(exc.errores);

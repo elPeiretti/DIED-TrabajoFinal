@@ -46,4 +46,8 @@ public class Estacion {
 		data.add(horario_cierre);
 		return data;
 	}
+	
+	public String toString() {
+		return this.nombre;
+	}
 }

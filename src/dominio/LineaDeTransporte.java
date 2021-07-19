@@ -13,20 +13,31 @@ public class LineaDeTransporte {
 	private EstadoLinea estado;
 	private List<Trayecto> recorrido;
 	
-	public LineaDeTransporte(String nombre, String color) {
+	public LineaDeTransporte(String nombre, String color,EstadoLinea estado) {
 		this.id_linea = "LIN"+(++ultimo_id).toString();
 		this.nombre = nombre;
 		this.color = color;
-		this.estado = EstadoLinea.ACTIVA;
+		this.estado = estado;
 		this.recorrido = new ArrayList<Trayecto>();
 	}
 	
-	public Vector<String> asVector(){
-		Vector<String> datos = new Vector<String>();
-		datos.add(id_linea);
-		datos.add(nombre);
-		datos.add(color);
-		datos.add(estado.toString());
-		return datos;
+	public String getId() {
+		return this.id_linea;
+	}
+	
+	public String toString() {
+		return nombre + ", "+ color + ", " + estado.toString();
+	}
+	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
+	public void setColor(String color) {
+		this.color = color;
+	}
+	
+	public void setEstado(EstadoLinea estado) {
+		this.estado=estado;
 	}
 }

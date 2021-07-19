@@ -1,5 +1,7 @@
 package gestores;
 
+import dominio.Estacion;
+import dominio.EstadoLinea;
 import excepciones.*;
 
 public class GestorValidaciones {
@@ -55,20 +57,20 @@ public class GestorValidaciones {
 		
 	}
 	
-	public static void validarLineaDeTransporte(String nombre, String color, Integer estado) throws DatosDeLineaDeTransporteIncorrectosException {
+	public static void validarLineaDeTransporte(String nombre, String color, EstadoLinea estado) throws DatosDeLineaDeTransporteIncorrectosException {
 		String errores = "";
 		if(nombre.isEmpty())
 			errores+="Campo 'nombre' Incompleto\n";
 		if(color.isEmpty())
 			errores+="Campo 'color' Incompleto\n";
-		if(estado == -1)
+		if(estado == null)
 			errores+="Campo 'estado' Incompleto";
 		
 		
 		if(!errores.isEmpty())
 			throw new DatosDeLineaDeTransporteIncorrectosException(errores);
 	}
-	public static void validarTrayecto(String origen, String destino, String costo) throws DatosDeTrayectoIncorrectosException {
+	public static void validarTrayecto(Estacion origen, Estacion destino, String costo) throws DatosDeTrayectoIncorrectosException {
 		String errores="";
 		
 		if(origen.equals(destino)) {

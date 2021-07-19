@@ -11,10 +11,15 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import excepciones.DatosDeLineaDeTransporteIncorrectosException;
+import gestores.GestorEntidades;
 import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
+
+import dominio.EstadoLinea;
+import dominio.LineaDeTransporte;
+
 import java.awt.Color;
 
 public class MenuEdicionLineaDeTransporte extends JPanel {
@@ -31,9 +36,10 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 	private JLabel lbl_nombre;
 	private JLabel lbl_color;
 	private JLabel lbl_estado;
-	private JComboBox<String> jcb_estado;
+	private JComboBox<EstadoLinea> jcb_estado;
 	private VentanaPrincipal ventana_contenedora;
 	private JTextPane jtp_errores;
+	protected static LineaDeTransporte linea_seleccionada;
 	/**
 	 * Create the panel.
 	 */
@@ -64,8 +70,8 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 		lbl_estado = new JLabel("Estado:");
 		lbl_estado.setBounds(70, 150, 46, 14);
 		
-		jcb_estado = new JComboBox<String>();
-		jcb_estado.setModel(new DefaultComboBoxModel<String>(new String[] {"Activa", "No Activa"}));
+		jcb_estado = new JComboBox<EstadoLinea>();
+		jcb_estado.setModel(new DefaultComboBoxModel<EstadoLinea>(new EstadoLinea[] {EstadoLinea.ACTIVA,EstadoLinea.NO_ACTIVA}));
 		jcb_estado.setMaximumRowCount(2);
 		jcb_estado.setBounds(183, 145, 86, 24);
 		
@@ -99,9 +105,17 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 		jb_guardar_cambios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					GestorValidaciones.validarLineaDeTransporte(jtf_nombre.getText(),jtf_color.getText(),jcb_estado.getSelectedIndex());
+					String nombre = jtf_nombre.getText();
+					String color = jtf_color.getText();
+					EstadoLinea estado = (EstadoLinea) jcb_estado.getSelectedItem();
+					GestorValidaciones.validarLineaDeTransporte(nombre,color,estado);
 					jtp_errores.setText("");
-					//agregar a la BD TO DO
+					
+					//pasar la entidad ya actualizada?
+					GestorEntidades.actualizarLinea(linea_seleccionada,nombre,color,estado);
+					
+					//GestorJDBC.actualizarLineaDeTransporte(linea_seleccionada) TO DO
+					
 				}
 				catch(DatosDeLineaDeTransporteIncorrectosException exc) {
 					jtp_errores.setText(exc.errores);

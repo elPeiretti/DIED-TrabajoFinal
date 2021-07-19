@@ -11,19 +11,27 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JList;
 import javax.swing.border.LineBorder;
 
+import dominio.Estacion;
+import dominio.LineaDeTransporte;
+import dominio.Trayecto;
 import excepciones.DatosDeTrayectoIncorrectosException;
+import gestores.GestorEntidades;
 import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
 
 import javax.swing.AbstractListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.JTextPane;
+import javax.swing.ListCellRenderer;
 import javax.swing.UIManager;
 
 public class MenuRegistrarRecorrido extends JPanel {
@@ -34,10 +42,10 @@ public class MenuRegistrarRecorrido extends JPanel {
 	
 	private JTextField jtf_costo;
 	private JLabel lbl_estacion_origen;
-	private JComboBox<String> jcb_estacion_origen;
+	private JComboBox<Estacion> jcb_estacion_origen;
 	private JButton jb_agregar_trayecto;
 	private JLabel lbl_estacion_destino;
-	private JComboBox<String> jcb_estacion_destino;
+	private JComboBox<Estacion> jcb_estacion_destino;
 	private JSpinner jspin_distancia;
 	private JLabel lbl_distancia;
 	private JLabel lbl_duracion;
@@ -47,14 +55,15 @@ public class MenuRegistrarRecorrido extends JPanel {
 	private JLabel lbl_costo;
 	private JComboBox<String> jcb_estado;
 	private JLabel lbl_estado;
-	private JList<String> jlist_trayectos;
-	private DefaultListModel<String> jlist_trayectos_contenido;
+	private JList<Trayecto> jlist_trayectos;
+	private DefaultListModel<Trayecto> jlist_trayectos_contenido;
 	private JButton jb_guardar_recorrido;
 	private JButton jb_cancelar;
 	private VentanaPrincipal ventana_contenedora;
 	private JTextPane jtp_errores;
-	private DefaultComboBoxModel<String> jcb_estacion_origen_contenido;
-	private DefaultComboBoxModel<String> jcb_estacion_destino_contenido;
+	private DefaultComboBoxModel<Estacion> jcb_estacion_origen_contenido;
+	private DefaultComboBoxModel<Estacion> jcb_estacion_destino_contenido;
+	protected static LineaDeTransporte linea_seleccionada;
 
 	/**
 	 * Create the panel.
@@ -66,20 +75,21 @@ public class MenuRegistrarRecorrido extends JPanel {
 		lbl_estacion_origen = new JLabel("Estacion origen:");
 		lbl_estacion_origen.setBounds(20, 16, 92, 14);
 		
-		jcb_estacion_origen = new JComboBox<String>();
+		jcb_estacion_origen = new JComboBox<Estacion>();
 		jcb_estacion_origen.setBounds(109, 11, 99, 24);
 		
-		jcb_estacion_origen_contenido = new DefaultComboBoxModel<String>();
+		jcb_estacion_origen_contenido = new DefaultComboBoxModel<Estacion>();
 		jcb_estacion_origen.setModel(jcb_estacion_origen_contenido);
 		
 		jb_agregar_trayecto = new JButton("Agregar trayecto al recorrido");
 		jb_agregar_trayecto.setBackground(new Color(60, 179, 113));
 		jb_agregar_trayecto.setBounds(248, 109, 173, 23);
+		jb_agregar_trayecto.setEnabled(false);
 		
-		jcb_estacion_destino = new JComboBox<String>();
+		jcb_estacion_destino = new JComboBox<Estacion>();
 		jcb_estacion_destino.setBounds(329, 11, 99, 24);
 		
-		jcb_estacion_destino_contenido = new DefaultComboBoxModel<String>();
+		jcb_estacion_destino_contenido = new DefaultComboBoxModel<Estacion>();
 		jcb_estacion_destino.setModel(jcb_estacion_destino_contenido);
 		
 		lbl_estacion_destino = new JLabel("Estacion destino:");
@@ -124,10 +134,10 @@ public class MenuRegistrarRecorrido extends JPanel {
 		lbl_estado = new JLabel("Estado:");
 		lbl_estado.setBounds(20, 113, 46, 14);
 		
-		jlist_trayectos = new JList<String>();
+		jlist_trayectos = new JList<Trayecto>();
 		jlist_trayectos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		jlist_trayectos_contenido = new DefaultListModel<String>();
+		jlist_trayectos_contenido = new DefaultListModel<Trayecto>();
 		
 		jlist_trayectos.setModel(jlist_trayectos_contenido);
 		jlist_trayectos.setBorder(new LineBorder(new Color(0, 0, 0), 2));
@@ -173,11 +183,16 @@ public class MenuRegistrarRecorrido extends JPanel {
 		// TO DO - BASE DE DATOS
 		
 		
+		/*for(Estacion e : GestorJDBC.buscarEstacion("","","","",-1)) {
+			jcb_estacion_origen_contenido.addElement(e);
+			jcb_estacion_destino_contenido.addElement(e);
+		}*/
 		
-		
-		for(Estacion e : GestorJDBC.buscarEstacion("","","","",-1)) {
-			jcb_estacion_origen_contenido.addElement(e.getNombre());
-			jcb_estacion_destino_contenido.addElement(e.getNombre());
+		//// for debugging purposes
+		for(char x='A';x<'F';x++) {
+			Estacion e = GestorEntidades.crearEstacion(""+x,"13:00","20:00");
+			jcb_estacion_origen_contenido.addElement(e);
+			jcb_estacion_destino_contenido.addElement(e);
 		}
 	}
 	
@@ -188,19 +203,32 @@ public class MenuRegistrarRecorrido extends JPanel {
 			}
 		});
 		
+		jcb_estacion_origen.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(jcb_estacion_destino.getSelectedIndex() != -1)
+					jb_agregar_trayecto.setEnabled(true);
+			}
+		});
+		
+		jcb_estacion_destino.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(jcb_estacion_origen.getSelectedIndex() != -1)
+					jb_agregar_trayecto.setEnabled(true);
+			}
+		});
+		
 		jb_agregar_trayecto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String origen = jcb_estacion_origen.getSelectedItem().toString();
-				String destino = jcb_estacion_destino.getSelectedItem().toString();
+				Estacion origen = (Estacion)jcb_estacion_origen.getSelectedItem();
+				Estacion destino = (Estacion)jcb_estacion_destino.getSelectedItem();
+				
 				
 				try {
 					GestorValidaciones.validarTrayecto(origen,destino,jtf_costo.getText());
 					jtp_errores.setText("");
-					jlist_trayectos_contenido.addElement(origen+" -> "+destino
-														+", $"+jtf_costo.getText()
-														+", "+jspin_distancia.getValue().toString()+" Km"
-														+", "+jspin_duracion.getValue().toString()+" min"
-														+", "+jspin_capacidad_maxima.getValue().toString()+" personas");
+					
+					Trayecto t = GestorEntidades.crearTrayecto(origen,destino,(Integer)jspin_duracion.getValue(),(Integer)jspin_capacidad_maxima.getValue(),(Integer)jspin_duracion.getValue(),jtf_costo.getText());
+					jlist_trayectos_contenido.addElement(t);
 					
 					// fijar el combobox jcb_origen al destino seleccionado
 					jcb_estacion_origen_contenido.removeAllElements();
