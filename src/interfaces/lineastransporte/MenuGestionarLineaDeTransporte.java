@@ -2,8 +2,7 @@ package interfaces.lineastransporte;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Vector;
+import java.util.*;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,10 +18,13 @@ import java.awt.Color;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+
+
 import dominio.EstadoLinea;
 import dominio.LineaDeTransporte;
 import excepciones.DatosDeLineaDeTransporteIncorrectosException;
 import gestores.GestorEntidades;
+import gestores.GestorJDBC;
 import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
 import javax.swing.JTextPane;
@@ -138,15 +140,15 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		
 		jb_buscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String estado = jcb_estado.getSelectedItem() == null? "" : jcb_estado.getSelectedItem().toString();
+				EstadoLinea estado = (EstadoLinea) jcb_estado.getSelectedItem();
 
 				//buscar datos en la BD
-				/*ArrayList<LineaDeTransporte> lineas = GestorJDBC.buscarLineasDeTransporte(jtf_nombre.getText(),jtf_color.getText(),estado);
+				List<LineaDeTransporte> lineas = GestorJDBC.buscarLineaDeTransporte("",jtf_nombre.getText(),jtf_color.getText(),estado);
 				
 				//llenar tabla
 				for(LineaDeTransporte linea : lineas) {
 					jlist_lineas_contenido.addElement(linea);
-				}*/
+				}
 				
 			}
 		});
@@ -194,8 +196,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 					EstadoLinea estado = (EstadoLinea) jcb_estado.getSelectedItem();
 					GestorValidaciones.validarLineaDeTransporte(nombre,color,estado);
 					jtp_errores.setText("");
-					
-					//GestorJDBC.agregarLineaDeTransporte(GestorEntidades.crearLineaDeTransporte(nombre,color,estado)); TODO
+					GestorJDBC.agregarLineaDeTransporte(GestorEntidades.crearLineaDeTransporte(nombre,color,estado)); 
 				}
 				catch(DatosDeLineaDeTransporteIncorrectosException exc) {
 					jtp_errores.setText(exc.errores);

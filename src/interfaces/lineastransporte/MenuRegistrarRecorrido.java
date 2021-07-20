@@ -26,6 +26,7 @@ import dominio.LineaDeTransporte;
 import dominio.Trayecto;
 import excepciones.DatosDeTrayectoIncorrectosException;
 import gestores.GestorEntidades;
+import gestores.GestorJDBC;
 import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
 
@@ -190,17 +191,17 @@ public class MenuRegistrarRecorrido extends JPanel {
 		// TO DO - BASE DE DATOS
 		
 		
-		/*for(Estacion e : GestorJDBC.buscarEstacion("","","","",-1)) {
-			jcb_estacion_origen_contenido.addElement(e);
-			jcb_estacion_destino_contenido.addElement(e);
-		}*/
-		
-		//// for debugging purposes
-		for(char x='A';x<'F';x++) {
-			Estacion e = GestorEntidades.crearEstacion(""+x,"13:00","20:00",EstadoEstacion.OPERATIVA);
+		for(Estacion e : GestorJDBC.buscarEstacion("","","","",null)) {
 			jcb_estacion_origen_contenido.addElement(e);
 			jcb_estacion_destino_contenido.addElement(e);
 		}
+		
+		//// for debugging purposes
+		/*for(char x='A';x<'F';x++) {
+			Estacion e = GestorEntidades.crearEstacion(""+x,"13:00","20:00",EstadoEstacion.OPERATIVA);
+			jcb_estacion_origen_contenido.addElement(e);
+			jcb_estacion_destino_contenido.addElement(e);
+		}*/
 	}
 	
 	private void agregarActionListener() {
@@ -263,7 +264,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 		jb_guardar_recorrido.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO
-				//GestorJDBC.guardarRecorridoDeLinea(linea_seleccionada,jlist_trayectos_contenido.toArray)
+				GestorJDBC.agregarRecorrido(linea_seleccionada,(Trayecto[]) jlist_trayectos_contenido.toArray());
 			}
 		});
 	}

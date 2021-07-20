@@ -67,7 +67,7 @@ public class GestorEntidades {
 		return new LineaDeTransporte(id_linea,nombre,color, estado==1? EstadoLinea.NO_ACTIVA : EstadoLinea.ACTIVA);
 	}
 
-	public static Estacion crearEstacion(String id_estacion, String nombre, String horario_apertura, String horario_cierre, Integer estado) {
-		return new Estacion(id_estacion,nombre,horario_apertura,horario_cierre, estado==1? EstadoEstacion.EN_MANTENIMIENTO : EstadoEstacion.OPERATIVA);
+	public static Estacion crearEstacion(String id_estacion, String nombre, String horario_apertura, String horario_cierre, String estado) {
+		return new Estacion(id_estacion,nombre,horario_apertura,horario_cierre, estado.equals(EstadoEstacion.EN_MANTENIMIENTO.toString())? EstadoEstacion.EN_MANTENIMIENTO : EstadoEstacion.OPERATIVA);
 	}
 }

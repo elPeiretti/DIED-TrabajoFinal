@@ -20,6 +20,7 @@ import dominio.Estacion;
 import dominio.EstadoEstacion;
 import excepciones.DatosDeEstacionIncorrectosException;
 import gestores.GestorEntidades;
+import gestores.GestorJDBC;
 import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
 import java.awt.Font;
@@ -188,9 +189,7 @@ public class MenuGestionarEstaciones extends JPanel {
 				try {
 					GestorValidaciones.validarEstacion(nombre,apertura,cierre,estado);
 					jtp_errores.setText("");
-					//GestorEntidades.crearEstacion(nombre,apertura,cierre,estado);
-					
-					//GestorJDBC.crearEstacion()
+					GestorJDBC.agregarEstacion(GestorEntidades.crearEstacion(nombre,apertura,cierre,estado));
 				}
 				catch(DatosDeEstacionIncorrectosException exp) {
 					jtp_errores.setText(exp.errores);
@@ -201,15 +200,16 @@ public class MenuGestionarEstaciones extends JPanel {
 		jb_buscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				objetos_en_tabla.clear();
+				jtable_estaciones_contenido.setRowCount(0);
 				try {
 					GestorValidaciones.validarFormatoHorariosEstacion(jtf_apertura.getText(),jtf_cierre.getText());
 					jtp_errores.setText("");
 					
 					//llenar la tabla
-					/*for(Estacion e : GestorJDBC.buscarEstacion("",jtf_nombre.getText(),jtf_apertura.getText(),jtf_cierre.getText(),jcb_estado.getSelectedIndex())) {
-						jtable_estaciones_contenido.addRow(e.asVector());
-						objetos_en_tabla.add(e);
-					}*/
+					for(Estacion est : GestorJDBC.buscarEstacion("",jtf_nombre.getText(),jtf_apertura.getText(),jtf_cierre.getText(),(EstadoEstacion) jcb_estado.getSelectedItem())) {
+						jtable_estaciones_contenido.addRow(est.asVector());
+						objetos_en_tabla.add(est);
+					}
 				}
 				catch(DatosDeEstacionIncorrectosException exp) {
 					jtp_errores.setText(exp.errores);

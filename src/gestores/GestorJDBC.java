@@ -68,7 +68,7 @@ public static void updateUltimosId () {
 	
 }
 	
-public static List<Estacion> buscarEstacion (String id_estacion, String nombre, String horario_apertura, String horario_cierre, Integer estado) {
+public static List<Estacion> buscarEstacion (String id_estacion, String nombre, String horario_apertura, String horario_cierre, EstadoEstacion estado) {
 		
 		Connection conn = null;
 		PreparedStatement pstm = null;
@@ -87,8 +87,8 @@ public static List<Estacion> buscarEstacion (String id_estacion, String nombre, 
 					+ "horario_apertura LIKE ? AND "
 					+ "horario_cierre LIKE ?";
 			
-			if(estado != -1) {
-				armadoStm += (" AND estado =" + estado);
+			if(estado !=  null) {
+				armadoStm += (" AND estado = ?");
 			}
 				
 			
@@ -100,6 +100,10 @@ public static List<Estacion> buscarEstacion (String id_estacion, String nombre, 
 			pstm.setString(3,(horario_apertura.isEmpty()? "%" : horario_apertura));
 			pstm.setString(4, (horario_cierre.isEmpty()? "%" : horario_cierre));
 			
+			if(estado !=  null) {
+				pstm.setString(5,estado.toString());
+			}
+			
 			
 			//int cantidad = pstm.executeUpdate();
 			//conn.commit()
@@ -107,7 +111,7 @@ public static List<Estacion> buscarEstacion (String id_estacion, String nombre, 
 			rs = pstm.executeQuery();
 			
 			while(rs.next()) {
-				Estacion aux = GestorEntidades.crearEstacion(rs.getString("id_estacion"),rs.getString("nombre"),rs.getString("horario_apertura"),rs.getString("horario_cierre"),rs.getInt("estado"));
+				Estacion aux = GestorEntidades.crearEstacion(rs.getString("id_estacion"),rs.getString("nombre"),rs.getString("horario_apertura"),rs.getString("horario_cierre"),rs.getString("estado"));
 				resultado.add(aux);
 			}
 					
@@ -205,7 +209,7 @@ public static List<TareaDeMantenimiento> buscarTareaDeMantenimiento (String id_t
 }
 
 
-public static List<LineaDeTransporte> buscarLineaDeTransporte (String id_linea, String nombre, String color, Integer estado) {
+public static List<LineaDeTransporte> buscarLineaDeTransporte (String id_linea, String nombre, String color, EstadoLinea estado) {
 	
 	
 	Connection conn = null;
@@ -225,7 +229,7 @@ public static List<LineaDeTransporte> buscarLineaDeTransporte (String id_linea, 
 				+ "color LIKE ?" ;
 		
 		if (estado != null) {
-			armadoStm += (" AND estado = " + estado);
+			armadoStm += (" AND estado = " + estado.toString());
 		}
 				
 		pstm = conn.prepareStatement(armadoStm);
@@ -333,8 +337,8 @@ public static List<Trayecto> buscarTrayecto (String id_trayecto, String id_linea
 	//Cargo estaciones Origen y Destino de los Trayectos
 	
 	for(int i = 0; i < resultado.size(); i++) {
-		resultado.get(i).setOrigen(buscarEstacion(origenes.get(i),"","","",-1).get(0));
-		resultado.get(i).setDestino(buscarEstacion(destinos.get(i),"","","",-1).get(0));
+		resultado.get(i).setOrigen(buscarEstacion(origenes.get(i),"","","",null).get(0));
+		resultado.get(i).setDestino(buscarEstacion(destinos.get(i),"","","",null).get(0));
 	}
 
 	return resultado;
@@ -416,7 +420,7 @@ public static void agregarEstacion(Estacion nueva_estacion) {
 		pstm.setString(2, nueva_estacion.getNombre());
 		pstm.setString(3, nueva_estacion.getHorario_apertura());
 		pstm.setString(4, nueva_estacion.getHorario_cierre());
-		pstm.setInt(5, nueva_estacion.getEstado().equals(EstadoEstacion.OPERATIVA)? 0:1);
+		pstm.setString(5, nueva_estacion.getEstado().toString());
 		
 		pstm.executeUpdate();
 		
@@ -748,6 +752,14 @@ public static void agregarCamino(Camino nuevo_camino) {
 	}
 	
 		
+}
+
+public static void agregarRecorrido(LineaDeTransporte linea_seleccionada, Trayecto[] recorrido) {
+	// TODO Auto-generated method stub
+	for(Trayecto t : recorrido) {
+		agregarTrayecto(linea_seleccionada.getId(),t);
+	}
+	
 }
 	
 	

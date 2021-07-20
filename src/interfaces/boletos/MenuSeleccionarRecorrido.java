@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import dominio.Camino;
 import dominio.Estacion;
 import gestores.GestorEntidades;
+import gestores.GestorJDBC;
 import interfaces.VentanaPrincipal;
 
 import java.awt.event.ActionListener;
@@ -132,11 +133,11 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		}
 	}
 	
-	private void llenarComboBox() {
-		/*for(Estacion e : GestorJDBC.buscarEstacion("","","","",null)) {
+	public void llenarComboBox() {
+		for(Estacion e : GestorJDBC.buscarEstacion("","","","",null)) {
 			jcb_estacion_origen.addItem(e);
 			jcb_estacion_destino.addItem(e);
-		}*/
+		}
 	}
 
 }

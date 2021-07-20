@@ -105,7 +105,8 @@ public class VentanaPrincipal extends JFrame {
 		CardLayout c = (CardLayout) contentPane.getLayout();
 		if(panel.equals(REG_COMPRADOR))
 			m_reg_compr.inicializarLabels();
-		
+		if(panel.equals(SELEC_RECORRIDO))
+			m_selec_rec.llenarComboBox();
 		c.show(contentPane,panel);
 	}
 	

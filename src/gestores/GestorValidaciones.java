@@ -13,6 +13,9 @@ public class GestorValidaciones {
 		if(estado == null)
 			errores+="Campo 'Estado' Incompleto\n";
 		
+		if(estado == EstadoEstacion.EN_MANTENIMIENTO)
+			errores+="El Campo 'Estado' debe estar en 'OPERTIVA' para la creacion\n";
+		
 		if(nombre.isEmpty()) {
 			errores+="Campo 'nombre' Incompleto\n";
 		}
