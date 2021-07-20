@@ -55,4 +55,19 @@ public class GestorEntidades {
 	public static Cliente crearCliente(String nombre, String email) {
 		return new Cliente(nombre, email);
 	}
+
+	
+	public static Trayecto crearTrayecto(String id_trayecto, Integer dist, Integer duracion, Integer capacidad, Integer estado, Double costo, Estacion origen, Estacion destino) {
+		
+		return new Trayecto(id_trayecto,dist,duracion,capacidad,costo,origen,destino, estado==1? EstadoTrayecto.INACTIVO : EstadoTrayecto.ACTIVO);
+		
+	}
+
+	public static LineaDeTransporte crearLineaDeTransporte(String id_linea, String nombre, String color, Integer estado) {
+		return new LineaDeTransporte(id_linea,nombre,color, estado==1? EstadoLinea.NO_ACTIVA : EstadoLinea.ACTIVA);
+	}
+
+	public static Estacion crearEstacion(String id_estacion, String nombre, String horario_apertura, String horario_cierre, Integer estado) {
+		return new Estacion(id_estacion,nombre,horario_apertura,horario_cierre, estado==1? EstadoEstacion.EN_MANTENIMIENTO : EstadoEstacion.OPERATIVA);
+	}
 }

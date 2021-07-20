@@ -21,4 +21,33 @@ public class Boleto {
 		this.camino = camino;
 	}
 	
+	public static void setUltimo_id(Integer id) {
+		ultimo_id=id;
+	}
+
+	public String getId_boleto() {
+		return id_boleto;
+	}
+
+	public LocalDate getFecha_venta() {
+		return fecha_venta;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public Estacion getOrigen() {
+		return origen;
+	}
+
+	public Estacion getDestino() {
+		return destino;
+	}
+
+	public Camino getCamino() {
+		return camino;
+	}
+	
+	
 }

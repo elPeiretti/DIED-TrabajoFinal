@@ -41,6 +41,21 @@ public class Camino {
 	public Integer getDistancia() {
 		return distancia;
 	}
+	public String getId_camino() {
+		return id_camino;
+	}
+	
+	public static void setUltimo_id(Integer id) {
+		ultimo_id=id;
+	}
+
+	public Estacion getOrigen() {
+		return origen;
+	}
+
+	public List<Trayecto> getCombinacion() {
+		return combinacion;
+	}
 	
 	
 }

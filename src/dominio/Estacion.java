@@ -14,15 +14,23 @@ public class Estacion {
 	private EstadoEstacion estado;
 	private List<TareaDeMantenimiento> mantenimientos;
 	
-	public Estacion(String nombre, String horario_apertura, String horario_cierre, EstadoEstacion estadi) {
-		this.id_estacion = "EST"+(++ultimo_id).toString();
+	public Estacion(String nombre, String horario_apertura, String horario_cierre, EstadoEstacion estado) {
 		this.nombre = nombre;
 		this.horario_apertura = horario_apertura;
 		this.horario_cierre = horario_cierre;
 		this.estado = estado;
 		this.mantenimientos = new ArrayList<TareaDeMantenimiento>();
 	}
-	
+
+	public Estacion(String id_estacion, String nombre, String horario_apertura, String horario_cierre, EstadoEstacion estado) {
+		this.id_estacion = id_estacion;
+		this.nombre = nombre;
+		this.horario_apertura = horario_apertura;
+		this.horario_cierre = horario_cierre;
+		this.estado = estado;
+		this.mantenimientos = new ArrayList<TareaDeMantenimiento>();
+	}
+
 	public void cambiarEstado() {
 		
 		if(this.estado == EstadoEstacion.OPERATIVA) {
@@ -66,5 +74,30 @@ public class Estacion {
 	public void setEstado(EstadoEstacion estado) {
 		this.estado = estado;
 	}
+
+	public static void setUltimo_id(Integer id) {
+		ultimo_id=id;
+	}
+
+	public String getId_estacion() {
+		return id_estacion;
+	}
+
+	public String getHorario_apertura() {
+		return horario_apertura;
+	}
+
+	public String getHorario_cierre() {
+		return horario_cierre;
+	}
+
+	public EstadoEstacion getEstado() {
+		return estado;
+	}
+
+	public List<TareaDeMantenimiento> getMantenimientos() {
+		return mantenimientos;
+	}
+	
 	
 }

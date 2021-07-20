@@ -21,6 +21,14 @@ public class LineaDeTransporte {
 		this.recorrido = new ArrayList<Trayecto>();
 	}
 	
+	public LineaDeTransporte(String id_linea, String nombre, String color, EstadoLinea estado) {
+		this.id_linea = id_linea;
+		this.nombre = nombre;
+		this.color = color;
+		this.estado = estado;
+		this.recorrido = new ArrayList<Trayecto>();
+	}
+
 	public String getId() {
 		return this.id_linea;
 	}
@@ -40,4 +48,29 @@ public class LineaDeTransporte {
 	public void setEstado(EstadoLinea estado) {
 		this.estado=estado;
 	}
+	
+	public static void setUltimo_id(Integer id) {
+		ultimo_id=id;
+	}
+
+	public String getId_linea() {
+		return id_linea;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public EstadoLinea getEstado() {
+		return estado;
+	}
+
+	public List<Trayecto> getRecorrido() {
+		return recorrido;
+	}
+	
 }

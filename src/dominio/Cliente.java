@@ -12,5 +12,17 @@ public class Cliente {
 		this.nombre = nombre;
 		this.email = email;
 	}
+	public static void setUltimo_id(Integer id) {
+		ultimo_id=id;
+	}
+	public String getId_cliente() {
+		return id_cliente;
+	}
+	public String getNombre() {
+		return nombre;
+	}
+	public String getEmail() {
+		return email;
+	}
 	
 }
