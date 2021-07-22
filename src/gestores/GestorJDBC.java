@@ -351,7 +351,7 @@ public static List<LineaDeTransporte> buscarLineaDeTransporte (String id_linea, 
 }
 
 
-public static List<Trayecto> buscarTrayecto (String id_trayecto, String id_linea, String id_origen, String id_destino) {
+public static List<Trayecto> buscarTrayecto (String id_trayecto, String id_linea, String id_origen, String id_destino, EstadoTrayecto estado) {
 	
 	
 	Connection conn = null;
@@ -373,16 +373,24 @@ public static List<Trayecto> buscarTrayecto (String id_trayecto, String id_linea
 				+ "id_origen LIKE ? AND "
 				+ "id_destino LIKE ?";
 		
+		if(estado != null) {
+			armadoStm += " AND estado = ?";
+		}
 				
 		pstm = conn.prepareStatement(armadoStm);
 		
 		//conn.setAutoCommit(false);
+		
 		pstm.setString(1, (id_trayecto.isEmpty()? "%" : id_trayecto));
 		pstm.setString(2, (id_linea.isEmpty()? "%" : id_linea));
 		pstm.setString(3, (id_origen.isEmpty()? "%" : id_origen));
 		pstm.setString(4, (id_destino.isEmpty()? "%" : id_destino));
 		
-		//int cantidad = pstm.executeUpdate();
+		
+		if(estado != null) {
+			pstm.setString(5, estado.toString());
+		}
+		
 		//conn.commit()
 		rs = pstm.executeQuery();
 		
@@ -1072,7 +1080,7 @@ public static void eliminarLineaDeTransporte (LineaDeTransporte linea) {
 	
 	Connection conn = null;
 	PreparedStatement pstm = null;
-	List<Trayecto> recorrido = GestorJDBC.buscarTrayecto("", linea.getId_linea(), "", "");
+	List<Trayecto> recorrido = GestorJDBC.buscarTrayecto("", linea.getId_linea(), "", "", null);
 	
 	for(Trayecto t : recorrido) {
 		GestorJDBC.eliminarTrayecto(t);

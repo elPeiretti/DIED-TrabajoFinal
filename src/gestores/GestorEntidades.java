@@ -93,7 +93,8 @@ public class GestorEntidades {
 			caminos.add(camino);
 			return;
 		}
-		List<Trayecto> trayectos = GestorJDBC.buscarTrayecto("","",origen.getId_estacion(),"");
+		
+		List<Trayecto> trayectos = GestorJDBC.buscarTrayecto("","",origen.getId_estacion(),"", EstadoTrayecto.ACTIVO);
 	
 		for(Trayecto t : trayectos) {
 			List<Trayecto> copia = new ArrayList<Trayecto>(camino);
