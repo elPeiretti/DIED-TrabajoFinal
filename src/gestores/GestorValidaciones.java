@@ -20,7 +20,7 @@ public class GestorValidaciones {
 			errores+="Campo 'nombre' Incompleto\n";
 		}
 		errores=validarHorariosEstacion(h_apertura,h_cierre,errores);
-		
+				
 		if(!errores.isEmpty())
 			throw new DatosDeEstacionIncorrectosException(errores);
 	}

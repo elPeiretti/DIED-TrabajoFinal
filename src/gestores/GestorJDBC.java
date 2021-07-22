@@ -118,7 +118,7 @@ public static List<Estacion> buscarEstacion (String id_estacion, String nombre, 
 		
 			//conn.setAutoCommit(false);
 			pstm.setString(1, (id_estacion.isEmpty()? "%" : id_estacion));
-			pstm.setString(2, (nombre.isEmpty()? "%" : "%"+nombre.toUpperCase().replace(' ','%')+"%"));
+			pstm.setString(2, (nombre.isEmpty()? "%" : "%"+nombre.replace(' ','%')+"%"));
 			pstm.setString(3,(horario_apertura.isEmpty()? "%" : horario_apertura));
 			pstm.setString(4, (horario_cierre.isEmpty()? "%" : horario_cierre));
 			
@@ -329,12 +329,11 @@ public static List<Trayecto> buscarTrayecto (String id_trayecto, String id_linea
 		
 		//int cantidad = pstm.executeUpdate();
 		//conn.commit()
-		
 		rs = pstm.executeQuery();
 		
 		while(rs.next()) {
 			Trayecto aux = GestorEntidades.crearTrayecto(rs.getString("id_trayecto"),rs.getInt("distancia"),rs.getInt("duracion"),rs.getInt("cant_max_pasajeros")
-					,rs.getInt("estado"),rs.getDouble("costo"),null,null); //las estaciones se agregan mas adelante
+					,rs.getString("estado"),rs.getDouble("costo"),null,null); //las estaciones se agregan mas adelante
 			resultado.add(aux);
 			
 			origenes.add(rs.getString("id_origen"));
@@ -499,7 +498,7 @@ public static void agregarTrayecto(String id_linea, Trayecto nuevo_trayecto) {
 		pstm.setDouble(2, nuevo_trayecto.getDistancia());
 		pstm.setInt(3, nuevo_trayecto.getDuracion());
 		pstm.setInt(4, nuevo_trayecto.getCant_max_pasajeros());
-		pstm.setInt(5, nuevo_trayecto.getEstado().equals(EstadoTrayecto.ACTIVO)? 0:1);
+		pstm.setString(5, nuevo_trayecto.getEstado().toString());
 		pstm.setDouble(6, nuevo_trayecto.getCosto());
 		pstm.setString(7, id_linea);
 		pstm.setString(8, nuevo_trayecto.getOrigen().getId_estacion());
@@ -750,7 +749,10 @@ public static void agregarCamino(Camino nuevo_camino) {
 			
 			pstm.setString(1, tray.getId_trayecto());
 			pstm.setString(2, nuevo_camino.getId_camino());
+			
+			pstm.executeUpdate();
 		}
+		
 		
 		conn.commit();
 		
@@ -786,6 +788,180 @@ public static void agregarRecorrido(LineaDeTransporte linea_seleccionada, Trayec
 	}
 	
 }
+
+public static void actualizarEstacion (Estacion estacion) {
 	
+	Connection conn = null;
+	PreparedStatement pstm = null;
+	
+	
+	try {
+		//Defino motor de base de datos
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		//Carga el Driver Manager
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		
+		String armadoStm = "UPDATE estacion SET "
+				+ "nombre = ?, "
+				+ "horario_apertura = ?, "
+				+ "horario_cierre = ?, "
+				+ "estado = ? "
+				+ "WHERE id_estacion = ?;";
+				
+		pstm = conn.prepareStatement(armadoStm);
+		
+		conn.setAutoCommit(false);
+			
+		pstm.setString(1, estacion.getNombre());
+		pstm.setString(2, estacion.getHorario_apertura());
+		pstm.setString(3, estacion.getHorario_cierre());
+		pstm.setString(4, estacion.getEstado().toString());
+		pstm.setString(5, estacion.getId_estacion());
+				
+		pstm.executeUpdate();
+		
+		conn.commit();
+		
+		conn.setAutoCommit(true);
+					
+	} catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SQLException e) {
+		try {
+			conn.rollback();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		e.printStackTrace();
+	} finally {
+		
+		if(pstm!=null) try { pstm.close(); }
+		catch (SQLException e) {e.printStackTrace(); }
+		
+		if(conn!=null) try { conn.close(); }
+		catch (SQLException e) { e.printStackTrace(); }
+	}
+	
+}
+
+public static void actualizarLineaDeTransporte (LineaDeTransporte linea) {
+	
+	Connection conn = null;
+	PreparedStatement pstm = null;
+	
+	
+	try {
+		//Defino motor de base de datos
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		//Carga el Driver Manager
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		
+		String armadoStm = "UPDATE linea SET "
+				+ "nombre = ?, "
+				+ "color = ?, "
+				+ "estado = ? "
+				+ "WHERE id_linea = ?;";
+				
+		pstm = conn.prepareStatement(armadoStm);
+		
+		conn.setAutoCommit(false);
+			
+		pstm.setString(1, linea.getNombre());
+		pstm.setString(2, linea.getColor());
+		pstm.setString(3, linea.getEstado().toString());
+		pstm.setString(4, linea.getId_linea());
+				
+		pstm.executeUpdate();
+		
+		conn.commit();
+		
+		conn.setAutoCommit(true);
+					
+	} catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SQLException e) {
+		try {
+			conn.rollback();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		e.printStackTrace();
+	} finally {
+		
+		if(pstm!=null) try { pstm.close(); }
+		catch (SQLException e) {e.printStackTrace(); }
+		
+		if(conn!=null) try { conn.close(); }
+		catch (SQLException e) { e.printStackTrace(); }
+	}
+	
+}
+
+public static void actualizarTrayecto (Trayecto trayecto) {
+	
+	Connection conn = null;
+	PreparedStatement pstm = null;
+	
+	
+	try {
+		//Defino motor de base de datos
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		//Carga el Driver Manager
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		
+		String armadoStm = "UPDATE trayecto SET "
+				+ "distancia = ?, "
+				+ "duracion = ?, "
+				+ "cant_max_pasajeros = ?, "
+				+ "estado = ?, "
+				+ "costo = ?, "
+				+ "id_origen = ?, "
+				+ "id_destino = ?"
+				+ "WHERE id_trayecto = ?;";
+				
+		pstm = conn.prepareStatement(armadoStm);
+		
+		conn.setAutoCommit(false);
+			
+		pstm.setInt(1, trayecto.getDistancia());
+		pstm.setInt(2, trayecto.getDuracion());
+		pstm.setInt(3, trayecto.getCant_max_pasajeros());
+		pstm.setString(4, trayecto.getEstado().toString());
+		pstm.setDouble(5, trayecto.getCosto());
+		pstm.setString(6, trayecto.getOrigen().getId_estacion());
+		pstm.setString(7, trayecto.getDestino().getId_estacion());
+		pstm.setString(8, trayecto.getId_trayecto());
+		
+		pstm.executeUpdate();
+		
+		conn.commit();
+		
+		conn.setAutoCommit(true);
+					
+	} catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SQLException e) {
+		try {
+			conn.rollback();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		e.printStackTrace();
+	} finally {
+		
+		if(pstm!=null) try { pstm.close(); }
+		catch (SQLException e) {e.printStackTrace(); }
+		
+		if(conn!=null) try { conn.close(); }
+		catch (SQLException e) { e.printStackTrace(); }
+	}
+	
+}
 	
 }

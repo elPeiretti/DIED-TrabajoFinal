@@ -57,9 +57,9 @@ public class GestorEntidades {
 	}
 
 	
-	public static Trayecto crearTrayecto(String id_trayecto, Integer dist, Integer duracion, Integer capacidad, Integer estado, Double costo, Estacion origen, Estacion destino) {
+	public static Trayecto crearTrayecto(String id_trayecto, Integer dist, Integer duracion, Integer capacidad, String estado, Double costo, Estacion origen, Estacion destino) {
 		
-		return new Trayecto(id_trayecto,dist,duracion,capacidad,costo,origen,destino, estado==1? EstadoTrayecto.INACTIVO : EstadoTrayecto.ACTIVO);
+		return new Trayecto(id_trayecto,dist,duracion,capacidad,costo,origen,destino, estado.equals(EstadoTrayecto.INACTIVO.toString())? EstadoTrayecto.INACTIVO : EstadoTrayecto.ACTIVO);
 		
 	}
 

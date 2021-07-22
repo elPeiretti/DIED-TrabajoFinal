@@ -21,6 +21,7 @@ import dominio.Estacion;
 import dominio.EstadoEstacion;
 import excepciones.DatosDeEstacionIncorrectosException;
 import gestores.GestorEntidades;
+import gestores.GestorJDBC;
 import gestores.GestorValidaciones;
 
 import java.awt.Color;
@@ -127,7 +128,7 @@ public class MenuEdicionEstacion extends JPanel {
 					if(opcion == JOptionPane.YES_OPTION) {
 						//MANEJAR TEMA DE CAMBIO DE ESTADO TODO
 						GestorEntidades.actualizarEstacion(MenuGestionarEstaciones.estacion_seleccionada,nombre,apertura,cierre,estado);
-						//GestorJDBC.actualizarEstacion(MenuGestionarEstaciones.estacion_seleccionada
+						GestorJDBC.actualizarEstacion(MenuGestionarEstaciones.estacion_seleccionada);
 						VentanaPrincipal.popupInfo("Se guardaron los cambios exitosamente.", "Cambios Guardados");
 						ventana_contenedora.cambiarPanel(VentanaPrincipal.GEST_ESTACIONES);	
 					}
