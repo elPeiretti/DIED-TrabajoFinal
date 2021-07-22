@@ -14,7 +14,7 @@ public class Camino {
 	private List<Trayecto> combinacion;
 	
 	public Camino(List<Trayecto> combinacion, Estacion origen, Estacion destino, Double costo, Integer duracion, Integer distancia) {
-		this.id_camino = "PATH"+(++ultimo_id).toString();
+		this.id_camino = "PAT"+(++ultimo_id).toString();
 		this.combinacion = combinacion;
 		this.origen = origen;
 		this.destino = destino;

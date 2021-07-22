@@ -104,5 +104,9 @@ public class GestorEntidades {
 			}
 		}
 	}
+
+	public static Boleto crearBoleto(Cliente c, Estacion origen, Estacion destino, Camino camino_seleccionado) {
+		return new Boleto(c, origen, destino, camino_seleccionado);
+	}
 	
 }
