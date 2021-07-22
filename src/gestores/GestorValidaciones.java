@@ -24,6 +24,19 @@ public class GestorValidaciones {
 		if(!errores.isEmpty())
 			throw new DatosDeEstacionIncorrectosException(errores);
 	}
+	
+	public static void validarEstacion(String nombre, String h_apertura, String h_cierre) throws DatosDeEstacionIncorrectosException {
+		String errores="";
+		
+		if(nombre.isEmpty()) {
+			errores+="Campo 'nombre' Incompleto\n";
+		}
+		errores=validarHorariosEstacion(h_apertura,h_cierre,errores);
+		
+		if(!errores.isEmpty())
+			throw new DatosDeEstacionIncorrectosException(errores);
+	}
+	
 	public static void validarHorariosEstacion(String h_apertura, String h_cierre) throws DatosDeEstacionIncorrectosException {
 		String errores = "";
 		errores = validarHorariosEstacion(h_apertura,h_cierre,errores);

@@ -63,8 +63,8 @@ public class GestorEntidades {
 		
 	}
 
-	public static LineaDeTransporte crearLineaDeTransporte(String id_linea, String nombre, String color, Integer estado) {
-		return new LineaDeTransporte(id_linea,nombre,color, estado==1? EstadoLinea.NO_ACTIVA : EstadoLinea.ACTIVA);
+	public static LineaDeTransporte crearLineaDeTransporte(String id_linea, String nombre, String color, String estado) {
+		return new LineaDeTransporte(id_linea,nombre,color, estado.equals(EstadoLinea.NO_ACTIVA.toString())? EstadoLinea.NO_ACTIVA : EstadoLinea.ACTIVA);
 	}
 
 	public static Estacion crearEstacion(String id_estacion, String nombre, String horario_apertura, String horario_cierre, String estado) {

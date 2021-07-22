@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.DefaultComboBoxModel;
@@ -144,7 +145,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 
 				//buscar datos en la BD
 				List<LineaDeTransporte> lineas = GestorJDBC.buscarLineaDeTransporte("",jtf_nombre.getText(),jtf_color.getText(),estado);
-				
+				jlist_lineas_contenido.clear();
 				//llenar tabla
 				for(LineaDeTransporte linea : lineas) {
 					jlist_lineas_contenido.addElement(linea);
@@ -181,8 +182,15 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		jb_eliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(jlist_lineas.getSelectedIndex()!=-1) {
-					jlist_lineas_contenido.removeElementAt(jlist_lineas.getSelectedIndex());
-					//// eliminar de la BD? TODO
+					Integer opcion = VentanaPrincipal.popupConfirmar("Esta seguro que desea eliminar la linea " + jlist_lineas.getSelectedValue().getNombre() + "?", "Confirmar Baja");
+					
+					if(opcion == JOptionPane.YES_OPTION) {
+						//GestorJDBC.eliminarLinea(jlist_lineas.getSelectedValue()); TO DO
+						jlist_lineas_contenido.removeElementAt(jlist_lineas.getSelectedIndex());						
+						VentanaPrincipal.popupInfo("Se elimino la Linea exitosamente.", "Baja Linea Existosa");
+					}
+					
+					
 				}
 					
 			}
@@ -197,6 +205,9 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 					GestorValidaciones.validarLineaDeTransporte(nombre,color,estado);
 					jtp_errores.setText("");
 					GestorJDBC.agregarLineaDeTransporte(GestorEntidades.crearLineaDeTransporte(nombre,color,estado)); 
+					VentanaPrincipal.popupInfo("Se agrego la Linea exitosamente.", "Alta Existosa");
+					limpiarCampos();
+					limpiarTabla();
 				}
 				catch(DatosDeLineaDeTransporteIncorrectosException exc) {
 					jtp_errores.setText(exc.errores);
@@ -204,5 +215,15 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 			}
 		});
 		
+	}
+	
+	public void limpiarCampos() {
+		jtf_color.setText("");
+		jtf_nombre.setText("");
+		jcb_estado.setSelectedItem(null);
+	}
+	
+	public void limpiarTabla() {
+		jlist_lineas_contenido.clear();
 	}
 }

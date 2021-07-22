@@ -2,6 +2,7 @@ package interfaces.estacion;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -119,15 +120,30 @@ public class MenuEdicionEstacion extends JPanel {
 				String cierre = jtf_horario_cierre.getText();
 				EstadoEstacion estado = (EstadoEstacion)jcb_estado.getSelectedItem();
 				try {
-					GestorValidaciones.validarEstacion(nombre,apertura,cierre,estado);
+					GestorValidaciones.validarEstacion(nombre,apertura,cierre);
 					jtp_errores.setText("");
-					GestorEntidades.actualizarEstacion(MenuGestionarEstaciones.estacion_seleccionada,nombre,apertura,cierre,estado);
-					//GestorJDBC.actualizarEstacion(MenuGestionarEstaciones.estacion_seleccionada
+					
+					Integer opcion = VentanaPrincipal.popupConfirmar("Esta seguro que desea guadar los cambios?", "Confirmar Cambios");
+					if(opcion == JOptionPane.YES_OPTION) {
+						//MANEJAR TEMA DE CAMBIO DE ESTADO TODO
+						GestorEntidades.actualizarEstacion(MenuGestionarEstaciones.estacion_seleccionada,nombre,apertura,cierre,estado);
+						//GestorJDBC.actualizarEstacion(MenuGestionarEstaciones.estacion_seleccionada
+						VentanaPrincipal.popupInfo("Se guardaron los cambios exitosamente.", "Cambios Guardados");
+						ventana_contenedora.cambiarPanel(VentanaPrincipal.GEST_ESTACIONES);	
+					}
 				}
 				catch(DatosDeEstacionIncorrectosException exp) {
 					jtp_errores.setText(exp.errores);
 				}
 			}
 		});
+	}
+	
+	public void llenarCampos() {
+		jtf_nombre.setText(MenuGestionarEstaciones.estacion_seleccionada.getNombre());
+		jcb_estado.setSelectedItem(MenuGestionarEstaciones.estacion_seleccionada.getEstado());
+		jtf_horario_apertura.setText(MenuGestionarEstaciones.estacion_seleccionada.getHorario_apertura());
+		jtf_horario_cierre.setText(MenuGestionarEstaciones.estacion_seleccionada.getHorario_cierre());
+		
 	}
 }

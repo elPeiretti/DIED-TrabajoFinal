@@ -15,11 +15,13 @@ public class Estacion {
 	private List<TareaDeMantenimiento> mantenimientos;
 	
 	public Estacion(String nombre, String horario_apertura, String horario_cierre, EstadoEstacion estado) {
+		this.id_estacion = "EST" + ++ultimo_id;
 		this.nombre = nombre;
 		this.horario_apertura = horario_apertura;
 		this.horario_cierre = horario_cierre;
 		this.estado = estado;
 		this.mantenimientos = new ArrayList<TareaDeMantenimiento>();
+		
 	}
 
 	public Estacion(String id_estacion, String nombre, String horario_apertura, String horario_cierre, EstadoEstacion estado) {

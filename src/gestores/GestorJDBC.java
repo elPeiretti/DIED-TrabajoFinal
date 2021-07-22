@@ -30,22 +30,44 @@ public static void updateUltimosId () {
 		rs = pstm.executeQuery();
 		
 		while(rs.next()) {
-			if(rs.getString("nombre").equals("id_estacion")) {
-				Estacion.setUltimo_id(rs.getInt("valor"));
-			} else if(rs.getString("nombre").equals("id_boleto")) {
-				Boleto.setUltimo_id(rs.getInt("valor"));
-			} else if(rs.getString("nombre").equals("id_camino")) {
-				Camino.setUltimo_id(rs.getInt("valor"));
-			} else if(rs.getString("nombre").equals("id_cliente")) {
-				Cliente.setUltimo_id(rs.getInt("valor"));
-			} else if(rs.getString("nombre").equals("id_linea")) {
-				LineaDeTransporte.setUltimo_id(rs.getInt("valor"));
-			} else if(rs.getString("nombre").equals("id_tarea")) {
-				TareaDeMantenimiento.setUltimo_id(rs.getInt("valor"));
-			} else if(rs.getString("nombre").equals("id_trayecto")) {
-				Trayecto.setUltimo_id(rs.getInt("valor"));
+			
+			if(rs.getString("id_estacion") != null) {
+				Estacion.setUltimo_id(Integer.valueOf(rs.getString("id_estacion").substring(3)));
+			} else {
+				Estacion.setUltimo_id(0);
 			}
-		}
+			
+			if(rs.getString("id_boleto") != null) {
+				Boleto.setUltimo_id(Integer.valueOf(rs.getString("id_boleto").substring(3)));
+			} else {
+				Boleto.setUltimo_id(0);
+			}
+			
+			if(rs.getString("id_camino") != null) {
+				Camino.setUltimo_id(Integer.valueOf(rs.getString("id_camino").substring(3)));
+			} else {
+				Camino.setUltimo_id(0);
+			}
+			
+			if(rs.getString("id_linea") != null) {
+				LineaDeTransporte.setUltimo_id(Integer.valueOf(rs.getString("id_linea").substring(3)));
+			} else {
+				LineaDeTransporte.setUltimo_id(0);
+			}
+			
+			if(rs.getString("id_tarea") != null) {
+				TareaDeMantenimiento.setUltimo_id(Integer.valueOf(rs.getString("id_tarea").substring(4)));
+			} else {
+				TareaDeMantenimiento.setUltimo_id(0);
+			}
+			
+			if(rs.getString("id_trayecto") != null) {
+				Trayecto.setUltimo_id(Integer.valueOf(rs.getString("id_trayecto").substring(4)));
+			} else {
+				Trayecto.setUltimo_id(0);
+			}
+			
+	}
 				
 	} catch (ClassNotFoundException e) {
 		// TODO Auto-generated catch block
@@ -229,7 +251,7 @@ public static List<LineaDeTransporte> buscarLineaDeTransporte (String id_linea, 
 				+ "color LIKE ?" ;
 		
 		if (estado != null) {
-			armadoStm += (" AND estado = " + estado.toString());
+			armadoStm += (" AND estado = ?");
 		}
 				
 		pstm = conn.prepareStatement(armadoStm);
@@ -239,13 +261,16 @@ public static List<LineaDeTransporte> buscarLineaDeTransporte (String id_linea, 
 		pstm.setString(2, (nombre.isEmpty()? "%" : nombre));
 		pstm.setString(3, (color.isEmpty()? "%" : color));
 		
+		if (estado != null) {
+			pstm.setString(4, estado.toString());
+		}
 		//int cantidad = pstm.executeUpdate();
 		//conn.commit()
 		
 		rs = pstm.executeQuery();
 		
 		while(rs.next()) {
-			LineaDeTransporte aux = GestorEntidades.crearLineaDeTransporte(rs.getString("id_linea"),rs.getString("nombre"),rs.getString("color"),rs.getInt("estado"));
+			LineaDeTransporte aux = GestorEntidades.crearLineaDeTransporte(rs.getString("id_linea"),rs.getString("nombre"),rs.getString("color"),rs.getString("estado"));
 			resultado.add(aux);
 		}
 					
@@ -603,7 +628,7 @@ public static void agregarLineaDeTransporte(LineaDeTransporte nueva_linea) {
 		pstm.setString(1, nueva_linea.getId_linea());
 		pstm.setString(2, nueva_linea.getNombre());
 		pstm.setString(3, nueva_linea.getColor());
-		pstm.setInt(4, nueva_linea.getEstado().equals(EstadoLinea.ACTIVA)? 0:1);
+		pstm.setString(4, nueva_linea.getEstado().toString());
 				
 		pstm.executeUpdate();
 		

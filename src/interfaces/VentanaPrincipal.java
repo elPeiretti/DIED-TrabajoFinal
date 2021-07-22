@@ -2,8 +2,12 @@ package interfaces;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import gestores.GestorJDBC;
+
 import java.awt.CardLayout;
 import interfaces.algoritmos.*;
 import interfaces.boletos.*;
@@ -50,6 +54,7 @@ public class VentanaPrincipal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					GestorJDBC.updateUltimosId();
 					VentanaPrincipal frame = new VentanaPrincipal();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -107,7 +112,26 @@ public class VentanaPrincipal extends JFrame {
 			m_reg_compr.inicializarLabels();
 		if(panel.equals(SELEC_RECORRIDO))
 			m_selec_rec.llenarComboBox();
+		if(panel.equals(EDIT_ESTACION))
+			m_edit_estac.llenarCampos();
+		if(panel.equals(GEST_ESTACIONES)) {
+			m_gest_estac.limpiarTabla();
+			m_gest_estac.limpiarCampos();
+		}
 		c.show(contentPane,panel);
 	}
+	
+	public static void popupInfo (String mensaje, String titulo) {
+		
+		JOptionPane.showMessageDialog(null, mensaje, titulo, JOptionPane.INFORMATION_MESSAGE);
+		
+	}
+	
+public static Integer popupConfirmar (String mensaje, String titulo) {
+		
+		return JOptionPane.showConfirmDialog(null, mensaje, titulo, JOptionPane.YES_NO_OPTION);
+		
+	}
+	
 	
 }
