@@ -7,6 +7,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -111,16 +112,24 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 					GestorValidaciones.validarLineaDeTransporte(nombre,color,estado);
 					jtp_errores.setText("");
 					
-					//pasar la entidad ya actualizada?
-					GestorEntidades.actualizarLinea(linea_seleccionada,nombre,color,estado);
-					
-					//GestorJDBC.actualizarLineaDeTransporte(linea_seleccionada) TO DO
-					
+					Integer opcion = VentanaPrincipal.popupConfirmar("Esta seguro que desea guardar los cambios?", "Guardar cambios");
+					if(opcion == JOptionPane.YES_OPTION) {
+						GestorEntidades.actualizarLinea(linea_seleccionada,nombre,color,estado);
+						//GestorJDBC.actualizarLineaDeTransporte(linea_seleccionada) TODO
+						VentanaPrincipal.popupInfo("Camios realizados exitosamente.", "Cambio exitoso");
+						ventana_contenedora.cambiarPanel(VentanaPrincipal.GEST_LINEA);
+					}
 				}
 				catch(DatosDeLineaDeTransporteIncorrectosException exc) {
 					jtp_errores.setText(exc.errores);
 				}
 			}
 		});
+	}
+
+	public void llenarCampos() {
+		jtf_nombre.setText(linea_seleccionada.getNombre());
+		jtf_color.setText(linea_seleccionada.getColor());
+		jcb_estado.setSelectedItem(linea_seleccionada.getEstado());
 	}
 }

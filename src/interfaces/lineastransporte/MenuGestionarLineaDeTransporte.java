@@ -176,7 +176,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				Integer i = jtable_lineas.getSelectedRow();
 				if(i != -1) {
-					MenuRegistrarRecorrido.linea_seleccionada = objetos_en_tabla.get(i);
+					MenuEdicionLineaDeTransporte.linea_seleccionada = objetos_en_tabla.get(i);
 					ventana_contenedora.cambiarPanel(VentanaPrincipal.EDIT_LINEA);
 				}
 			}

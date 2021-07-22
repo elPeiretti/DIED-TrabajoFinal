@@ -1,11 +1,13 @@
 package interfaces.lineastransporte;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -16,10 +18,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
 
+import dominio.Camino;
 import dominio.Estacion;
 import dominio.EstadoEstacion;
 import dominio.LineaDeTransporte;
@@ -57,8 +64,8 @@ public class MenuRegistrarRecorrido extends JPanel {
 	private JLabel lbl_costo;
 	private JComboBox<EstadoEstacion> jcb_estado;
 	private JLabel lbl_estado;
-	private JList<Trayecto> jlist_trayectos;
-	private DefaultListModel<Trayecto> jlist_trayectos_contenido;
+	private JTable jtable_trayectos;
+	private DefaultTableModel jtable_trayectos_contenido;
 	private JButton jb_guardar_recorrido;
 	private JButton jb_cancelar;
 	private VentanaPrincipal ventana_contenedora;
@@ -67,6 +74,8 @@ public class MenuRegistrarRecorrido extends JPanel {
 	private DefaultComboBoxModel<Estacion> jcb_estacion_destino_contenido;
 	protected static LineaDeTransporte linea_seleccionada;
 	private JButton jb_eliminar_ultimo;
+	private List<Trayecto> objetos_en_tabla;
+	private JScrollPane jspane_trayectos;
 
 	/**
 	 * Create the panel.
@@ -137,17 +146,29 @@ public class MenuRegistrarRecorrido extends JPanel {
 		lbl_estado = new JLabel("Estado:");
 		lbl_estado.setBounds(20, 113, 46, 14);
 		
-		jlist_trayectos = new JList<Trayecto>();
-		jlist_trayectos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		jtable_trayectos = new JTable();
+		jtable_trayectos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		jlist_trayectos_contenido = new DefaultListModel<Trayecto>();
+		jtable_trayectos_contenido = new DefaultTableModel();
+		jtable_trayectos_contenido.addColumn("Origen");
+		jtable_trayectos_contenido.addColumn("Destino");
+		jtable_trayectos_contenido.addColumn("Costo [$]");
+		jtable_trayectos_contenido.addColumn("Distancia [km]");
+		jtable_trayectos_contenido.addColumn("Duracion [min]");
+		jtable_trayectos_contenido.addColumn("Capacidad [personas]");
 		
-		jlist_trayectos.setModel(jlist_trayectos_contenido);
-		jlist_trayectos.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		jlist_trayectos.setBounds(20, 143, 408, 100);
+		objetos_en_tabla = new ArrayList<Trayecto>();
+
+		jtable_trayectos.setModel(jtable_trayectos_contenido);
+		jtable_trayectos.setBorder(null);
+		
+		jspane_trayectos = new JScrollPane(jtable_trayectos);
+		jspane_trayectos.setSize(430, 100);
+		jspane_trayectos.setLocation(10, 150);
 		
 		jb_guardar_recorrido = new JButton("Guardar recorrido");
 		jb_guardar_recorrido.setBounds(311, 254, 117, 23);
+		jb_guardar_recorrido.setEnabled(false);
 		
 		jb_cancelar = new JButton("Cancelar");
 		jb_cancelar.setBounds(23, 254, 89, 23);
@@ -165,7 +186,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 		this.llenarComboBoxEstaciones();
 		this.agregarActionListener();
 		add(jb_guardar_recorrido);
-		add(jlist_trayectos);
+		add(jspane_trayectos);
 		add(lbl_estado);
 		add(jcb_estado);
 		add(lbl_costo);
@@ -188,8 +209,6 @@ public class MenuRegistrarRecorrido extends JPanel {
 	}
 	
 	private void llenarComboBoxEstaciones() {
-		// TO DO - BASE DE DATOS
-		
 		
 		for(Estacion e : GestorJDBC.buscarEstacion("","","","",null)) {
 			jcb_estacion_origen_contenido.addElement(e);
@@ -205,10 +224,12 @@ public class MenuRegistrarRecorrido extends JPanel {
 	}
 	
 	private void agregarActionListener() {
+		
 		jb_cancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jcb_estacion_origen.setEnabled(true);
 				jb_eliminar_ultimo.setEnabled(false);
+				limpiarTabla();
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.GEST_LINEA);
 			}
 		});
@@ -238,13 +259,15 @@ public class MenuRegistrarRecorrido extends JPanel {
 					jtp_errores.setText("");
 					
 					Trayecto t = GestorEntidades.crearTrayecto(origen,destino,(Integer)jspin_duracion.getValue(),(Integer)jspin_capacidad_maxima.getValue(),(Integer)jspin_duracion.getValue(),jtf_costo.getText());
-					jlist_trayectos_contenido.addElement(t);
+					jtable_trayectos_contenido.addRow(t.asVector());
+					objetos_en_tabla.add(t);
 					
 					// fijar el combobox jcb_origen al destino seleccionado
 					jcb_estacion_origen_contenido.removeAllElements();
 					jcb_estacion_origen_contenido.addElement(destino);
 					jcb_estacion_origen.setEnabled(false);
 					jb_eliminar_ultimo.setEnabled(true);
+					jb_guardar_recorrido.setEnabled(true);
 					
 				}
 				catch(DatosDeTrayectoIncorrectosException exc){
@@ -255,17 +278,31 @@ public class MenuRegistrarRecorrido extends JPanel {
 		
 		jb_eliminar_ultimo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jlist_trayectos_contenido.remove(jlist_trayectos_contenido.getSize());
-				if(jlist_trayectos_contenido.getSize()==0)
+				Integer ultimo_indice = jtable_trayectos_contenido.getRowCount();
+				jtable_trayectos_contenido.removeRow(ultimo_indice-1);
+				objetos_en_tabla.remove(ultimo_indice-1);
+				
+				if(jtable_trayectos_contenido.getRowCount()==0) {
 					jb_eliminar_ultimo.setEnabled(false);
+					jb_guardar_recorrido.setEnabled(false);
+					jcb_estacion_origen.setEnabled(true);
+				}
 			}
 		});
 		
 		jb_guardar_recorrido.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO
-				GestorJDBC.agregarRecorrido(linea_seleccionada,(Trayecto[]) jlist_trayectos_contenido.toArray());
+				Integer opcion = VentanaPrincipal.popupConfirmar("Esta seguro que desea registrar el recorrido?", "Guardar Recorrido");
+				if(opcion == JOptionPane.YES_OPTION) {
+					GestorJDBC.agregarRecorrido(linea_seleccionada, (Trayecto[]) objetos_en_tabla.toArray());
+					VentanaPrincipal.popupInfo("Nuevo recorrido registrado exitosamente.","Registro exitoso");
+				}
 			}
 		});
+	}
+	
+	public void limpiarTabla() {
+		jtable_trayectos_contenido.setRowCount(0);
+		objetos_en_tabla.clear();
 	}
 }

@@ -1,5 +1,7 @@
 package dominio;
 
+import java.util.Vector;
+
 public class Trayecto {
 
 	private static Integer ultimo_id=0;
@@ -92,6 +94,17 @@ public class Trayecto {
 	
 	public Boolean equals(Trayecto t) {
 		return this.id_trayecto.equals(t.id_trayecto);
+	}
+
+	public Vector<String> asVector() {
+		Vector<String> data = new Vector<String>();
+		data.add(origen.getNombre());
+		data.add(destino.getNombre());
+		data.add(costo.toString());
+		data.add(distancia.toString());
+		data.add(duracion.toString());
+		data.add(cant_max_pasajeros.toString());
+		return data;
 	}
 	
 	
