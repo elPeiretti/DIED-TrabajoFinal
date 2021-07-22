@@ -82,7 +82,7 @@ public class GestorEntidades {
 		for(Trayecto t : camino) {
 			costo+=t.getCosto();
 			dist+=t.getDistancia();
-			durac+=t.getDistancia();
+			durac+=t.getDuracion();
 		}
 		return new Object[] {costo,durac,dist};
 	}
