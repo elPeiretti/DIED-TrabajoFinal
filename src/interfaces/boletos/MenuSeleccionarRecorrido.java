@@ -4,6 +4,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,7 +21,12 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
+import javax.swing.ListSelectionModel;
+import javax.swing.JTextPane;
+import javax.swing.UIManager;
+import java.awt.Color;
 
 public class MenuSeleccionarRecorrido extends JPanel {
 	/**
@@ -39,6 +45,8 @@ public class MenuSeleccionarRecorrido extends JPanel {
 	private DefaultTableModel jtable_recorridos_contenido;
 	private JButton jb_buscar;
 	private List<Camino> caminos_en_tabla;
+	private JScrollPane jspane_recorridos;
+	private JTextPane jtp_errores;
 
 	/**
 	 * Create the panel.
@@ -52,36 +60,36 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		lbl_estacion_origen = new JLabel("Estacion origen:");
 		lbl_estacion_origen.setBounds(20, 16, 92, 14);
 		
-		
 		jcb_estacion_origen = new JComboBox<Estacion>();
 		jcb_estacion_origen.setBounds(109, 11, 99, 24);
-		
-		
+	
 		jcb_estacion_destino = new JComboBox<Estacion>();
 		jcb_estacion_destino.setBounds(329, 11, 99, 24);
 		jcb_estacion_destino.setEnabled(true);
 		
-		
 		lbl_estacion_destino = new JLabel("Estacion destino:");
 		lbl_estacion_destino.setBounds(227, 16, 92, 14);
 		
-		
 		jb_siguiente = new JButton("Siguiente");
 		jb_siguiente.setBounds(311, 254, 117, 23);
-		
 		
 		jb_cancelar = new JButton("Cancelar");
 		jb_cancelar.setBounds(23, 254, 89, 23);
 
 		jtable_recorridos_contenido = new DefaultTableModel();
+		jtable_recorridos_contenido.addColumn("");
 		jtable_recorridos_contenido.addColumn("Duracion [minutos]");
 		jtable_recorridos_contenido.addColumn("Distancia [Km]");
 		jtable_recorridos_contenido.addColumn("Precio [$]");
 		
 		jtable_recorridos = new JTable();
+		jtable_recorridos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jtable_recorridos.setModel(jtable_recorridos_contenido);
-		jtable_recorridos.setBounds(23, 79, 407, 164);
 		jtable_recorridos.setAutoCreateRowSorter(true);
+		
+		jspane_recorridos = new JScrollPane(jtable_recorridos);
+		jspane_recorridos.setSize(430, 140);
+		jspane_recorridos.setLocation(10, 100);
 		
 		jb_buscar = new JButton("Buscar");
 		jb_buscar.setBounds(329, 46, 99, 23);
@@ -94,15 +102,22 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		add(lbl_estacion_destino);
 		add(jcb_estacion_destino);
 		add(lbl_estacion_origen);
-		add(jtable_recorridos);
+		add(jspane_recorridos);
 		add(jb_buscar);
+		
+		jtp_errores = new JTextPane();
+		jtp_errores.setForeground(Color.RED);
+		jtp_errores.setEditable(false);
+		jtp_errores.setBackground(UIManager.getColor("Button.background"));
+		jtp_errores.setBounds(10, 299, 430, 74);
+		add(jtp_errores);
 
 	}
 	
 	private void agregarActionListener() {
 		jb_cancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jtable_recorridos_contenido.setRowCount(0);
+				limpiarTabla();
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.MENU_PPAL);
 			}
 		});
@@ -123,22 +138,27 @@ public class MenuSeleccionarRecorrido extends JPanel {
 				Estacion destino = (Estacion) jcb_estacion_destino.getSelectedItem();
 				try {
 					GestorValidaciones.validarEstaciones(origen, destino);
-					buscarCaminosYCompletarTabla(origen,destino,jtable_recorridos_contenido, caminos_en_tabla);
+					jtp_errores.setText("");
+					limpiarTabla();
+					
+					buscarCaminosYCompletarTabla(origen,destino);
 				} 
 				catch (DatosDeRecorridoIncorrectosException exc) {
-					//AGREGAR MENSAJE ERROR TODO
+					jtp_errores.setText(exc.errores);
 				}
 			}
 		});		
 
 	}
 	
-	private static void buscarCaminosYCompletarTabla(Estacion origen, Estacion destino, DefaultTableModel contenido_tabla, List<Camino> caminos_en_tabla) {
-		List<Camino> recorridos = GestorEntidades.getRecorridosDesdeHasta(origen,destino); //TODO
-		caminos_en_tabla.clear();
-		contenido_tabla.setRowCount(0);
+	private void buscarCaminosYCompletarTabla(Estacion origen, Estacion destino) {
+		List<Camino> recorridos = GestorEntidades.getRecorridosDesdeHasta(origen,destino);
+		Integer i=1;
 		for(Camino c : recorridos) {
-			contenido_tabla.addRow(GestorEntidades.getVectorDeDatosDeCamino(c));
+			Vector<String> data = new Vector<String>();
+			data.add((i++).toString());
+			data.addAll(GestorEntidades.getVectorDeDatosDeCamino(c));
+			jtable_recorridos_contenido.addRow(data);
 			caminos_en_tabla.add(c);
 		}
 	}
@@ -149,5 +169,9 @@ public class MenuSeleccionarRecorrido extends JPanel {
 			jcb_estacion_destino.addItem(e);
 		}
 	}
-
+	
+	public void limpiarTabla() {
+		jtable_recorridos_contenido.setRowCount(0);
+		caminos_en_tabla.clear();
+	}
 }

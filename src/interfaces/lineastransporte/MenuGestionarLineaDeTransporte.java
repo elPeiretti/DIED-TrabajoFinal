@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -50,10 +51,12 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 	private JLabel lbl_nombre;
 	private JLabel lbl_estado;
 	private JButton jb_registrar_recorrido;
-	private JList<LineaDeTransporte> jlist_lineas;
-	private DefaultListModel<LineaDeTransporte> jlist_lineas_contenido;
+	private JTable jtable_lineas;
+	private DefaultTableModel jtable_lineas_contenido;
 	private VentanaPrincipal ventana_contenedora;
 	private JTextPane jtp_errores;
+	private List<LineaDeTransporte> objetos_en_tabla;
+	private JScrollPane jspane_lineas;
 	
 	/**
 	 * Create the panel.
@@ -102,16 +105,29 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		jb_registrar_recorrido = new JButton("Registrar recorrido");
 		jb_registrar_recorrido.setBounds(314, 266, 123, 23);
 		
+		jtable_lineas = new JTable();
+		jtable_lineas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		jtable_lineas.setBorder(null);
+		jtable_lineas.setBounds(26, 95, 389, 150);
 		
-		jlist_lineas = new JList<LineaDeTransporte>();
-		jlist_lineas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		jlist_lineas.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		jlist_lineas.setBounds(26, 95, 389, 150);
+		jtable_lineas_contenido = new DefaultTableModel();
+		jtable_lineas_contenido.addColumn("ID");
+		jtable_lineas_contenido.addColumn("Nombre");
+		jtable_lineas_contenido.addColumn("Color");
+		jtable_lineas_contenido.addColumn("Estado");
 		
-		jlist_lineas_contenido = new DefaultListModel<LineaDeTransporte>();
+		jtable_lineas.setModel(jtable_lineas_contenido);
+		objetos_en_tabla = new ArrayList<LineaDeTransporte>();
 		
-		jlist_lineas.setModel(jlist_lineas_contenido);
+		jspane_lineas = new JScrollPane(jtable_lineas);
+		jspane_lineas.setSize(430, 150);
+		jspane_lineas.setLocation(10, 100);
 		
+		jtp_errores = new JTextPane();
+		jtp_errores.setEditable(false);
+		jtp_errores.setBackground(UIManager.getColor("Button.background"));
+		jtp_errores.setForeground(Color.RED);
+		jtp_errores.setBounds(10, 300, 427, 89);
 		
 		this.agregarActionListener();
 		add(jb_registrar_recorrido);
@@ -126,13 +142,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		add(jb_alta);
 		add(jb_buscar);
 		add(jtf_nombre);
-		add(jlist_lineas);
-		
-		jtp_errores = new JTextPane();
-		jtp_errores.setEditable(false);
-		jtp_errores.setBackground(UIManager.getColor("Button.background"));
-		jtp_errores.setForeground(Color.RED);
-		jtp_errores.setBounds(10, 300, 427, 89);
+		add(jspane_lineas);
 		add(jtp_errores);
 
 	}
@@ -145,10 +155,11 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 
 				//buscar datos en la BD
 				List<LineaDeTransporte> lineas = GestorJDBC.buscarLineaDeTransporte("",jtf_nombre.getText(),jtf_color.getText(),estado);
-				jlist_lineas_contenido.clear();
+				limpiarTabla();
 				//llenar tabla
 				for(LineaDeTransporte linea : lineas) {
-					jlist_lineas_contenido.addElement(linea);
+					jtable_lineas_contenido.addRow(linea.asVector());
+					objetos_en_tabla.add(linea);
 				}
 				
 			}
@@ -156,37 +167,42 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		
 		jb_regresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jlist_lineas_contenido.clear();
+				limpiarTabla();
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.MENU_PPAL);
 			}
 		});
 		
 		jb_modificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(jlist_lineas.getSelectedIndex()!=-1) {
+				Integer i = jtable_lineas.getSelectedRow();
+				if(i != -1) {
+					MenuRegistrarRecorrido.linea_seleccionada = objetos_en_tabla.get(i);
 					ventana_contenedora.cambiarPanel(VentanaPrincipal.EDIT_LINEA);
-					MenuRegistrarRecorrido.linea_seleccionada=jlist_lineas.getSelectedValue();
 				}
 			}
 		});
 		
 		jb_registrar_recorrido.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(jlist_lineas.getSelectedIndex()!=-1){
+				Integer i = jtable_lineas.getSelectedRow();
+				if(i != -1){
+					MenuRegistrarRecorrido.linea_seleccionada = objetos_en_tabla.get(i);
 					ventana_contenedora.cambiarPanel(VentanaPrincipal.REG_RECORRIDO);
-					MenuRegistrarRecorrido.linea_seleccionada=jlist_lineas.getSelectedValue();
 				}
 			}
 		});
 		
 		jb_eliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(jlist_lineas.getSelectedIndex()!=-1) {
-					Integer opcion = VentanaPrincipal.popupConfirmar("Esta seguro que desea eliminar la linea " + jlist_lineas.getSelectedValue().getNombre() + "?", "Confirmar Baja");
+				Integer i = jtable_lineas.getSelectedRow();
+				
+				if(i != -1) {
+					Integer opcion = VentanaPrincipal.popupConfirmar("Esta seguro que desea eliminar la linea " + objetos_en_tabla.get(i).getNombre() + "?", "Confirmar Baja");
 					
 					if(opcion == JOptionPane.YES_OPTION) {
-						//GestorJDBC.eliminarLinea(jlist_lineas.getSelectedValue()); TO DO
-						jlist_lineas_contenido.removeElementAt(jlist_lineas.getSelectedIndex());						
+						//GestorJDBC.eliminarLinea(jlist_lineas.getSelectedValue()); TODO
+						jtable_lineas_contenido.removeRow(i);	
+						objetos_en_tabla.remove(objetos_en_tabla.get(i));
 						VentanaPrincipal.popupInfo("Se elimino la Linea exitosamente.", "Baja Linea Existosa");
 					}
 					
@@ -224,6 +240,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 	}
 	
 	public void limpiarTabla() {
-		jlist_lineas_contenido.clear();
+		jtable_lineas_contenido.setRowCount(0);
+		objetos_en_tabla.clear();
 	}
 }

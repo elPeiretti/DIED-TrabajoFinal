@@ -100,7 +100,7 @@ public class MenuRegistrarComprador extends JPanel {
 	}
 	
 	public void inicializarLabels() {
-		lbl_origen_destino.setText("Viaje desde: "+camino_seleccionado.getOrgien().getNombre());
+		lbl_origen_destino.setText("Viaje desde: "+camino_seleccionado.getOrgien().getNombre()+" - hasta: "+camino_seleccionado.getDestino().getNombre());
 		lbl_costo_boleto.setText("Costo del boleto: $"+camino_seleccionado.getCosto().toString());
 		lbl_duracion_viaje.setText("Duracion del viaje: "+camino_seleccionado.getDuracion().toString()+" minutos");
 		lbl_longitud_viaje.setText("Longitud del viaje: "+camino_seleccionado.getDistancia().toString()+" km");

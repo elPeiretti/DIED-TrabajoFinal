@@ -29,6 +29,15 @@ public class LineaDeTransporte {
 		this.recorrido = new ArrayList<Trayecto>();
 	}
 
+	public Vector<String> asVector(){
+		Vector<String> data = new Vector<String>();
+		data.add(id_linea);
+		data.add(nombre);
+		data.add(color);
+		data.add(estado.toString());
+		return data;
+	}
+	
 	public String getId() {
 		return this.id_linea;
 	}

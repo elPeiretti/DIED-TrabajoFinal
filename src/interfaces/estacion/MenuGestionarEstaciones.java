@@ -1,6 +1,7 @@
 package interfaces.estacion;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class MenuGestionarEstaciones extends JPanel {
 	private DefaultTableModel jtable_estaciones_contenido;
 	private List<Estacion> objetos_en_tabla;
 	protected static Estacion estacion_seleccionada;
+	private JScrollPane jspane_tabla;
 
 	/**
 	 * Create the panel.
@@ -110,13 +112,15 @@ public class MenuGestionarEstaciones extends JPanel {
 		lbl_estado.setBounds(214, 11, 48, 14);
 		
 		
+		
 		jtable_estaciones = new JTable();
 		jtable_estaciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		jtable_estaciones.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		jtable_estaciones.setBorder(null);
 		jtable_estaciones.setFillsViewportHeight(true);
 		jtable_estaciones.setBounds(26, 105, 400, 150);
 		
 		jtable_estaciones_contenido = new DefaultTableModel();
+		jtable_estaciones_contenido.addColumn("ID");
 		jtable_estaciones_contenido.addColumn("Nombre");
 		jtable_estaciones_contenido.addColumn("Estado");
 		jtable_estaciones_contenido.addColumn("Horario de apertura");
@@ -124,6 +128,9 @@ public class MenuGestionarEstaciones extends JPanel {
 		
 		jtable_estaciones.setModel(jtable_estaciones_contenido);
 		
+		jspane_tabla = new JScrollPane(jtable_estaciones);
+		jspane_tabla.setSize(430, 150);
+		jspane_tabla.setLocation(10, 100);
 		objetos_en_tabla = new ArrayList<Estacion>();
 		
 		jtp_errores = new JTextPane();
@@ -146,7 +153,7 @@ public class MenuGestionarEstaciones extends JPanel {
 		add(jb_alta);
 		add(jb_buscar);
 		add(jtf_nombre);
-		add(jtable_estaciones);
+		add(jspane_tabla);
 		add(jtp_errores);
 	
 	}
