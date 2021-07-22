@@ -9,8 +9,10 @@ import javax.swing.table.DefaultTableModel;
 
 import dominio.Camino;
 import dominio.Estacion;
+import excepciones.DatosDeRecorridoIncorrectosException;
 import gestores.GestorEntidades;
 import gestores.GestorJDBC;
+import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
 
 import java.awt.event.ActionListener;
@@ -45,6 +47,8 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		this.ventana_contenedora = contenedor;
 		setLayout(null);
 		
+		caminos_en_tabla = new ArrayList<Camino>();
+		
 		lbl_estacion_origen = new JLabel("Estacion origen:");
 		lbl_estacion_origen.setBounds(20, 16, 92, 14);
 		
@@ -55,7 +59,7 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		
 		jcb_estacion_destino = new JComboBox<Estacion>();
 		jcb_estacion_destino.setBounds(329, 11, 99, 24);
-		jcb_estacion_destino.setEnabled(false);
+		jcb_estacion_destino.setEnabled(true);
 		
 		
 		lbl_estacion_destino = new JLabel("Estacion destino:");
@@ -117,16 +121,22 @@ public class MenuSeleccionarRecorrido extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				Estacion origen = (Estacion) jcb_estacion_origen.getSelectedItem();
 				Estacion destino = (Estacion) jcb_estacion_destino.getSelectedItem();
-				if(origen != null && destino != null)
+				try {
+					GestorValidaciones.validarEstaciones(origen, destino);
 					buscarCaminosYCompletarTabla(origen,destino,jtable_recorridos_contenido, caminos_en_tabla);
+				} 
+				catch (DatosDeRecorridoIncorrectosException exc) {
+					//AGREGAR MENSAJE ERROR TODO
+				}
 			}
 		});		
 
 	}
 	
 	private static void buscarCaminosYCompletarTabla(Estacion origen, Estacion destino, DefaultTableModel contenido_tabla, List<Camino> caminos_en_tabla) {
-		List<Camino> recorridos = GestorEntidades.getTrayectosDesdeHasta(origen,destino); //TODO
-
+		List<Camino> recorridos = GestorEntidades.getRecorridosDesdeHasta(origen,destino); //TODO
+		caminos_en_tabla.clear();
+		contenido_tabla.setRowCount(0);
 		for(Camino c : recorridos) {
 			contenido_tabla.addRow(GestorEntidades.getVectorDeDatosDeCamino(c));
 			caminos_en_tabla.add(c);

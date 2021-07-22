@@ -90,5 +90,9 @@ public class Trayecto {
 		this.destino = destino;
 	}
 	
+	public Boolean equals(Trayecto t) {
+		return this.id_trayecto.equals(t.id_trayecto);
+	}
+	
 	
 }

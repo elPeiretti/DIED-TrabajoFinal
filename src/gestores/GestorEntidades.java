@@ -1,5 +1,6 @@
 package gestores;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -41,18 +42,7 @@ public class GestorEntidades {
 		return data;
 	}
 
-	public static List<Camino> getTrayectosDesdeHasta(Estacion origen, Estacion destino) {
-		
-		//todos los trayectos
-		//List<Trayecto> = GestorJDBC.buscarTrayectos();
-		
-		// dfs para encontrar todos los caminos de origen a destino
-		// TODO
-		
-		return null;
-	}
-
-	public static Cliente crearCliente(String nombre, String email) {
+		public static Cliente crearCliente(String nombre, String email) {
 		return new Cliente(nombre, email);
 	}
 
@@ -70,4 +60,48 @@ public class GestorEntidades {
 	public static Estacion crearEstacion(String id_estacion, String nombre, String horario_apertura, String horario_cierre, String estado) {
 		return new Estacion(id_estacion,nombre,horario_apertura,horario_cierre, estado.equals(EstadoEstacion.EN_MANTENIMIENTO.toString())? EstadoEstacion.EN_MANTENIMIENTO : EstadoEstacion.OPERATIVA);
 	}
+	
+	public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion destino) {
+		
+		List<List<Trayecto>> caminos = new ArrayList<List<Trayecto>>();
+		GestorEntidades.getRecorridosDesdeHastaAux(origen, destino, caminos, new ArrayList<Trayecto>());
+		
+		List<Camino> recorridos = new ArrayList<Camino>();
+		for(List<Trayecto> c : caminos) {
+			Object data[] = GestorEntidades.calcularCostoDuracionYLongitud(c);
+			Camino cam = new Camino(c,origen,destino,(Double)data[0],(Integer)data[1],(Integer)data[2]);
+			recorridos.add(cam);
+		}
+		return recorridos;
+	}
+	
+	private static Object[] calcularCostoDuracionYLongitud(List<Trayecto> camino) {
+		Double costo=0d;
+		Integer dist = 0;
+		Integer durac = 0;
+		for(Trayecto t : camino) {
+			costo+=t.getCosto();
+			dist+=t.getDistancia();
+			durac+=t.getDistancia();
+		}
+		return new Object[] {costo,durac,dist};
+	}
+	
+	private static void getRecorridosDesdeHastaAux(Estacion origen, Estacion destino, List<List<Trayecto>> caminos, List<Trayecto> camino) {
+		
+		if(origen.equals(destino)) {
+			caminos.add(camino);
+			return;
+		}
+		List<Trayecto> trayectos = GestorJDBC.buscarTrayecto("","",origen.getId_estacion(),"");
+	
+		for(Trayecto t : trayectos) {
+			List<Trayecto> copia = new ArrayList<Trayecto>(camino);
+			if(!copia.contains(t)) {
+				copia.add(t);
+				getRecorridosDesdeHastaAux(t.getDestino(),destino,caminos,copia);
+			}
+		}
+	}
+	
 }

@@ -118,4 +118,18 @@ public class GestorValidaciones {
 			throw new DatosDeClienteIncorrectosException(errores);
 	}
 
+	public static void validarEstaciones(Estacion origen, Estacion destino) throws DatosDeRecorridoIncorrectosException {
+		
+		String errores = "";
+		
+		if(origen == null) errores += "La estacion origen no puede estar vacia.\n";
+		
+		if(destino == null) errores += "La estacion destino no puede estar vacia.\n";
+		
+		if(origen.equals(destino)) errores += "La estacion origen no puede ser la misma que la de destino.\n";
+		
+		if(!errores.isEmpty()) throw new DatosDeRecorridoIncorrectosException(errores);
+		
+	}
+
 }

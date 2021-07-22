@@ -101,5 +101,9 @@ public class Estacion {
 		return mantenimientos;
 	}
 	
+	public Boolean equals(Estacion e) {
+		return this.id_estacion.equals(e.id_estacion);
+	}
+	
 	
 }
