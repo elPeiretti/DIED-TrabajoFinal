@@ -158,6 +158,61 @@ public static List<Estacion> buscarEstacion (String id_estacion, String nombre, 
 		return resultado;
 		
 	}
+
+
+public static List<Cliente> buscarCliente (String id_cliente) {
+	
+	Connection conn = null;
+	PreparedStatement pstm = null;
+	ResultSet rs = null;
+	List<Cliente> resultado = new ArrayList<Cliente>();
+	
+	try {
+		//Defino motor de base de datos
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		//Carga el Driver Manager
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		
+		String armadoStm = "SELECT * FROM cliente WHERE "
+				+ "id_estacion LIKE ?;";
+		
+				
+		pstm = conn.prepareStatement(armadoStm);
+	
+		//conn.setAutoCommit(false);
+		pstm.setString(1, (id_cliente.isEmpty()? "%" : id_cliente));
+				
+		//int cantidad = pstm.executeUpdate();
+		//conn.commit()
+		
+		rs = pstm.executeQuery();
+		
+		while(rs.next()) {
+			//Cliente aux = GestorEntidades.crearCliente(rs.getString("id_cliente"),rs.getString("nombre"),rs.getString("email")); TODO
+			//resultado.add(aux);
+		}
+				
+	} catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SQLException e) {
+		// conn.rollback();
+		e.printStackTrace();
+	} finally {
+		
+		if(rs!=null) try { rs.close(); }
+		catch (SQLException e) { e.printStackTrace(); }
+		
+		if(pstm!=null) try { pstm.close(); }
+		catch (SQLException e) {e.printStackTrace(); }
+		
+		if(conn!=null) try { conn.close(); }
+		catch (SQLException e) { e.printStackTrace(); }
+	}
+	
+	return resultado;
+	
+}
 	
 
 public static List<TareaDeMantenimiento> buscarTareaDeMantenimiento (String id_tarea, String fecha_inicio, String fecha_fin, String id_estacion) {
@@ -963,5 +1018,210 @@ public static void actualizarTrayecto (Trayecto trayecto) {
 	}
 	
 }
+
+public static void eliminarTrayecto (Trayecto trayecto) {
+	
+	Connection conn = null;
+	PreparedStatement pstm = null;
+	
+	
+	try {
+		//Defino motor de base de datos
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		//Carga el Driver Manager
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		
+		String armadoStm = "DELETE FROM trayecto WHERE "
+				+ "id_trayecto  = ?;";
+				
+		pstm = conn.prepareStatement(armadoStm);
+		
+		conn.setAutoCommit(false);
+			
+		pstm.setString(1, trayecto.getId_trayecto());
+		
+		pstm.executeUpdate();
+		
+		conn.commit();
+		
+		conn.setAutoCommit(true);
+					
+	} catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SQLException e) {
+		try {
+			conn.rollback();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		e.printStackTrace();
+	} finally {
+		
+		if(pstm!=null) try { pstm.close(); }
+		catch (SQLException e) {e.printStackTrace(); }
+		
+		if(conn!=null) try { conn.close(); }
+		catch (SQLException e) { e.printStackTrace(); }
+	}
+	
+}
+
+public static void eliminarLineaDeTransporte (LineaDeTransporte linea) {
+	
+	Connection conn = null;
+	PreparedStatement pstm = null;
+	List<Trayecto> recorrido = GestorJDBC.buscarTrayecto("", linea.getId_linea(), "", "");
+	
+	for(Trayecto t : recorrido) {
+		GestorJDBC.eliminarTrayecto(t);
+	}
+	
+	try {
+		//Defino motor de base de datos
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		//Carga el Driver Manager
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		
+		String armadoStm = "DELETE FROM linea_transporte WHERE "
+				+ "id_linea  = ?;";
+				
+		pstm = conn.prepareStatement(armadoStm);
+		
+		conn.setAutoCommit(false);
+			
+		pstm.setString(1, linea.getId_linea());
+		
+		pstm.executeUpdate();
+		
+		conn.commit();
+		
+		conn.setAutoCommit(true);
+					
+	} catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SQLException e) {
+		try {
+			conn.rollback();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		e.printStackTrace();
+	} finally {
+		
+		if(pstm!=null) try { pstm.close(); }
+		catch (SQLException e) {e.printStackTrace(); }
+		
+		if(conn!=null) try { conn.close(); }
+		catch (SQLException e) { e.printStackTrace(); }
+	}
+	
+}
+
+public static void eliminarTareaDeMantenimiento (TareaDeMantenimiento tarea) {
+	
+	Connection conn = null;
+	PreparedStatement pstm = null;
+		
+	try {
+		//Defino motor de base de datos
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		//Carga el Driver Manager
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		
+		String armadoStm = "DELETE FROM tarea_mantenimiento WHERE "
+				+ "id_tarea  = ?;";
+				
+		pstm = conn.prepareStatement(armadoStm);
+		
+		conn.setAutoCommit(false);
+			
+		pstm.setString(1, tarea.getId_tarea());
+		
+		pstm.executeUpdate();
+		
+		conn.commit();
+		
+		conn.setAutoCommit(true);
+					
+	} catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SQLException e) {
+		try {
+			conn.rollback();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		e.printStackTrace();
+	} finally {
+		
+		if(pstm!=null) try { pstm.close(); }
+		catch (SQLException e) {e.printStackTrace(); }
+		
+		if(conn!=null) try { conn.close(); }
+		catch (SQLException e) { e.printStackTrace(); }
+	}
+	
+}
+
+public static void eliminarEstacion (Estacion estacion) {
+	
+	Connection conn = null;
+	PreparedStatement pstm = null;
+	List<TareaDeMantenimiento> mantenimientos = GestorJDBC.buscarTareaDeMantenimiento("", "", "", estacion.getId_estacion());
+	
+	for(TareaDeMantenimiento m : mantenimientos) {
+		GestorJDBC.eliminarTareaDeMantenimiento(m);
+	}
+		
+	try {
+		//Defino motor de base de datos
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		//Carga el Driver Manager
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		
+		String armadoStm = "DELETE FROM estacion WHERE "
+				+ "id_estacion  = ?;";
+				
+		pstm = conn.prepareStatement(armadoStm);
+		
+		conn.setAutoCommit(false);
+			
+		pstm.setString(1, estacion.getId_estacion());
+		
+		pstm.executeUpdate();
+		
+		conn.commit();
+		
+		conn.setAutoCommit(true);
+					
+	} catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SQLException e) {
+		try {
+			conn.rollback();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		e.printStackTrace();
+	} finally {
+		
+		if(pstm!=null) try { pstm.close(); }
+		catch (SQLException e) {e.printStackTrace(); }
+		
+		if(conn!=null) try { conn.close(); }
+		catch (SQLException e) { e.printStackTrace(); }
+	}
+	
+}
+
+
 	
 }
