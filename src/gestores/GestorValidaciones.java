@@ -113,6 +113,9 @@ public class GestorValidaciones {
 			errores+="El campo 'nombre' no puede estar vacio\n";
 		if(email.isEmpty())
 			errores+="El campo 'E-mail' no puede estar vacio\n";
+		else if(!email.matches("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")) {
+			errores+="El campo 'E-mail' posee un formato invalido\n";
+		}
 		
 		if(!errores.isEmpty())
 			throw new DatosDeClienteIncorrectosException(errores);

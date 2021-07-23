@@ -104,6 +104,10 @@ public class Estacion {
 	public Boolean equals(Estacion e) {
 		return this.id_estacion.equals(e.id_estacion);
 	}
+
+	public TareaDeMantenimiento getUltimoMantenimiento() {
+		return this.mantenimientos.isEmpty() ? null : mantenimientos.get(this.mantenimientos.size()-1);
+	}
 	
 	
 }

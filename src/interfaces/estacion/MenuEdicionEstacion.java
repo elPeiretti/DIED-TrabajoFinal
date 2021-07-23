@@ -19,6 +19,7 @@ import javax.swing.UIManager;
 
 import dominio.Estacion;
 import dominio.EstadoEstacion;
+import dominio.TareaDeMantenimiento;
 import excepciones.DatosDeEstacionIncorrectosException;
 import gestores.GestorEntidades;
 import gestores.GestorJDBC;
@@ -125,8 +126,9 @@ public class MenuEdicionEstacion extends JPanel {
 					jtp_errores.setText("");
 					
 					Integer opcion = VentanaPrincipal.popupConfirmar("Esta seguro que desea guadar los cambios?", "Confirmar Cambios");
+					
 					if(opcion == JOptionPane.YES_OPTION) {
-						//MANEJAR TEMA DE CAMBIO DE ESTADO TODO
+						GestionarNuevoEstado(MenuGestionarEstaciones.estacion_seleccionada.getEstado(), estado);
 						GestorEntidades.actualizarEstacion(MenuGestionarEstaciones.estacion_seleccionada,nombre,apertura,cierre,estado);
 						GestorJDBC.actualizarEstacion(MenuGestionarEstaciones.estacion_seleccionada);
 						VentanaPrincipal.popupInfo("Se guardaron los cambios exitosamente.", "Cambios Guardados");
@@ -140,11 +142,28 @@ public class MenuEdicionEstacion extends JPanel {
 		});
 	}
 	
+	private void GestionarNuevoEstado(EstadoEstacion previo, EstadoEstacion nuevo) {
+		
+		Estacion e = MenuGestionarEstaciones.estacion_seleccionada;
+		
+		if(nuevo.equals(EstadoEstacion.EN_MANTENIMIENTO) && previo.equals(EstadoEstacion.OPERATIVA)) {
+			GestorEntidades.actualizarEstadoTrayectosQueIncluyen(e);
+			GestorJDBC.agregarTareaDeMantenimiento(e.getId_estacion(),GestorEntidades.crearTareaDeMantenimiento());
+		}
+		else if(previo.equals(EstadoEstacion.EN_MANTENIMIENTO) && nuevo.equals(EstadoEstacion.OPERATIVA)) {
+			//activar todos los trayectos? TODO
+			String obs = JOptionPane.showInputDialog("Ingrese las observaciones respecto al mantenimiento realizado:");
+			TareaDeMantenimiento tarea = e.getUltimoMantenimiento();
+			tarea.finalizar(obs);
+			//GestorJDBC.finalizarTareaDeMantenimiento(tarea); TODO
+		}
+		
+	}
+
 	public void llenarCampos() {
 		jtf_nombre.setText(MenuGestionarEstaciones.estacion_seleccionada.getNombre());
 		jcb_estado.setSelectedItem(MenuGestionarEstaciones.estacion_seleccionada.getEstado());
 		jtf_horario_apertura.setText(MenuGestionarEstaciones.estacion_seleccionada.getHorario_apertura());
 		jtf_horario_cierre.setText(MenuGestionarEstaciones.estacion_seleccionada.getHorario_cierre());
-		
 	}
 }

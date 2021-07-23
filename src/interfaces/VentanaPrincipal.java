@@ -116,6 +116,8 @@ public class VentanaPrincipal extends JFrame {
 			m_edit_estac.llenarCampos();
 		if(panel.equals(EDIT_LINEA))
 			m_edit_linea.llenarCampos();
+		if(panel.equals(ALGORITMOS))
+			m_alg.llenarComboBox();
 		if(panel.equals(GEST_ESTACIONES)) {
 			m_gest_estac.limpiarTabla();
 			m_gest_estac.limpiarCampos();

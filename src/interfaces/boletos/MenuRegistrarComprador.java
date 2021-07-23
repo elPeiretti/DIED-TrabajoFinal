@@ -109,6 +109,7 @@ public class MenuRegistrarComprador extends JPanel {
 	private void agregarActionListener() {
 		jb_regresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				camino_seleccionado=null;
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.SELEC_RECORRIDO);
 			}
 		});
@@ -118,24 +119,28 @@ public class MenuRegistrarComprador extends JPanel {
 				
 				String nombre = jtf_nombre_cliente.getText();
 				String email = jtf_email_cliente.getText();
-				Cliente c = null;//GestorJDBC.buscarCliente(nombre,email); TODO
+				
 				try {
-					if(c==null) {
+					Cliente c = null;
+					//Cliente c = GestorJDBC.buscarCliente(nombre,email);
+					
+					if(c==null) { // no hay registro en la BD
 						GestorValidaciones.validarCliente(nombre,email);
 						c = GestorEntidades.crearCliente(nombre,email);
 					}
 					jtp_errores.setText("");
 					
-					//GestorJDBC.agregarCliente(c);
-					//GestorJDBC.agregarCamino(camino_seleccionado)
-					//GestorJDBC.agregarBoleto(c, camino_seleccionado.getOrigen, camino_seleccionado.getDestino(), camino_seleccionado)
+					GestorJDBC.agregarCliente(c);
+					GestorJDBC.agregarCamino(camino_seleccionado);
+					GestorJDBC.agregarBoleto(GestorEntidades.crearBoleto(c, camino_seleccionado.getOrigen(), camino_seleccionado.getDestino(), camino_seleccionado));
 					
+					VentanaPrincipal.popupInfo("Venta realizada exitosamente, boleto registrado en el sistema.", "Venta existosa");
+					ventana_contenedora.cambiarPanel(VentanaPrincipal.MENU_PPAL);
 				}
 				catch(DatosDeClienteIncorrectosException exc) {
 					jtp_errores.setText(exc.errores);
 				}
 				
-				ventana_contenedora.cambiarPanel(VentanaPrincipal.MENU_PPAL);
 			}
 		});
 	}

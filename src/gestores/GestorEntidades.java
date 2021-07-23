@@ -60,49 +60,25 @@ public class GestorEntidades {
 	public static Estacion crearEstacion(String id_estacion, String nombre, String horario_apertura, String horario_cierre, String estado) {
 		return new Estacion(id_estacion,nombre,horario_apertura,horario_cierre, estado.equals(EstadoEstacion.EN_MANTENIMIENTO.toString())? EstadoEstacion.EN_MANTENIMIENTO : EstadoEstacion.OPERATIVA);
 	}
-	
-	public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion destino) {
-		
-		List<List<Trayecto>> caminos = new ArrayList<List<Trayecto>>();
-		GestorEntidades.getRecorridosDesdeHastaAux(origen, destino, caminos, new ArrayList<Trayecto>());
-		
-		List<Camino> recorridos = new ArrayList<Camino>();
-		for(List<Trayecto> c : caminos) {
-			Object data[] = GestorEntidades.calcularCostoDuracionYLongitud(c);
-			Camino cam = new Camino(c,origen,destino,(Double)data[0],(Integer)data[1],(Integer)data[2]);
-			recorridos.add(cam);
-		}
-		return recorridos;
+
+	public static Boleto crearBoleto(Cliente c, Estacion origen, Estacion destino, Camino camino_seleccionado) {
+		return new Boleto(c, origen, destino, camino_seleccionado);
 	}
-	
-	private static Object[] calcularCostoDuracionYLongitud(List<Trayecto> camino) {
-		Double costo=0d;
-		Integer dist = 0;
-		Integer durac = 0;
-		for(Trayecto t : camino) {
-			costo+=t.getCosto();
-			dist+=t.getDistancia();
-			durac+=t.getDuracion();
-		}
-		return new Object[] {costo,durac,dist};
-	}
-	
-	private static void getRecorridosDesdeHastaAux(Estacion origen, Estacion destino, List<List<Trayecto>> caminos, List<Trayecto> camino) {
+
+	public static void actualizarEstadoTrayectosQueIncluyen(Estacion estacion) {
+		//todos los trayectos activos que lleguen o salgan de 'estacion', deben inhabilitarse
+		List<Trayecto> trayectos = GestorJDBC.buscarTrayecto("","",estacion.getId_estacion(),"", EstadoTrayecto.ACTIVO); //salientes
+		trayectos.addAll(GestorJDBC.buscarTrayecto("","","",estacion.getId_estacion(), EstadoTrayecto.ACTIVO));  //entrantes
 		
-		if(origen.equals(destino)) {
-			caminos.add(camino);
-			return;
-		}
-		
-		List<Trayecto> trayectos = GestorJDBC.buscarTrayecto("","",origen.getId_estacion(),"", EstadoTrayecto.ACTIVO);
-	
 		for(Trayecto t : trayectos) {
-			List<Trayecto> copia = new ArrayList<Trayecto>(camino);
-			if(!copia.contains(t)) {
-				copia.add(t);
-				getRecorridosDesdeHastaAux(t.getDestino(),destino,caminos,copia);
-			}
+			t.setEstado(EstadoTrayecto.INACTIVO);
+			GestorJDBC.actualizarTrayecto(t);
 		}
+		
 	}
-	
+
+	public static TareaDeMantenimiento crearTareaDeMantenimiento() {
+		return new TareaDeMantenimiento();
+	}
+
 }
