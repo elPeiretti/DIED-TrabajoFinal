@@ -59,21 +59,32 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 		// TODO Auto-generated method stub
 		HashMap <String, Integer> arcos = incializarArcos();
 		Integer flujo_maximo = 0;
-		List<Trayecto> camino = new ArrayList<Trayecto>();
+		List<List<Trayecto>> caminos = new ArrayList<List<Trayecto>>();
+		getRecorridosDesdeHastaAux(origen, destino, caminos, new ArrayList<Trayecto>());
 		
-		do {
-		camino = getCamino(origen, destino, new ArrayList<Trayecto>(), arcos);
-		
-		if(!camino.isEmpty()) {
-			flujo_maximo += getMininoYReducir(camino, arcos);
-		}
-		
-		} while (!camino.isEmpty());
-		
+		for (List<Trayecto> c : caminos) {
+			if(verficarCamino(c,arcos)) {
+				flujo_maximo += getMininoYReducir(c, arcos);
+			}
+		}		
 		
 		return flujo_maximo;
 	}
 	
+	private static Boolean verficarCamino(List<Trayecto> camino, HashMap<String, Integer> arcos) {
+		
+		Boolean correcto = true;
+		
+		for(Trayecto t : camino) {
+			if(arcos.get(t.getId_trayecto()) == 0) {
+				correcto = false;
+			}
+		}
+		
+		return correcto;
+		
+	}
+
 	private static Integer getMininoYReducir(List<Trayecto> camino, HashMap<String, Integer> arcos) {
 
 		Integer minimo = -1;
@@ -95,27 +106,6 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 		return minimo;
 		
 	}
-
-	private static List<Trayecto> getCamino(Estacion origen, Estacion destino, List<Trayecto> visitados, HashMap <String, Integer> arcos) {
-		
-		if(origen.equals(destino)) {
-			return visitados;
-		}
-		
-		List<Trayecto> trayectos = GestorJDBC.buscarTrayecto("","",origen.getId_estacion(),"", EstadoTrayecto.ACTIVO);
-	
-		for(Trayecto t : trayectos) {
-			List<Trayecto> copia = new ArrayList<Trayecto>(visitados);
-			if(!copia.contains(t) && arcos.get(t.getId_trayecto()) > 0) {
-				copia.add(t);
-				return getCamino(t.getDestino(),destino,copia, arcos);
-			}
-		}
-		
-		return new ArrayList<Trayecto>();
-	}
-	
-	
 
 	private static HashMap<String, Integer> incializarArcos() {
 		List<Trayecto> trayectos = GestorJDBC.buscarTrayecto("", "", "", "", null);
