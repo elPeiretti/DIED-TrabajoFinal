@@ -1,10 +1,5 @@
 package gestores;
 
-<<<<<<< HEAD
-public class GestorAlgoritmos {
-
-	
-=======
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,6 +68,6 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 		// TODO Auto-generated method stub
 		return null;
 	}
->>>>>>> 21b4037cd1b718db62028bbce09e97b2d901d67f
+
 	
 }
