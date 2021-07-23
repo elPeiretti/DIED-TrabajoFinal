@@ -4,12 +4,15 @@ import javax.swing.JPanel;
 
 import dominio.Estacion;
 import excepciones.DatosDeRecorridoIncorrectosException;
+import gestores.GestorAlgoritmos;
 import gestores.GestorJDBC;
 import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -101,10 +104,39 @@ public class MenuAlgoritmos extends JPanel {
 				try {
 					GestorValidaciones.validarEstaciones(origen,destino);
 					jtp_errores.setText("");
+					Integer flujo = GestorAlgoritmos.calcularFlujoMaximo(origen,destino);
+					
+					VentanaPrincipal.popupInfo("La cantidad maxima de pasajeros que se pueden transportar desde: "+
+												origen.getNombre()+", hasta: "+destino.getNombre()+
+												"\nEs de "+ flujo.toString() +" pasajeros","Flujo maximo");
 				} 
 				catch (DatosDeRecorridoIncorrectosException exc) {
 					jtp_errores.setText(exc.errores);
 				}
+			}
+		});
+		
+		jb_page_rank.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				List<Estacion> ranking = GestorAlgoritmos.calcularPageRank();
+				VentanaPrincipal.popupInfo("El ranking de las estaciones es el siguiente (más a la izquerda significa mayor prioridad):\n"+
+											ranking.toString(), "Page Rank");
+			}
+		});
+		
+		jb_prox_mantenimiento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//mostrar monticulo entero o solo la estacion correspondiente? TODO
+				//para no ocupar mas memoria, se usan los objetos que estan en el combobox
+				List<Estacion> estaciones = new ArrayList<Estacion>();
+				for(int i=0; i<jcb_estacion_origen.getItemCount(); i++) {
+					estaciones.add(jcb_estacion_origen.getItemAt(i));
+				}
+				Estacion est = GestorAlgoritmos.calcularProximoMantenimiento(estaciones);
+				
+				VentanaPrincipal.popupInfo("La estacion a la cual hay que realizarle el proximo mantenimiento es:\n"+
+											"ID: "+est.getId_estacion()+ " NOMBRE: "+est.getNombre(), "Proximo mantenimiento");
 			}
 		});
 	}

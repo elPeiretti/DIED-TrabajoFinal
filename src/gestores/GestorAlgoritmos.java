@@ -53,5 +53,20 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 			}
 		}
 	}
+
+	public static Integer calcularFlujoMaximo(Estacion origen, Estacion destino) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public static List<Estacion> calcularPageRank() {
+		// TODO Auto-generated method stub
+		return new ArrayList<Estacion>() {};
+	}
+
+	public static Estacion calcularProximoMantenimiento(List<Estacion> estaciones) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
