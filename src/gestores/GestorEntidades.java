@@ -108,5 +108,21 @@ public class GestorEntidades {
 	public static Boleto crearBoleto(Cliente c, Estacion origen, Estacion destino, Camino camino_seleccionado) {
 		return new Boleto(c, origen, destino, camino_seleccionado);
 	}
-	
+
+	public static void actualizarEstadoTrayectosQueIncluyen(Estacion estacion) {
+		//todos los trayectos activos que lleguen o salgan de 'estacion', deben inhabilitarse
+		List<Trayecto> trayectos = GestorJDBC.buscarTrayecto("","",estacion.getId_estacion(),"", EstadoTrayecto.ACTIVO); //salientes
+		trayectos.addAll(GestorJDBC.buscarTrayecto("","","",estacion.getId_estacion(), EstadoTrayecto.ACTIVO));  //entrantes
+		
+		for(Trayecto t : trayectos) {
+			t.setEstado(EstadoTrayecto.INACTIVO);
+			GestorJDBC.actualizarTrayecto(t);
+		}
+		
+	}
+
+	public static TareaDeMantenimiento crearTareaDeMantenimiento() {
+		return new TareaDeMantenimiento();
+	}
+
 }

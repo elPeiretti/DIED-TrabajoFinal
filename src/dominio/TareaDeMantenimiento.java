@@ -27,7 +27,6 @@ public class TareaDeMantenimiento {
 	}
 
 
-
 	public void finalizar(String observaciones) {
 		this.fecha_fin = LocalDate.now();
 		this.observaciones = observaciones;
@@ -37,25 +36,17 @@ public class TareaDeMantenimiento {
 		ultimo_id=id;
 	}
 
-
-
 	public String getId_tarea() {
 		return id_tarea;
 	}
-
-
 
 	public LocalDate getFecha_inicio() {
 		return fecha_inicio;
 	}
 
-
-
 	public LocalDate getFecha_fin() {
 		return fecha_fin;
 	}
-
-
 
 	public String getObservaciones() {
 		return observaciones;
