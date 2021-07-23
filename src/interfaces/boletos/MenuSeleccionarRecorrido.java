@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import dominio.Camino;
 import dominio.Estacion;
 import excepciones.DatosDeRecorridoIncorrectosException;
+import gestores.GestorAlgoritmos;
 import gestores.GestorEntidades;
 import gestores.GestorJDBC;
 import gestores.GestorValidaciones;
@@ -152,7 +153,7 @@ public class MenuSeleccionarRecorrido extends JPanel {
 	}
 	
 	private void buscarCaminosYCompletarTabla(Estacion origen, Estacion destino) {
-		List<Camino> recorridos = GestorEntidades.getRecorridosDesdeHasta(origen,destino);
+		List<Camino> recorridos = GestorAlgoritmos.getRecorridosDesdeHasta(origen,destino);
 		Integer i=1;
 		for(Camino c : recorridos) {
 			Vector<String> data = new Vector<String>();
