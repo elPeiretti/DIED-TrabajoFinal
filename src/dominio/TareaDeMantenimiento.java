@@ -19,10 +19,11 @@ public class TareaDeMantenimiento {
 	
 	
 	public TareaDeMantenimiento(String id_tarea, String fecha_inicio, String fecha_fin, String obs) {
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		this.id_tarea = id_tarea;
 		this.fecha_inicio = LocalDate.parse(fecha_inicio, dtf);
-		this.fecha_fin =  LocalDate.parse(fecha_fin, dtf);
+		if(fecha_fin != null)
+			this.fecha_fin =  LocalDate.parse(fecha_fin, dtf);
 		this.observaciones = obs;
 	}
 

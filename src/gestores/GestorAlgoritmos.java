@@ -1,5 +1,6 @@
 package gestores;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,7 @@ import dominio.Camino;
 import dominio.Estacion;
 import dominio.EstadoTrayecto;
 import dominio.Trayecto;
+import excepciones.NoHayDatosDeEstacionesException;
 
 public class GestorAlgoritmos {
 	
@@ -123,9 +125,22 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 		return new ArrayList<Estacion>() {};
 	}
 
-	public static Estacion calcularProximoMantenimiento(List<Estacion> estaciones) {
-		// TODO Auto-generated method stub
-		return null;
+	public static Estacion calcularProximoMantenimiento(List<Estacion> estaciones) throws NoHayDatosDeEstacionesException {
+		
+		if(estaciones.isEmpty()) throw new NoHayDatosDeEstacionesException();
+		
+		Estacion prox =  estaciones.get(0);
+		
+		for(Estacion est : estaciones) {
+			if(est.getUltimoMantenimiento() == null || prox.getUltimoMantenimiento() == null) continue;
+			LocalDate fecha_est = est.getUltimoMantenimiento().getFecha_fin();
+			LocalDate fecha_prox = prox.getUltimoMantenimiento().getFecha_fin();
+			if((fecha_est != null && fecha_prox != null && fecha_prox.isAfter(fecha_est)) || (fecha_est !=  null && fecha_prox == null)) {
+				prox = est;
+			}
+		}
+		
+		return prox;
 	}
 
 	

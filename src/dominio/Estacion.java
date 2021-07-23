@@ -57,6 +57,10 @@ public class Estacion {
 		return data;
 	}
 	
+	public void agregarMantenimiento(TareaDeMantenimiento tarea) {
+		mantenimientos.add(tarea);
+	}
+	
 	public String toString() {
 		return this.nombre;
 	}

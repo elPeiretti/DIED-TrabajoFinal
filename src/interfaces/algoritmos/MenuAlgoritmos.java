@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 
 import dominio.Estacion;
 import excepciones.DatosDeRecorridoIncorrectosException;
+import excepciones.NoHayDatosDeEstacionesException;
 import gestores.GestorAlgoritmos;
 import gestores.GestorJDBC;
 import gestores.GestorValidaciones;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import java.awt.Color;
@@ -133,16 +135,21 @@ public class MenuAlgoritmos extends JPanel {
 				for(int i=0; i<jcb_estacion_origen.getItemCount(); i++) {
 					estaciones.add(jcb_estacion_origen.getItemAt(i));
 				}
-				Estacion est = GestorAlgoritmos.calcularProximoMantenimiento(estaciones);
-				
-				VentanaPrincipal.popupInfo("La estacion a la cual hay que realizarle el proximo mantenimiento es:\n"+
-											"ID: "+est.getId_estacion()+ " NOMBRE: "+est.getNombre(), "Proximo mantenimiento");
+								
+				try {
+					Estacion est = GestorAlgoritmos.calcularProximoMantenimiento(estaciones);
+					VentanaPrincipal.popupInfo("La estacion a la cual hay que realizarle el proximo mantenimiento es:\n"+
+								"ID: "+est.getId_estacion()+ " NOMBRE: "+est.getNombre(), "Proximo mantenimiento");
+				} 
+				catch (NoHayDatosDeEstacionesException e1) {
+					JOptionPane.showMessageDialog(null,"No se puede realizar este algoritmo sin tener estaciones cargadas.", "Error", JOptionPane.ERROR_MESSAGE);
+				}				
 			}
 		});
 	}
 	
 	public void llenarComboBox() {
-		for(Estacion e : GestorJDBC.buscarEstacion("","","","",null)) {
+		for(Estacion e : GestorJDBC.buscarEstacionConUltimoMantenimiento("","","","",null)) {
 			jcb_estacion_origen.addItem(e);
 			jcb_estacion_destino.addItem(e);
 		}

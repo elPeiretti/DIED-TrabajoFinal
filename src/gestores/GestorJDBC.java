@@ -89,6 +89,31 @@ public static void updateUltimosId () {
 	
 	
 }
+
+public static List<Estacion> buscarEstacionConUltimoMantenimiento(String id_estacion, String nombre, String horario_apertura, String horario_cierre, EstadoEstacion estado) {
+	// TODO Auto-generated method stu
+	List<Estacion> estaciones = buscarEstacion(id_estacion, nombre, horario_apertura, horario_cierre, estado);
+	
+	for(Estacion est : estaciones) {
+		List<TareaDeMantenimiento> mantenimientos = buscarTareaDeMantenimiento("", "", "", est.getId_estacion());
+		TareaDeMantenimiento ultima = null;
+		
+		if(mantenimientos.isEmpty()) continue;
+		
+		for(TareaDeMantenimiento mant : mantenimientos) {
+			if(ultima == null) {
+				ultima = mant;
+			} 
+			else {	
+				if(ultima.getFecha_fin() != null && (mant.getFecha_fin() == null || ultima.getFecha_fin().isBefore(mant.getFecha_fin()))) 
+					ultima = mant;
+			}
+		}
+		est.agregarMantenimiento(ultima);
+	}
+	
+	return estaciones;
+}
 	
 public static List<Estacion> buscarEstacion (String id_estacion, String nombre, String horario_apertura, String horario_cierre, EstadoEstacion estado) {
 		
@@ -1229,6 +1254,9 @@ public static void eliminarEstacion (Estacion estacion) {
 	}
 	
 }
+
+
+
 
 
 	
