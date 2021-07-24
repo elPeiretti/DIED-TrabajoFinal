@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -123,8 +124,43 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 	}
 
 	public static List<Estacion> calcularPageRank() {
-		// TODO Auto-generated method stub
-		return new ArrayList<Estacion>() {};
+		
+		HashMap<String, Double> pageRanks = new HashMap<String, Double>();
+		List<Estacion> estaciones = GestorJDBC.buscarEstacion("", "", "", "", null);
+		Double variacion;
+		Double probabilidad = 0.85;
+		for(Estacion est : estaciones) pageRanks.put(est.getId_estacion(), 1.0);
+		
+		do {
+			variacion = 0d;
+			HashMap<String, Double> auxPageRanks  = new HashMap<String,Double>();
+			for(Estacion est : estaciones) {
+				Double nuevoPR;
+				System.out.println("Estacion: " + est.getNombre());
+				List<Trayecto> trayectosEntrantes = GestorJDBC.buscarTrayecto("", "", "", est.getId_estacion(), null);
+				
+				nuevoPR = 1-probabilidad;
+				
+				for(Trayecto t : trayectosEntrantes) {
+					Integer enlacesSalientes = GestorJDBC.buscarTrayecto("", "", t.getOrigen().getId_estacion(), "", null).size();
+					System.out.println("Estacion Entrante: " +  t.getOrigen().getNombre() + " " + pageRanks.get(t.getOrigen().getId_estacion()));
+					nuevoPR += probabilidad * pageRanks.get(t.getOrigen().getId_estacion())/enlacesSalientes;
+				}
+				Double auxVariacion = Math.abs(pageRanks.get(est.getId_estacion()) - nuevoPR);
+				if(auxVariacion > variacion) variacion = auxVariacion;
+				auxPageRanks.put(est.getId_estacion(), nuevoPR);
+			}
+			
+			pageRanks = (HashMap<String, Double>) auxPageRanks.clone();
+			
+		} while(variacion > 0.001);
+		
+		System.out.println("Page Ranks: ");	
+		for(String est : pageRanks.keySet()) {
+			System.out.println("Estacion: " +  est + " " + pageRanks.get(est));
+		}
+		
+		return new ArrayList<Estacion>();
 	}
 
 	public static PriorityQueue<Estacion> calcularPrioridadMantenimiento(List<Estacion> estaciones) throws NoHayDatosDeEstacionesException {
