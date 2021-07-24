@@ -142,8 +142,7 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 					GestorJDBC.buscarTrayecto("", "", "", est.getId_estacion(), null).stream()
 					.map((Trayecto t) -> {return t.getOrigen();}).collect(Collectors.toList()));
 		}
-		
-		
+				
 		do {
 			variacion = 0d;
 			HashMap<String, Double> auxPageRanks  = new HashMap<String,Double>();
@@ -158,7 +157,7 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 				auxPageRanks.put(est.getId_estacion(), nuevoPR);
 			}
 			
-			pageRanks = (HashMap<String, Double>) auxPageRanks.clone();
+			pageRanks = auxPageRanks;
 			
 		} while(variacion > 0.01);
 		
