@@ -10,6 +10,10 @@ import dominio.*;
 
 public class GestorJDBC {
 
+	private static String url = "jdbc:mysql://localhost:3307/died";
+	private static String user = "root";
+	private static String password = "velero100";
+	
 	
 public static void updateUltimosId () {
 	
@@ -21,7 +25,7 @@ public static void updateUltimosId () {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "SELECT * FROM ultimos_id";
 				
@@ -76,7 +80,7 @@ public static void updateUltimosId () {
 	}
 				
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		// conn.rollback();
@@ -97,7 +101,7 @@ public static void updateUltimosId () {
 }
 
 public static List<Estacion> buscarEstacionConUltimoMantenimiento(String id_estacion, String nombre, String horario_apertura, String horario_cierre, EstadoEstacion estado) {
-	// TODO Auto-generated method stu
+
 	List<Estacion> estaciones = buscarEstacion(id_estacion, nombre, horario_apertura, horario_cierre, estado);
 	
 	for(Estacion est : estaciones) {
@@ -132,7 +136,7 @@ public static List<Estacion> buscarEstacion (String id_estacion, String nombre, 
 			//Defino motor de base de datos
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			//Carga el Driver Manager
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+			conn = DriverManager.getConnection(url,user,password);
 			
 			String armadoStm = "SELECT * FROM estacion WHERE "
 					+ "id_estacion LIKE ? AND "
@@ -169,7 +173,7 @@ public static List<Estacion> buscarEstacion (String id_estacion, String nombre, 
 			}
 					
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (SQLException e) {
 			// conn.rollback();
@@ -191,7 +195,7 @@ public static List<Estacion> buscarEstacion (String id_estacion, String nombre, 
 	}
 
 
-public static List<Cliente> buscarCliente (String id_cliente) {
+public static List<Cliente> buscarCliente (String id_cliente, String nombre, String email) {
 	
 	Connection conn = null;
 	PreparedStatement pstm = null;
@@ -202,17 +206,20 @@ public static List<Cliente> buscarCliente (String id_cliente) {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "SELECT * FROM cliente WHERE "
-				+ "id_estacion LIKE ?;";
+				+ "id_estacion LIKE ?"
+				+ "nombre LIKE ?"
+				+ "email LIKE ?;";
 		
 				
 		pstm = conn.prepareStatement(armadoStm);
 	
 		//conn.setAutoCommit(false);
 		pstm.setString(1, (id_cliente.isEmpty()? "%" : id_cliente));
-				
+		pstm.setString(2, (id_cliente.isEmpty()? "%" : nombre));
+		pstm.setString(3, (id_cliente.isEmpty()? "%" : email));
 		//int cantidad = pstm.executeUpdate();
 		//conn.commit()
 		
@@ -224,7 +231,7 @@ public static List<Cliente> buscarCliente (String id_cliente) {
 		}
 				
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		// conn.rollback();
@@ -259,7 +266,7 @@ public static List<TareaDeMantenimiento> buscarTareaDeMantenimiento (String id_t
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "SELECT * FROM tarea_mantenimiento WHERE "
 				+ "id_tarea LIKE ? AND "
@@ -296,7 +303,7 @@ public static List<TareaDeMantenimiento> buscarTareaDeMantenimiento (String id_t
 		}
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		// conn.rollback();
@@ -329,7 +336,7 @@ public static List<LineaDeTransporte> buscarLineaDeTransporte (String id_linea, 
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "SELECT * FROM linea_transporte WHERE "
 				+ "id_linea LIKE ? AND "
@@ -361,7 +368,7 @@ public static List<LineaDeTransporte> buscarLineaDeTransporte (String id_linea, 
 		}
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		// conn.rollback();
@@ -396,7 +403,7 @@ public static List<Trayecto> buscarTrayecto (String id_trayecto, String id_linea
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "SELECT * FROM trayecto WHERE "
 				+ "id_trayecto LIKE ? AND "
@@ -435,7 +442,7 @@ public static List<Trayecto> buscarTrayecto (String id_trayecto, String id_linea
 		}
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		// conn.rollback();
@@ -472,7 +479,7 @@ public static void agregarCliente(Cliente nuevo_cliente) {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "INSERT INTO cliente VALUES (?,?,?);";
 		
@@ -492,13 +499,13 @@ public static void agregarCliente(Cliente nuevo_cliente) {
 		conn.setAutoCommit(true);
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		try {
 			conn.rollback();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		e.printStackTrace();
@@ -525,7 +532,7 @@ public static void agregarEstacion(Estacion nueva_estacion) {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "INSERT INTO estacion VALUES (?,?,?,?,?);";
 		
@@ -547,13 +554,13 @@ public static void agregarEstacion(Estacion nueva_estacion) {
 		conn.setAutoCommit(true);
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		try {
 			conn.rollback();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		e.printStackTrace();
@@ -579,7 +586,7 @@ public static void agregarTrayecto(String id_linea, Trayecto nuevo_trayecto) {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "INSERT INTO trayecto VALUES (?,?,?,?,?,?,?,?,?);";
 		
@@ -605,13 +612,13 @@ public static void agregarTrayecto(String id_linea, Trayecto nuevo_trayecto) {
 		conn.setAutoCommit(true);
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		try {
 			conn.rollback();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		e.printStackTrace();
@@ -638,7 +645,7 @@ public static void agregarTareaDeMantenimiento(String id_estacion, TareaDeManten
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 	
 		
@@ -676,13 +683,13 @@ public static void agregarTareaDeMantenimiento(String id_estacion, TareaDeManten
 		conn.setAutoCommit(true);
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		try {
 			conn.rollback();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		e.printStackTrace();
@@ -709,7 +716,7 @@ public static void agregarLineaDeTransporte(LineaDeTransporte nueva_linea) {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "INSERT INTO linea_transporte VALUES (?,?,?,?);";
 		
@@ -730,13 +737,13 @@ public static void agregarLineaDeTransporte(LineaDeTransporte nueva_linea) {
 		conn.setAutoCommit(true);
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		try {
 			conn.rollback();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		e.printStackTrace();
@@ -763,7 +770,7 @@ public static void agregarBoleto(Boleto nuevo_boleto) {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "INSERT INTO linea_transporte VALUES (?,?,?,?,?,?);";
 		
@@ -786,13 +793,13 @@ public static void agregarBoleto(Boleto nuevo_boleto) {
 		conn.setAutoCommit(true);
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		try {
 			conn.rollback();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		e.printStackTrace();
@@ -819,7 +826,7 @@ public static void agregarCamino(Camino nuevo_camino) {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "INSERT INTO camino VALUES (?,?,?,?,?,?);";
 				
@@ -853,13 +860,13 @@ public static void agregarCamino(Camino nuevo_camino) {
 		conn.setAutoCommit(true);
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		try {
 			conn.rollback();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		e.printStackTrace();
@@ -876,7 +883,7 @@ public static void agregarCamino(Camino nuevo_camino) {
 }
 
 public static void agregarRecorrido(LineaDeTransporte linea_seleccionada, Trayecto[] recorrido) {
-	// TODO Auto-generated method stub
+	
 	for(Trayecto t : recorrido) {
 		agregarTrayecto(linea_seleccionada.getId(),t);
 	}
@@ -893,7 +900,7 @@ public static void actualizarEstacion (Estacion estacion) {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "UPDATE estacion SET "
 				+ "nombre = ?, "
@@ -919,13 +926,13 @@ public static void actualizarEstacion (Estacion estacion) {
 		conn.setAutoCommit(true);
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		try {
 			conn.rollback();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		e.printStackTrace();
@@ -950,7 +957,7 @@ public static void actualizarLineaDeTransporte (LineaDeTransporte linea) {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "UPDATE linea SET "
 				+ "nombre = ?, "
@@ -974,13 +981,13 @@ public static void actualizarLineaDeTransporte (LineaDeTransporte linea) {
 		conn.setAutoCommit(true);
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		try {
 			conn.rollback();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		e.printStackTrace();
@@ -1005,7 +1012,7 @@ public static void actualizarTrayecto (Trayecto trayecto) {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "UPDATE trayecto SET "
 				+ "distancia = ?, "
@@ -1037,13 +1044,13 @@ public static void actualizarTrayecto (Trayecto trayecto) {
 		conn.setAutoCommit(true);
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		try {
 			conn.rollback();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		e.printStackTrace();
@@ -1068,7 +1075,7 @@ public static void eliminarTrayecto (Trayecto trayecto) {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "DELETE FROM trayecto WHERE "
 				+ "id_trayecto  = ?;";
@@ -1086,13 +1093,13 @@ public static void eliminarTrayecto (Trayecto trayecto) {
 		conn.setAutoCommit(true);
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		try {
 			conn.rollback();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		e.printStackTrace();
@@ -1121,7 +1128,7 @@ public static void eliminarLineaDeTransporte (LineaDeTransporte linea) {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "DELETE FROM linea_transporte WHERE "
 				+ "id_linea  = ?;";
@@ -1139,13 +1146,13 @@ public static void eliminarLineaDeTransporte (LineaDeTransporte linea) {
 		conn.setAutoCommit(true);
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		try {
 			conn.rollback();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		e.printStackTrace();
@@ -1169,7 +1176,7 @@ public static void eliminarTareaDeMantenimiento (TareaDeMantenimiento tarea) {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "DELETE FROM tarea_mantenimiento WHERE "
 				+ "id_tarea  = ?;";
@@ -1187,13 +1194,13 @@ public static void eliminarTareaDeMantenimiento (TareaDeMantenimiento tarea) {
 		conn.setAutoCommit(true);
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		try {
 			conn.rollback();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		e.printStackTrace();
@@ -1222,7 +1229,7 @@ public static void eliminarEstacion (Estacion estacion) {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//Carga el Driver Manager
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/died","root","velero100");
+		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "DELETE FROM estacion WHERE "
 				+ "id_estacion  = ?;";
@@ -1240,13 +1247,13 @@ public static void eliminarEstacion (Estacion estacion) {
 		conn.setAutoCommit(true);
 					
 	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	} catch (SQLException e) {
 		try {
 			conn.rollback();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		e.printStackTrace();
