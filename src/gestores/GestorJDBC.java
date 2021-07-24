@@ -209,8 +209,8 @@ public static List<Cliente> buscarCliente (String id_cliente, String nombre, Str
 		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "SELECT * FROM cliente WHERE "
-				+ "id_estacion LIKE ?"
-				+ "nombre LIKE ?"
+				+ "id_estacion LIKE ? AND "
+				+ "nombre LIKE ? AND "
 				+ "email LIKE ?;";
 		
 				
