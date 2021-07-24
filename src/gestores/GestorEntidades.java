@@ -1,13 +1,14 @@
 package gestores;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-
 import dominio.*;
 
 public class GestorEntidades {
 	
+	public static Cliente crearCliente(String nombre, String email) {
+		return new Cliente(nombre, email);
+	}
 	
 	public static Trayecto crearTrayecto(Estacion origen, Estacion destino, Integer dist, Integer capacidad, Integer duracion, String costo) {
 		return new Trayecto(dist,duracion,capacidad,Double.parseDouble(costo),origen,destino);
@@ -42,10 +43,9 @@ public class GestorEntidades {
 		return data;
 	}
 
-		public static Cliente crearCliente(String nombre, String email) {
-		return new Cliente(nombre, email);
+	public static Cliente crearCliente(String id_cliente, String nombre, String email) {
+		return new Cliente(id_cliente, nombre, email);
 	}
-
 	
 	public static Trayecto crearTrayecto(String id_trayecto, Integer dist, Integer duracion, Integer capacidad, String estado, Double costo, Estacion origen, Estacion destino) {
 		

@@ -226,8 +226,8 @@ public static List<Cliente> buscarCliente (String id_cliente, String nombre, Str
 		rs = pstm.executeQuery();
 		
 		while(rs.next()) {
-			//Cliente aux = GestorEntidades.crearCliente(rs.getString("id_cliente"),rs.getString("nombre"),rs.getString("email")); TODO
-			//resultado.add(aux);
+			Cliente aux = GestorEntidades.crearCliente(rs.getString("id_cliente"),rs.getString("nombre"),rs.getString("email"));
+			resultado.add(aux);
 		}
 				
 	} catch (ClassNotFoundException e) {

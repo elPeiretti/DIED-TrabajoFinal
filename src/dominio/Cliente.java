@@ -12,6 +12,11 @@ public class Cliente {
 		this.nombre = nombre;
 		this.email = email;
 	}
+	public Cliente(String id_cliente, String nombre, String email) {
+		this.id_cliente = id_cliente;
+		this.nombre = nombre;
+		this.email = email;
+	}
 	public static void setUltimo_id(Integer id) {
 		ultimo_id=id;
 	}

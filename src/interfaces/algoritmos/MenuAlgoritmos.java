@@ -121,10 +121,15 @@ public class MenuAlgoritmos extends JPanel {
 		
 		jb_page_rank.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				List<Estacion> ranking;
+				try {
+					ranking = GestorAlgoritmos.calcularPageRank();
+					VentanaPrincipal.popupInfo("El ranking de las estaciones es el siguiente (más a la izquerda significa mayor prioridad):\n"+
+							ranking.toString(), "Page Rank");
+				} catch (NoHayDatosDeEstacionesException e1) {
+					JOptionPane.showMessageDialog(null,"No se puede realizar este algoritmo sin tener estaciones cargadas.", "Error", JOptionPane.ERROR_MESSAGE);
+				}
 				
-				List<Estacion> ranking = GestorAlgoritmos.calcularPageRank();
-				VentanaPrincipal.popupInfo("El ranking de las estaciones es el siguiente (más a la izquerda significa mayor prioridad):\n"+
-											ranking.toString(), "Page Rank");
 			}
 		});
 		

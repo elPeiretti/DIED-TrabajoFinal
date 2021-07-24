@@ -125,13 +125,16 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 		return arcos;
 	}
 
-	public static List<Estacion> calcularPageRank() {
+	public static List<Estacion> calcularPageRank() throws NoHayDatosDeEstacionesException {
 		
 		HashMap<String, Double> pageRanks = new HashMap<String, Double>();
 		HashMap<String, List<Estacion>> estacionesEntrantes  = new HashMap<String, List<Estacion>>();
 		HashMap<String, Integer> enlacesSalientes = new HashMap<String, Integer>();
 		
 		List<Estacion> estaciones = GestorJDBC.buscarEstacion("", "", "", "", null);
+		
+		if(estaciones.isEmpty()) throw new NoHayDatosDeEstacionesException();
+		
 		Double variacion;
 		Double probabilidad = 0.85;
 		
