@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -137,9 +138,10 @@ public class MenuAlgoritmos extends JPanel {
 				}
 								
 				try {
-					Estacion est = GestorAlgoritmos.calcularProximoMantenimiento(estaciones);
+					PriorityQueue<Estacion> ests = GestorAlgoritmos.calcularPrioridadMantenimiento(estaciones);
 					VentanaPrincipal.popupInfo("La estacion a la cual hay que realizarle el proximo mantenimiento es:\n"+
-								"ID: "+est.getId_estacion()+ " NOMBRE: "+est.getNombre(), "Proximo mantenimiento");
+								"ID: "+ests.peek().getId_estacion()+ " NOMBRE: "+ests.peek().getNombre()
+								+ "\nMonticulo: \n" + ests, "Proximo mantenimiento");
 				} 
 				catch (NoHayDatosDeEstacionesException e1) {
 					JOptionPane.showMessageDialog(null,"No se puede realizar este algoritmo sin tener estaciones cargadas.", "Error", JOptionPane.ERROR_MESSAGE);

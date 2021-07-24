@@ -1,6 +1,7 @@
 package dominio;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
@@ -13,7 +14,7 @@ public class Estacion {
 	private String horario_cierre;
 	private EstadoEstacion estado;
 	private List<TareaDeMantenimiento> mantenimientos;
-	
+		
 	public Estacion(String nombre, String horario_apertura, String horario_cierre, EstadoEstacion estado) {
 		this.id_estacion = "EST" + ++ultimo_id;
 		this.nombre = nombre;
@@ -111,6 +112,35 @@ public class Estacion {
 
 	public TareaDeMantenimiento getUltimoMantenimiento() {
 		return this.mantenimientos.isEmpty() ? null : mantenimientos.get(this.mantenimientos.size()-1);
+	}
+	
+		
+	public static class PriorityMantenimientoComparator implements Comparator<Estacion> {
+		
+		@Override
+		public int compare(Estacion est1, Estacion est2) {
+			//Positivo si est1 > est2
+			//Cero si son iguales
+			//Negativo si est2 > est1
+			//Si es negativo no cambia dentro de la queue
+								
+			if(est1.mantenimientos.isEmpty()) return -1;
+			
+			if(est2.mantenimientos.isEmpty()) return 1;
+			
+			if(est1.getUltimoMantenimiento().getFecha_fin() == null && est2.getUltimoMantenimiento().getFecha_fin() == null)
+				return 0;
+			
+			if(est1.getUltimoMantenimiento().getFecha_fin() != null && est2.getUltimoMantenimiento().getFecha_fin() == null)
+				return -1;
+			
+			if(est1.getUltimoMantenimiento().getFecha_fin() == null && est2.getUltimoMantenimiento().getFecha_fin() != null)
+				return 1;
+			
+			return est1.getUltimoMantenimiento().getFecha_fin().compareTo(est2.getUltimoMantenimiento().getFecha_fin());
+			
+		}
+		
 	}
 	
 	

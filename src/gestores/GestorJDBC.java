@@ -67,6 +67,12 @@ public static void updateUltimosId () {
 				Trayecto.setUltimo_id(0);
 			}
 			
+			if(rs.getString("id_cliente") != null) {
+				Cliente.setUltimo_id(Integer.valueOf(rs.getString("id_cliente").substring(3)));
+			} else {
+				Cliente.setUltimo_id(0);
+			}
+			
 	}
 				
 	} catch (ClassNotFoundException e) {
