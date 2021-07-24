@@ -3,6 +3,7 @@ package dominio;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Vector;
 
 public class Estacion {
@@ -56,6 +57,10 @@ public class Estacion {
 		data.add(horario_apertura);
 		data.add(horario_cierre);
 		return data;
+	}
+	
+	public int  hashCode() {
+		return Objects.hashCode(id_estacion);	
 	}
 	
 	public void agregarMantenimiento(TareaDeMantenimiento tarea) {

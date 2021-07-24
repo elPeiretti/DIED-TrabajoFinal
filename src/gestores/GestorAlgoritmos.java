@@ -2,11 +2,13 @@ package gestores;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 import dominio.Camino;
 import dominio.Estacion;
@@ -126,25 +128,30 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 	public static List<Estacion> calcularPageRank() {
 		
 		HashMap<String, Double> pageRanks = new HashMap<String, Double>();
+		HashMap<String, List<Estacion>> estacionesEntrantes  = new HashMap<String, List<Estacion>>();
+		HashMap<String, Integer> enlacesSalientes = new HashMap<String, Integer>();
+		
 		List<Estacion> estaciones = GestorJDBC.buscarEstacion("", "", "", "", null);
 		Double variacion;
 		Double probabilidad = 0.85;
-		for(Estacion est : estaciones) pageRanks.put(est.getId_estacion(), 1.0);
+		
+		for(Estacion est : estaciones) {
+			pageRanks.put(est.getId_estacion(), 1.0);
+			enlacesSalientes.put(est.getId_estacion(),GestorJDBC.buscarTrayecto("", "", est.getId_estacion(), "", null).size());
+			estacionesEntrantes.put(est.getId_estacion(), 
+					GestorJDBC.buscarTrayecto("", "", "", est.getId_estacion(), null).stream()
+					.map((Trayecto t) -> {return t.getOrigen();}).collect(Collectors.toList()));
+		}
+		
 		
 		do {
 			variacion = 0d;
 			HashMap<String, Double> auxPageRanks  = new HashMap<String,Double>();
 			for(Estacion est : estaciones) {
-				Double nuevoPR;
-				System.out.println("Estacion: " + est.getNombre());
-				List<Trayecto> trayectosEntrantes = GestorJDBC.buscarTrayecto("", "", "", est.getId_estacion(), null);
+				Double nuevoPR = 1-probabilidad;
 				
-				nuevoPR = 1-probabilidad;
-				
-				for(Trayecto t : trayectosEntrantes) {
-					Integer enlacesSalientes = GestorJDBC.buscarTrayecto("", "", t.getOrigen().getId_estacion(), "", null).size();
-					System.out.println("Estacion Entrante: " +  t.getOrigen().getNombre() + " " + pageRanks.get(t.getOrigen().getId_estacion()));
-					nuevoPR += probabilidad * pageRanks.get(t.getOrigen().getId_estacion())/enlacesSalientes;
+				for(Estacion t : estacionesEntrantes.get(est.getId_estacion())) {
+					nuevoPR += probabilidad * pageRanks.get(t.getId_estacion())/enlacesSalientes.get(t.getId_estacion());
 				}
 				Double auxVariacion = Math.abs(pageRanks.get(est.getId_estacion()) - nuevoPR);
 				if(auxVariacion > variacion) variacion = auxVariacion;
@@ -153,14 +160,11 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 			
 			pageRanks = (HashMap<String, Double>) auxPageRanks.clone();
 			
-		} while(variacion > 0.001);
+		} while(variacion > 0.01);
 		
-		System.out.println("Page Ranks: ");	
-		for(String est : pageRanks.keySet()) {
-			System.out.println("Estacion: " +  est + " " + pageRanks.get(est));
-		}
+		estaciones.sort(new GestorAlgoritmos.EstacionPageRankComparator(pageRanks));
 		
-		return new ArrayList<Estacion>();
+		return estaciones;
 	}
 
 	public static PriorityQueue<Estacion> calcularPrioridadMantenimiento(List<Estacion> estaciones) throws NoHayDatosDeEstacionesException {
@@ -174,5 +178,18 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 		return monticulo;
 	}
 
+	private static class EstacionPageRankComparator implements Comparator<Estacion> {
+
+		private HashMap<String,Double> pageRanks;
+		
+		private EstacionPageRankComparator (HashMap<String,Double> pageRanks) {
+			this.pageRanks = pageRanks;
+		}
+		
+		public int compare(Estacion e1, Estacion e2) {
+			return pageRanks.get(e1.getId_estacion()).compareTo(pageRanks.get(e2.getId_estacion()))*-1;
+		}
+		
+	}
 	
 }
