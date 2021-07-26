@@ -26,7 +26,7 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 		List<Camino> recorridos = new ArrayList<Camino>();
 		for(List<Trayecto> c : caminos) {
 			Object data[] = calcularCostoDuracionYLongitud(c);
-			Camino cam = new Camino(c,origen,destino,(Double)data[0],(Integer)data[1],(Integer)data[2]);
+			Camino cam = new Camino(c,origen,destino,data);
 			recorridos.add(cam);
 		}
 		return recorridos;

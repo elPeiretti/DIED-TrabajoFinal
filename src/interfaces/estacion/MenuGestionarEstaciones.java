@@ -183,7 +183,8 @@ public class MenuGestionarEstaciones extends JPanel {
 					Integer opcion = VentanaPrincipal.popupConfirmar("Esta seguro que desea eliminar la estacion " + objetos_en_tabla.get(i).getNombre() + "?", "Confirmar Baja");
 					
 					if(opcion == JOptionPane.YES_OPTION) {
-						//GestorJDBC.eliminarEstacion(objetos_en_tabla.get(i)) TO DO
+						//GestorValidaciones.validarEliminacionEstacion(objetos_en_tabla.get(i));
+						//GestorJDBC.eliminarEstacion(objetos_en_tabla.get(i));
 						VentanaPrincipal.popupInfo("Se elimino la Estacion con Exito", "Baja Estacion Exitosa");	
 						objetos_en_tabla.remove(objetos_en_tabla.get(i));
 						jtable_estaciones_contenido.removeRow(i);

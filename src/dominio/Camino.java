@@ -23,6 +23,15 @@ public class Camino {
 		this.costo = costo;
 	}
 	
+	public Camino(List<Trayecto> c, Estacion origen, Estacion destino, Object[] data) {
+		this.combinacion = c;
+		this.origen = origen;
+		this.destino = destino;
+		this.costo = (Double)data[0];
+		this.duracion = (Integer)data[1];
+		this.distancia = (Integer)data[2];
+	}
+
 	public Estacion getOrgien() {
 		return this.origen;
 	}
@@ -55,6 +64,10 @@ public class Camino {
 
 	public List<Trayecto> getCombinacion() {
 		return combinacion;
+	}
+
+	public void asignarUltimoId() {
+		this.id_camino = "PAT"+(++ultimo_id).toString();		
 	}
 	
 	

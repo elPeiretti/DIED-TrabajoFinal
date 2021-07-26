@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 
 import excepciones.DatosDeLineaDeTransporteIncorrectosException;
 import gestores.GestorEntidades;
+import gestores.GestorJDBC;
 import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
 import javax.swing.JTextPane;
@@ -114,9 +115,11 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 					
 					Integer opcion = VentanaPrincipal.popupConfirmar("Esta seguro que desea guardar los cambios?", "Guardar cambios");
 					if(opcion == JOptionPane.YES_OPTION) {
+						EstadoLinea viejo_estado = linea_seleccionada.getEstado();
 						GestorEntidades.actualizarLinea(linea_seleccionada,nombre,color,estado);
-						//GestorJDBC.actualizarLineaDeTransporte(linea_seleccionada) TODO
-						VentanaPrincipal.popupInfo("Camios realizados exitosamente.", "Cambio exitoso");
+						GestorJDBC.actualizarLineaDeTransporte(linea_seleccionada);
+						GestorEntidades.gestionarNuevoEstadoLinea(linea_seleccionada, viejo_estado, estado);
+						VentanaPrincipal.popupInfo("Cambios realizados exitosamente.", "Cambio exitoso");
 						ventana_contenedora.cambiarPanel(VentanaPrincipal.GEST_LINEA);
 					}
 				}

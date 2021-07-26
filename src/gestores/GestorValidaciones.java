@@ -135,4 +135,10 @@ public class GestorValidaciones {
 		
 	}
 
+	public static void validarEliminacionEstacion(Estacion estacion) {
+		
+		
+		
+	}
+
 }

@@ -195,13 +195,12 @@ public static List<Estacion> buscarEstacion (String id_estacion, String nombre, 
 	}
 
 
-public static List<Cliente> buscarCliente (String id_cliente, String nombre, String email) {
+public static Cliente buscarCliente (String nombre, String email) {
 	
 	Connection conn = null;
 	PreparedStatement pstm = null;
 	ResultSet rs = null;
-	List<Cliente> resultado = new ArrayList<Cliente>();
-	
+	Cliente aux = null;	
 	try {
 		//Defino motor de base de datos
 		Class.forName("com.mysql.cj.jdbc.Driver");
@@ -209,25 +208,22 @@ public static List<Cliente> buscarCliente (String id_cliente, String nombre, Str
 		conn = DriverManager.getConnection(url,user,password);
 		
 		String armadoStm = "SELECT * FROM cliente WHERE "
-				+ "id_estacion LIKE ? AND "
-				+ "nombre LIKE ? AND "
-				+ "email LIKE ?;";
+				+ "nombre = ? AND "
+				+ "email = ?;";
 		
 				
 		pstm = conn.prepareStatement(armadoStm);
 	
 		//conn.setAutoCommit(false);
-		pstm.setString(1, (id_cliente.isEmpty()? "%" : id_cliente));
-		pstm.setString(2, (id_cliente.isEmpty()? "%" : nombre));
-		pstm.setString(3, (id_cliente.isEmpty()? "%" : email));
+		pstm.setString(1, nombre);
+		pstm.setString(2, email);
 		//int cantidad = pstm.executeUpdate();
 		//conn.commit()
 		
 		rs = pstm.executeQuery();
 		
 		while(rs.next()) {
-			Cliente aux = GestorEntidades.crearCliente(rs.getString("id_cliente"),rs.getString("nombre"),rs.getString("email"));
-			resultado.add(aux);
+			aux = GestorEntidades.crearCliente(rs.getString("id_cliente"),rs.getString("nombre"),rs.getString("email"));
 		}
 				
 	} catch (ClassNotFoundException e) {
@@ -248,7 +244,7 @@ public static List<Cliente> buscarCliente (String id_cliente, String nombre, Str
 		catch (SQLException e) { e.printStackTrace(); }
 	}
 	
-	return resultado;
+	return aux;
 	
 }
 	
@@ -772,7 +768,7 @@ public static void agregarBoleto(Boleto nuevo_boleto) {
 		//Carga el Driver Manager
 		conn = DriverManager.getConnection(url,user,password);
 		
-		String armadoStm = "INSERT INTO linea_transporte VALUES (?,?,?,?,?,?);";
+		String armadoStm = "INSERT INTO boleto VALUES (?,?,?,?,?,?);";
 		
 				
 		pstm = conn.prepareStatement(armadoStm);
@@ -1014,7 +1010,7 @@ public static void actualizarLineaDeTransporte (LineaDeTransporte linea) {
 		//Carga el Driver Manager
 		conn = DriverManager.getConnection(url,user,password);
 		
-		String armadoStm = "UPDATE linea SET "
+		String armadoStm = "UPDATE linea_transporte SET "
 				+ "nombre = ?, "
 				+ "color = ?, "
 				+ "estado = ? "
@@ -1319,6 +1315,14 @@ public static void eliminarEstacion (Estacion estacion) {
 		
 		if(conn!=null) try { conn.close(); }
 		catch (SQLException e) { e.printStackTrace(); }
+	}
+	
+}
+
+public static void actualizarTrayectos(List<Trayecto> trayectos) {
+	
+	for(Trayecto t : trayectos) {
+		GestorJDBC.actualizarTrayecto(t);
 	}
 	
 }

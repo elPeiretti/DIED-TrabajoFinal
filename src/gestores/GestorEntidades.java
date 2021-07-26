@@ -57,6 +57,31 @@ public class GestorEntidades {
 		}
 		
 	}
+	
+	public static void gestionarNuevoEstadoLinea(LineaDeTransporte linea, EstadoLinea previo, EstadoLinea nuevo) {
+		
+		if((nuevo.equals(EstadoLinea.NO_ACTIVA) && previo.equals(EstadoLinea.ACTIVA)) || 
+			(previo.equals(EstadoLinea.NO_ACTIVA) && nuevo.equals(EstadoLinea.ACTIVA))) {
+				actualizarEstadosTrayectosDeLinea(linea);
+		}
+		
+	}
+
+	private static void actualizarEstadosTrayectosDeLinea(LineaDeTransporte linea) {
+		List<Trayecto> trayectos = GestorJDBC.buscarTrayecto("", linea.getId_linea(), "", "", null);
+		
+		for(Trayecto t : trayectos) {
+			if(linea.getEstado().equals(EstadoLinea.NO_ACTIVA)) {
+				t.setEstado(EstadoTrayecto.INACTIVO);
+			} else {
+				if(t.getOrigen().getEstado().equals(EstadoEstacion.OPERATIVA) && t.getDestino().getEstado().equals(EstadoEstacion.OPERATIVA))
+					t.setEstado(EstadoTrayecto.ACTIVO);
+			}
+		}
+		
+		GestorJDBC.actualizarTrayectos(trayectos);
+		
+	}
 
 	public static Vector<String> getVectorDeDatosDeCamino(Camino c) {
 		Vector<String> data = new Vector<String>();

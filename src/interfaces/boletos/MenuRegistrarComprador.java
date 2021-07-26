@@ -121,16 +121,16 @@ public class MenuRegistrarComprador extends JPanel {
 				String email = jtf_email_cliente.getText();
 				
 				try {
-					Cliente c = null;
-					//Cliente c = GestorJDBC.buscarCliente(nombre,email);
+					GestorValidaciones.validarCliente(nombre,email);
+					Cliente c = GestorJDBC.buscarCliente(nombre,email);
 					
 					if(c==null) { // no hay registro en la BD
-						GestorValidaciones.validarCliente(nombre,email);
 						c = GestorEntidades.crearCliente(nombre,email);
+						GestorJDBC.agregarCliente(c);
 					}
 					jtp_errores.setText("");
 					
-					GestorJDBC.agregarCliente(c);
+					camino_seleccionado.asignarUltimoId();
 					GestorJDBC.agregarCamino(camino_seleccionado);
 					GestorJDBC.agregarBoleto(GestorEntidades.crearBoleto(c, camino_seleccionado.getOrigen(), camino_seleccionado.getDestino(), camino_seleccionado));
 					
