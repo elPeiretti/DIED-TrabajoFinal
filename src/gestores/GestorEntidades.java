@@ -2,7 +2,11 @@ package gestores;
 
 import java.util.List;
 import java.util.Vector;
+
+import javax.swing.JOptionPane;
+
 import dominio.*;
+import interfaces.estacion.MenuGestionarEstaciones;
 
 public class GestorEntidades {
 	
@@ -11,7 +15,9 @@ public class GestorEntidades {
 	}
 	
 	public static Trayecto crearTrayecto(Estacion origen, Estacion destino, Integer dist, Integer capacidad, Integer duracion, String costo) {
-		return new Trayecto(dist,duracion,capacidad,Double.parseDouble(costo),origen,destino);
+		return new Trayecto(dist,duracion,capacidad,Double.parseDouble(costo),origen,destino, 
+				(origen.getEstado().equals(EstadoEstacion.EN_MANTENIMIENTO) || destino.getEstado().equals(EstadoEstacion.EN_MANTENIMIENTO)?
+				EstadoTrayecto.INACTIVO : EstadoTrayecto.ACTIVO));
 	}
 	
 	public static Estacion crearEstacion(String nombre, String horario_apertura, String horario_cierre, EstadoEstacion estado) {
@@ -33,6 +39,23 @@ public class GestorEntidades {
 		e.setHorario_apertura(apertura);
 		e.setHorario_cierre(cierre);
 		e.setEstado(estado);
+	}
+	
+	public static void gestionarNuevoEstadoEstacion(Estacion e, EstadoEstacion previo, EstadoEstacion nuevo) {
+		
+		GestorEntidades.actualizarEstadoTrayectosQueIncluyen(e);
+		
+		if(nuevo.equals(EstadoEstacion.EN_MANTENIMIENTO) && previo.equals(EstadoEstacion.OPERATIVA)) {
+				GestorJDBC.agregarTareaDeMantenimiento(e.getId_estacion(),GestorEntidades.crearTareaDeMantenimiento());
+		}
+		else if(previo.equals(EstadoEstacion.EN_MANTENIMIENTO) && nuevo.equals(EstadoEstacion.OPERATIVA)) {
+			
+			String obs = JOptionPane.showInputDialog("Ingrese las observaciones respecto al mantenimiento realizado:");
+			TareaDeMantenimiento tarea = e.getUltimoMantenimiento();
+			tarea.finalizar(obs);
+			GestorJDBC.actualizarTareaDeMantenimiento(tarea); 
+		}
+		
 	}
 
 	public static Vector<String> getVectorDeDatosDeCamino(Camino c) {
@@ -67,11 +90,18 @@ public class GestorEntidades {
 
 	public static void actualizarEstadoTrayectosQueIncluyen(Estacion estacion) {
 		//todos los trayectos activos que lleguen o salgan de 'estacion', deben inhabilitarse
-		List<Trayecto> trayectos = GestorJDBC.buscarTrayecto("","",estacion.getId_estacion(),"", EstadoTrayecto.ACTIVO); //salientes
-		trayectos.addAll(GestorJDBC.buscarTrayecto("","","",estacion.getId_estacion(), EstadoTrayecto.ACTIVO));  //entrantes
+		List<Trayecto> trayectos = GestorJDBC.buscarTrayecto("","",estacion.getId_estacion(),"", null); //salientes
+		trayectos.addAll(GestorJDBC.buscarTrayecto("","","",estacion.getId_estacion(), null));  //entrantes
 		
 		for(Trayecto t : trayectos) {
-			t.setEstado(EstadoTrayecto.INACTIVO);
+			if(estacion.getEstado().equals(EstadoEstacion.OPERATIVA)) {
+				if(t.getOrigen().getEstado().equals(EstadoEstacion.OPERATIVA) && t.getDestino().getEstado().equals(EstadoEstacion.OPERATIVA)) {
+					t.setEstado(EstadoTrayecto.ACTIVO);
+				}
+			} else {
+				t.setEstado(EstadoTrayecto.INACTIVO);
+			}
+					
 			GestorJDBC.actualizarTrayecto(t);
 		}
 		

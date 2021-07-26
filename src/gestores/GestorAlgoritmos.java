@@ -140,9 +140,9 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 		
 		for(Estacion est : estaciones) {
 			pageRanks.put(est.getId_estacion(), 1.0);
-			enlacesSalientes.put(est.getId_estacion(),GestorJDBC.buscarTrayecto("", "", est.getId_estacion(), "", null).size());
+			enlacesSalientes.put(est.getId_estacion(),GestorJDBC.buscarTrayecto("", "", est.getId_estacion(), "", EstadoTrayecto.ACTIVO).size());
 			estacionesEntrantes.put(est.getId_estacion(), 
-					GestorJDBC.buscarTrayecto("", "", "", est.getId_estacion(), null).stream()
+					GestorJDBC.buscarTrayecto("", "", "", est.getId_estacion(), EstadoTrayecto.ACTIVO).stream()
 					.map((Trayecto t) -> {return t.getOrigen();}).collect(Collectors.toList()));
 		}
 				

@@ -222,7 +222,7 @@ public class MenuGestionarEstaciones extends JPanel {
 					jtp_errores.setText("");
 					
 					//llenar la tabla
-					for(Estacion est : GestorJDBC.buscarEstacion("",jtf_nombre.getText(),jtf_horario_apertura.getText(),jtf_horario_cierre.getText(),(EstadoEstacion) jcb_estado.getSelectedItem())) {
+					for(Estacion est : GestorJDBC.buscarEstacionConUltimoMantenimiento("",jtf_nombre.getText(),jtf_horario_apertura.getText(),jtf_horario_cierre.getText(),(EstadoEstacion) jcb_estado.getSelectedItem())) {
 						jtable_estaciones_contenido.addRow(est.asVector());
 						objetos_en_tabla.add(est);
 					}

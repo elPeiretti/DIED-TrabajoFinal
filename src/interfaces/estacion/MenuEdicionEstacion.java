@@ -128,9 +128,10 @@ public class MenuEdicionEstacion extends JPanel {
 					Integer opcion = VentanaPrincipal.popupConfirmar("Esta seguro que desea guadar los cambios?", "Confirmar Cambios");
 					
 					if(opcion == JOptionPane.YES_OPTION) {
-						GestionarNuevoEstado(MenuGestionarEstaciones.estacion_seleccionada.getEstado(), estado);
+						EstadoEstacion estado_viejo = MenuGestionarEstaciones.estacion_seleccionada.getEstado();
 						GestorEntidades.actualizarEstacion(MenuGestionarEstaciones.estacion_seleccionada,nombre,apertura,cierre,estado);
 						GestorJDBC.actualizarEstacion(MenuGestionarEstaciones.estacion_seleccionada);
+						GestorEntidades.gestionarNuevoEstadoEstacion(MenuGestionarEstaciones.estacion_seleccionada,estado_viejo, estado);
 						VentanaPrincipal.popupInfo("Se guardaron los cambios exitosamente.", "Cambios Guardados");
 						ventana_contenedora.cambiarPanel(VentanaPrincipal.GEST_ESTACIONES);	
 					}
@@ -142,24 +143,6 @@ public class MenuEdicionEstacion extends JPanel {
 		});
 	}
 	
-	private void GestionarNuevoEstado(EstadoEstacion previo, EstadoEstacion nuevo) {
-		
-		Estacion e = MenuGestionarEstaciones.estacion_seleccionada;
-		
-		if(nuevo.equals(EstadoEstacion.EN_MANTENIMIENTO) && previo.equals(EstadoEstacion.OPERATIVA)) {
-			GestorEntidades.actualizarEstadoTrayectosQueIncluyen(e);
-			GestorJDBC.agregarTareaDeMantenimiento(e.getId_estacion(),GestorEntidades.crearTareaDeMantenimiento());
-		}
-		else if(previo.equals(EstadoEstacion.EN_MANTENIMIENTO) && nuevo.equals(EstadoEstacion.OPERATIVA)) {
-			//activar todos los trayectos? TODO
-			String obs = JOptionPane.showInputDialog("Ingrese las observaciones respecto al mantenimiento realizado:");
-			TareaDeMantenimiento tarea = e.getUltimoMantenimiento();
-			tarea.finalizar(obs);
-			//GestorJDBC.finalizarTareaDeMantenimiento(tarea); TODO
-		}
-		
-	}
-
 	public void llenarCampos() {
 		jtf_nombre.setText(MenuGestionarEstaciones.estacion_seleccionada.getNombre());
 		jcb_estado.setSelectedItem(MenuGestionarEstaciones.estacion_seleccionada.getEstado());

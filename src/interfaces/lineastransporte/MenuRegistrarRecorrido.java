@@ -29,6 +29,7 @@ import javax.swing.table.DefaultTableModel;
 import dominio.Camino;
 import dominio.Estacion;
 import dominio.EstadoEstacion;
+import dominio.EstadoTrayecto;
 import dominio.LineaDeTransporte;
 import dominio.Trayecto;
 import excepciones.DatosDeTrayectoIncorrectosException;
@@ -62,8 +63,6 @@ public class MenuRegistrarRecorrido extends JPanel {
 	private JLabel lbl_capacidad_maxima;
 	private JSpinner jspin_capacidad_maxima;
 	private JLabel lbl_costo;
-	private JComboBox<EstadoEstacion> jcb_estado;
-	private JLabel lbl_estado;
 	private JTable jtable_trayectos;
 	private DefaultTableModel jtable_trayectos_contenido;
 	private JButton jb_guardar_recorrido;
@@ -137,14 +136,6 @@ public class MenuRegistrarRecorrido extends JPanel {
 		lbl_costo = new JLabel("Costo [$]:");
 		lbl_costo.setBounds(341, 80, 155, 14);
 		
-		jcb_estado = new JComboBox<EstadoEstacion>();
-		jcb_estado.setModel(new DefaultComboBoxModel<EstadoEstacion>(new EstadoEstacion[] {EstadoEstacion.OPERATIVA, EstadoEstacion.EN_MANTENIMIENTO}));
-		jcb_estado.setMaximumRowCount(3);
-		jcb_estado.setBounds(115, 108, 155, 24);
-		
-		lbl_estado = new JLabel("Estado:");
-		lbl_estado.setBounds(10, 113, 46, 14);
-		
 		jtable_trayectos = new JTable();
 		jtable_trayectos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
@@ -184,8 +175,6 @@ public class MenuRegistrarRecorrido extends JPanel {
 		this.agregarActionListener();
 		add(jb_guardar_recorrido);
 		add(jspane_trayectos);
-		add(lbl_estado);
-		add(jcb_estado);
 		add(lbl_costo);
 		add(jtf_costo);
 		add(jspin_capacidad_maxima);
@@ -253,7 +242,8 @@ public class MenuRegistrarRecorrido extends JPanel {
 					GestorValidaciones.validarTrayecto(origen,destino,jtf_costo.getText());
 					jtp_errores.setText("");
 					
-					Trayecto t = GestorEntidades.crearTrayecto(origen,destino,(Integer)jspin_duracion.getValue(),(Integer)jspin_capacidad_maxima.getValue(),(Integer)jspin_duracion.getValue(),jtf_costo.getText());
+					Trayecto t = GestorEntidades.crearTrayecto(origen,destino,(Integer)jspin_duracion.getValue(),
+								(Integer)jspin_capacidad_maxima.getValue(),(Integer)jspin_duracion.getValue(),jtf_costo.getText());
 					jtable_trayectos_contenido.addRow(t.asVector());
 					objetos_en_tabla.add(t);
 					

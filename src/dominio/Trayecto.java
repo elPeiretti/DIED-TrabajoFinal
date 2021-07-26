@@ -14,12 +14,13 @@ public class Trayecto {
 	private Estacion origen;
 	private Estacion destino;
 	
-	public Trayecto(Integer distancia, Integer duracion, Integer cant_max_pasajeros, Double costo, Estacion origen, Estacion destino) {
+
+	public Trayecto(Integer distancia, Integer duracion, Integer cant_max_pasajeros, Double costo, Estacion origen, Estacion destino, EstadoTrayecto estado) {
 		this.id_trayecto = "TRAY"+(++ultimo_id).toString();
 		this.distancia = distancia;
 		this.duracion = duracion;
 		this.cant_max_pasajeros = cant_max_pasajeros;
-		this.estado = EstadoTrayecto.ACTIVO;
+		this.estado = estado;
 		this.costo = costo;
 		this.origen = origen;
 		this.destino = destino;

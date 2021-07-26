@@ -947,6 +947,61 @@ public static void actualizarEstacion (Estacion estacion) {
 	
 }
 
+public static void actualizarTareaDeMantenimiento (TareaDeMantenimiento tarea) {
+	
+	Connection conn = null;
+	PreparedStatement pstm = null;
+		
+	try {
+		//Defino motor de base de datos
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		//Carga el Driver Manager
+		conn = DriverManager.getConnection(url,user,password);
+		
+		String armadoStm = "UPDATE tarea_mantenimiento SET "
+				+ "fecha_inicio = ?, "
+				+ "fecha_fin = ?, "
+				+ "observaciones = ? "
+				+ "WHERE  id_tarea = ?;";
+				
+		pstm = conn.prepareStatement(armadoStm);
+		
+		conn.setAutoCommit(false);
+			
+		pstm.setString(1, tarea.getFecha_inicio().toString());
+		pstm.setString(2, tarea.getFecha_fin().toString());
+		pstm.setString(3, tarea.getObservaciones());
+		pstm.setString(4, tarea.getId_tarea());
+		
+		pstm.executeUpdate();
+		
+		conn.commit();
+		
+		conn.setAutoCommit(true);
+					
+	} catch (ClassNotFoundException e) {
+		
+		e.printStackTrace();
+	} catch (SQLException e) {
+		try {
+			conn.rollback();
+		} catch (SQLException e1) {
+			
+			e1.printStackTrace();
+		}
+		e.printStackTrace();
+	} finally {
+		
+		if(pstm!=null) try { pstm.close(); }
+		catch (SQLException e) {e.printStackTrace(); }
+		
+		if(conn!=null) try { conn.close(); }
+		catch (SQLException e) { e.printStackTrace(); }
+	}
+	
+}
+
+
 public static void actualizarLineaDeTransporte (LineaDeTransporte linea) {
 	
 	Connection conn = null;
