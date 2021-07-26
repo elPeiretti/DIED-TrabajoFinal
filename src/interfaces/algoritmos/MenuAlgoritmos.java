@@ -143,9 +143,9 @@ public class MenuAlgoritmos extends JPanel {
 				}
 								
 				try {
-					PriorityQueue<Estacion> ests = GestorAlgoritmos.calcularPrioridadMantenimiento(estaciones);
+					List<Estacion> ests = GestorAlgoritmos.calcularPrioridadMantenimiento(estaciones);
 					VentanaPrincipal.popupInfo("La estacion a la cual hay que realizarle el proximo mantenimiento es:\n"+
-								"ID: "+ests.peek().getId_estacion()+ " NOMBRE: "+ests.peek().getNombre()
+								"ID: "+ests.get(0).getId_estacion()+ " NOMBRE: "+ests.get(0).getNombre()
 								+ "\nMonticulo: \n" + ests, "Proximo mantenimiento");
 				} 
 				catch (NoHayDatosDeEstacionesException e1) {

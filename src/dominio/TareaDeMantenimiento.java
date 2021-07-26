@@ -16,8 +16,6 @@ public class TareaDeMantenimiento {
 		this.fecha_inicio = LocalDate.now();
 	}
 	
-	
-	
 	public TareaDeMantenimiento(String id_tarea, String fecha_inicio, String fecha_fin, String obs) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		this.id_tarea = id_tarea;
@@ -26,7 +24,6 @@ public class TareaDeMantenimiento {
 			this.fecha_fin =  LocalDate.parse(fecha_fin, dtf);
 		this.observaciones = obs;
 	}
-
 
 	public void finalizar(String observaciones) {
 		this.fecha_fin = LocalDate.now();

@@ -169,7 +169,7 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 		return estaciones;
 	}
 
-	public static PriorityQueue<Estacion> calcularPrioridadMantenimiento(List<Estacion> estaciones) throws NoHayDatosDeEstacionesException {
+	public static List<Estacion> calcularPrioridadMantenimiento(List<Estacion> estaciones) throws NoHayDatosDeEstacionesException {
 		
 		if(estaciones.isEmpty()) throw new NoHayDatosDeEstacionesException();
 		
@@ -177,7 +177,15 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 		
 		monticulo.addAll(estaciones);
 		
-		return monticulo;
+		List<Estacion> resultado = new ArrayList<Estacion>();
+		
+		int tamano = monticulo.size();
+		
+		for(int i = 0; i < tamano; i++) {
+			resultado.add(monticulo.remove());
+		}
+		
+		return resultado;
 	}
 
 	private static class EstacionPageRankComparator implements Comparator<Estacion> {

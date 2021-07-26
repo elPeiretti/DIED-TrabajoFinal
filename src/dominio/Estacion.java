@@ -128,7 +128,7 @@ public class Estacion {
 			//Cero si son iguales
 			//Negativo si est2 > est1
 			//Si es negativo no cambia dentro de la queue
-								
+			
 			if(est1.mantenimientos.isEmpty()) return -1;
 			
 			if(est2.mantenimientos.isEmpty()) return 1;
@@ -147,6 +147,5 @@ public class Estacion {
 		}
 		
 	}
-	
 	
 }
