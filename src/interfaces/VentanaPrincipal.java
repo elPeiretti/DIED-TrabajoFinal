@@ -39,12 +39,6 @@ public class VentanaPrincipal extends JFrame {
 	private MenuGestionarLineaDeTransporte m_gest_linea;
 	private MenuRegistrarRecorrido m_reg_rec;
 	private MenuPrincipal m_ppal;
-	
-	
-	
-	/**
-	 * 
-	 */
 	private JPanel contentPane;
 
 	/**
@@ -110,8 +104,10 @@ public class VentanaPrincipal extends JFrame {
 		CardLayout c = (CardLayout) contentPane.getLayout();
 		if(panel.equals(REG_COMPRADOR))
 			m_reg_compr.inicializarLabels();
-		if(panel.equals(SELEC_RECORRIDO))
+		if(panel.equals(SELEC_RECORRIDO)) {
 			m_selec_rec.llenarComboBox();
+			m_selec_rec.inicializarBotones(false);
+		}
 		if(panel.equals(EDIT_ESTACION))
 			m_edit_estac.llenarCampos();
 		if(panel.equals(EDIT_LINEA))
@@ -121,10 +117,15 @@ public class VentanaPrincipal extends JFrame {
 		if(panel.equals(GEST_ESTACIONES)) {
 			m_gest_estac.limpiarTabla();
 			m_gest_estac.limpiarCampos();
+			m_gest_estac.inicializarBotones(false);
 		}
 		if(panel.equals(GEST_LINEA)) {
 			m_gest_linea.limpiarTabla();
 			m_gest_linea.limpiarCampos();
+			m_gest_linea.inicializarBotones(false);
+		}
+		if(panel.equals(REG_RECORRIDO)) {
+			m_reg_rec.inicializarBotones(false);
 		}
 		c.show(contentPane,panel);
 	}

@@ -47,36 +47,36 @@ public class MenuRegistrarComprador extends JPanel {
 		setLayout(null);
 		
 		jtf_nombre_cliente = new JTextField();
-		jtf_nombre_cliente.setBounds(248, 77, 86, 20);
+		jtf_nombre_cliente.setBounds(280, 77, 190, 20);
 		jtf_nombre_cliente.setColumns(10);
 		
 		lbl_nombre_cliente = new JLabel("Nombre del cliente:");
-		lbl_nombre_cliente.setBounds(119, 80, 99, 14);
+		lbl_nombre_cliente.setBounds(151, 80, 119, 14);
 		
 		jtf_email_cliente = new JTextField();
-		jtf_email_cliente.setBounds(248, 108, 86, 20);
+		jtf_email_cliente.setBounds(280, 108, 190, 20);
 		jtf_email_cliente.setColumns(10);
 		
 		lbl_email_cliente = new JLabel("E-Mail del cliente:");
-		lbl_email_cliente.setBounds(119, 105, 99, 14);
+		lbl_email_cliente.setBounds(151, 111, 119, 14);
 		
 		jb_regresar = new JButton("Regresar");
 		jb_regresar.setBounds(10, 266, 89, 23);
 		
 		jb_registrar_venta = new JButton("Registrar Venta");
-		jb_registrar_venta.setBounds(333, 266, 107, 23);
+		jb_registrar_venta.setBounds(470, 266, 140, 23);
 		
 		lbl_origen_destino = new JLabel("Viaje desde:");
-		lbl_origen_destino.setBounds(79, 166, 292, 14);
+		lbl_origen_destino.setBounds(151, 150, 319, 14);
 		
 		lbl_costo_boleto = new JLabel("Costo del boleto: $");
-		lbl_costo_boleto.setBounds(79, 191, 292, 14);
+		lbl_costo_boleto.setBounds(151, 175, 319, 14);
 		
 		lbl_longitud_viaje = new JLabel("Longitud del viaje [km]: ");
-		lbl_longitud_viaje.setBounds(79, 241, 292, 14);
+		lbl_longitud_viaje.setBounds(151, 225, 319, 14);
 		
 		lbl_duracion_viaje = new JLabel("Duracion del viaje [min]: ");
-		lbl_duracion_viaje.setBounds(79, 216, 292, 14);
+		lbl_duracion_viaje.setBounds(151, 200, 319, 14);
 		
 		jtp_errores = new JTextPane();
 		jtp_errores.setEditable(false);

@@ -48,28 +48,28 @@ public class MenuAlgoritmos extends JPanel {
 		this.ventana_contenedora=contenedor;
 		
 		jb_flujo_max = new JButton("Calcular Flujo Maximo");
-		jb_flujo_max.setBounds(2, 180, 135, 54);
+		jb_flujo_max.setBounds(10, 220, 163, 54);
 				
 		jb_page_rank = new JButton("Calcular Page Rank");
-		jb_page_rank.setBounds(138, 180, 125, 54);
+		jb_page_rank.setBounds(438, 220, 150, 54);
 				
 		jb_prox_mantenimiento = new JButton("Calcular Proximo Mantenimiento");
-		jb_prox_mantenimiento.setBounds(263, 180, 185, 54);
+		jb_prox_mantenimiento.setBounds(183, 220, 245, 54);
 				
 		jcb_estacion_origen = new JComboBox<Estacion>();
-		jcb_estacion_origen.setBounds(10, 88, 115, 24);
+		jcb_estacion_origen.setBounds(10, 90, 163, 24);
 		
-		lbl_estacion_origen = new JLabel("Estacion de origen");
-		lbl_estacion_origen.setBounds(23, 65, 99, 14);
+		lbl_estacion_origen = new JLabel("Estacion de origen:");
+		lbl_estacion_origen.setBounds(10, 65, 150, 14);
 				
 		jcb_estacion_destino = new JComboBox<Estacion>();
-		jcb_estacion_destino.setBounds(10, 145, 115, 24);
+		jcb_estacion_destino.setBounds(10, 169, 163, 24);
 		
-		lbl_estacion_destino = new JLabel("Estacion de destino");
-		lbl_estacion_destino.setBounds(23, 122, 99, 14);
+		lbl_estacion_destino = new JLabel("Estacion de destino:");
+		lbl_estacion_destino.setBounds(10, 144, 150, 14);
 		
 		jb_regresar = new JButton("Regresar");
-		jb_regresar.setBounds(10, 266, 89, 23);
+		jb_regresar.setBounds(10, 380, 89, 23);
 		
 		jtp_errores = new JTextPane();
 		jtp_errores.setEditable(false);

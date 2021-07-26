@@ -15,6 +15,9 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.Color;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -66,52 +69,48 @@ public class MenuGestionarEstaciones extends JPanel {
 		setLayout(null);
 		
 		jb_buscar = new JButton("Buscar");
-		jb_buscar.setBounds(359, 71, 67, 23);
+		jb_buscar.setBounds(515, 71, 95, 23);
 
-		
 		jtf_nombre = new JTextField();
-		jtf_nombre.setBounds(115, 8, 89, 20);
+		jtf_nombre.setBounds(115, 8, 200, 20);
 		jtf_nombre.setColumns(10);
 		
-		
 		jb_alta = new JButton("Dar de Alta");
-		jb_alta.setBounds(260, 71, 89, 23);
+		jb_alta.setBounds(354, 71, 151, 23);
 		
 		jb_regresar = new JButton("Regresar");
-		jb_regresar.setBounds(10, 266, 77, 23);
+		jb_regresar.setBounds(10, 277, 106, 23);
 		
 		jb_modificar = new JButton("Modificar");
-		jb_modificar.setBounds(360, 266, 77, 23);
+		jb_modificar.setBounds(515, 277, 95, 23);
 		
 		jb_eliminar = new JButton("Eliminar");
-		jb_eliminar.setBounds(277, 266, 73, 23);
+		jb_eliminar.setBounds(410, 277, 95, 23);
 		
 		jtf_horario_cierre = new JTextField();
-		jtf_horario_cierre.setBounds(331, 39, 95, 20);
+		jtf_horario_cierre.setBounds(460, 39, 150, 20);
 		jtf_horario_cierre.setColumns(10);
 		
 		jtf_horario_apertura = new JTextField();
-		jtf_horario_apertura.setBounds(115, 39, 89, 20);
+		jtf_horario_apertura.setBounds(165, 39, 150, 20);
 		jtf_horario_apertura.setColumns(10);
 		
 		jcb_estado = new JComboBox<EstadoEstacion>();
 		jcb_estado.setModel(new DefaultComboBoxModel<EstadoEstacion>(new EstadoEstacion[] {null,EstadoEstacion.OPERATIVA, EstadoEstacion.EN_MANTENIMIENTO}));
 		jcb_estado.setMaximumRowCount(3);
-		jcb_estado.setBounds(331, 6, 95, 24);
+		jcb_estado.setBounds(460, 6, 150, 24);
 		
 		lbl_horario_cierre = new JLabel("Horario de Cierre:");
-		lbl_horario_cierre.setBounds(214, 42, 106, 14);
+		lbl_horario_cierre.setBounds(354, 42, 106, 14);
 		
 		lbl_nombre = new JLabel("Nombre:");
 		lbl_nombre.setBounds(10, 11, 48, 14);
 		
 		lbl_horario_apertura = new JLabel("Horario de Apertura:");
-		lbl_horario_apertura.setBounds(10, 42, 106, 14);
+		lbl_horario_apertura.setBounds(10, 42, 145, 14);
 		
 		lbl_estado = new JLabel("Estado:");
-		lbl_estado.setBounds(214, 11, 48, 14);
-		
-		
+		lbl_estado.setBounds(354, 11, 48, 14);
 		
 		jtable_estaciones = new JTable();
 		jtable_estaciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -129,15 +128,15 @@ public class MenuGestionarEstaciones extends JPanel {
 		jtable_estaciones.setModel(jtable_estaciones_contenido);
 		
 		jspane_tabla = new JScrollPane(jtable_estaciones);
-		jspane_tabla.setSize(430, 150);
-		jspane_tabla.setLocation(10, 100);
+		jspane_tabla.setSize(600, 150);
+		jspane_tabla.setLocation(10, 111);
 		objetos_en_tabla = new ArrayList<Estacion>();
 		
 		jtp_errores = new JTextPane();
 		jtp_errores.setEditable(false);
 		jtp_errores.setForeground(Color.RED);
 		jtp_errores.setBackground(UIManager.getColor("Button.background"));
-		jtp_errores.setBounds(10, 323, 416, 66);
+		jtp_errores.setBounds(10, 323, 600, 66);
 		
 		this.agregarActionListener();
 		add(lbl_estado);
@@ -188,6 +187,7 @@ public class MenuGestionarEstaciones extends JPanel {
 						VentanaPrincipal.popupInfo("Se elimino la Estacion con Exito", "Baja Estacion Exitosa");	
 						objetos_en_tabla.remove(objetos_en_tabla.get(i));
 						jtable_estaciones_contenido.removeRow(i);
+						inicializarBotones(false);
 					}
 				}
 			}
@@ -215,8 +215,8 @@ public class MenuGestionarEstaciones extends JPanel {
 		
 		jb_buscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				objetos_en_tabla.clear();
-				jtable_estaciones_contenido.setRowCount(0);
+				limpiarTabla();
+				inicializarBotones(false);
 				try {
 					GestorValidaciones.validarFormatoHorariosEstacion(jtf_horario_apertura.getText(),jtf_horario_cierre.getText());
 					jtp_errores.setText("");
@@ -233,6 +233,14 @@ public class MenuGestionarEstaciones extends JPanel {
 			}
 		});
 		
+		jtable_estaciones.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				if(jtable_estaciones.getSelectedRow() != -1) {
+					inicializarBotones(true);
+				}
+			}
+		});
+		
 	}
 	
 	public void limpiarCampos() {
@@ -245,6 +253,11 @@ public class MenuGestionarEstaciones extends JPanel {
 	public void limpiarTabla() {
 		objetos_en_tabla.clear();
 		jtable_estaciones_contenido.setRowCount(0);
+	}
+	
+	public void inicializarBotones(boolean estado) {
+		jb_eliminar.setEnabled(estado);
+		jb_modificar.setEnabled(estado);
 	}
 	
 }

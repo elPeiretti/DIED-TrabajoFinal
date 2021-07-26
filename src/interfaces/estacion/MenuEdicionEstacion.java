@@ -54,39 +54,39 @@ public class MenuEdicionEstacion extends JPanel {
 		setLayout(null);
 		
 		jb_guardar_cambios = new JButton("Guardar Cambios");
-		jb_guardar_cambios.setBounds(325, 266, 115, 23);
+		jb_guardar_cambios.setBounds(460, 266, 150, 23);
 		
 		jb_regresar = new JButton("Regresar");
-		jb_regresar.setBounds(27, 266, 89, 23);
+		jb_regresar.setBounds(10, 266, 89, 23);
 				
 		jtf_nombre = new JTextField();
-		jtf_nombre.setBounds(183, 68, 86, 20);
+		jtf_nombre.setBounds(250, 66, 200, 20);
 		jtf_nombre.setColumns(10);
 		
 		jtf_horario_apertura = new JTextField();
-		jtf_horario_apertura.setBounds(183, 110, 86, 20);
+		jtf_horario_apertura.setBounds(330, 108, 120, 20);
 		jtf_horario_apertura.setColumns(10);
 		
 		jtf_horario_cierre = new JTextField();
-		jtf_horario_cierre.setBounds(183, 155, 86, 20);
+		jtf_horario_cierre.setBounds(330, 153, 120, 20);
 		jtf_horario_cierre.setColumns(10);
 		
 		lbl_nombre = new JLabel("Nombre:");
-		lbl_nombre.setBounds(70, 71, 46, 14);
+		lbl_nombre.setBounds(159, 69, 80, 14);
 		
 		lbl_horario_apertura = new JLabel("Horario de apertura:");
-		lbl_horario_apertura.setBounds(70, 113, 102, 14);
+		lbl_horario_apertura.setBounds(159, 111, 150, 14);
 		
 		lbl_horario_cierre = new JLabel("Horario de cierre:");
-		lbl_horario_cierre.setBounds(70, 158, 97, 14);
+		lbl_horario_cierre.setBounds(159, 156, 150, 14);
 		
 		lbl_estado = new JLabel("Estado:");
-		lbl_estado.setBounds(70, 198, 46, 14);
+		lbl_estado.setBounds(159, 196, 46, 14);
 	
 		jcb_estado = new JComboBox<EstadoEstacion>();
 		jcb_estado.setModel(new DefaultComboBoxModel<EstadoEstacion>(new EstadoEstacion[] {EstadoEstacion.OPERATIVA, EstadoEstacion.EN_MANTENIMIENTO}));
 		jcb_estado.setMaximumRowCount(2);
-		jcb_estado.setBounds(183, 193, 86, 24);
+		jcb_estado.setBounds(330, 191, 120, 24);
 		
 		this.agregarActionListener();
 		add(jb_guardar_cambios);
@@ -104,7 +104,7 @@ public class MenuEdicionEstacion extends JPanel {
 		jtp_errores.setEditable(false);
 		jtp_errores.setForeground(Color.RED);
 		jtp_errores.setBackground(UIManager.getColor("Button.background"));
-		jtp_errores.setBounds(10, 301, 430, 88);
+		jtp_errores.setBounds(10, 301, 600, 88);
 		add(jtp_errores);
 	}
 	

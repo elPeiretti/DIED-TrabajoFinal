@@ -16,6 +16,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.Color;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -66,44 +69,44 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		setLayout(null);
 		
 		jb_buscar = new JButton("Buscar");
-		jb_buscar.setBounds(348, 61, 67, 23);
+		jb_buscar.setBounds(515, 61, 95, 23);
 		
 		jtf_nombre = new JTextField();
-		jtf_nombre.setBounds(72, 13, 89, 20);
+		jtf_nombre.setBounds(85, 13, 200, 20);
 		jtf_nombre.setColumns(10);
 		
 		jb_alta = new JButton("Dar de Alta");
-		jb_alta.setBounds(249, 61, 89, 23);
+		jb_alta.setBounds(355, 61, 150, 23);
 		
 		jb_regresar = new JButton("Regresar");
-		jb_regresar.setBounds(10, 266, 77, 23);
+		jb_regresar.setBounds(10, 266, 95, 23);
 		
 		jb_modificar = new JButton("Modificar");
-		jb_modificar.setBounds(232, 266, 77, 23);
+		jb_modificar.setBounds(355, 266, 95, 23);
 		
 		jb_eliminar = new JButton("Eliminar");
-		jb_eliminar.setBounds(154, 266, 73, 23);
+		jb_eliminar.setBounds(250, 266, 95, 23);
 		
 		jtf_color = new JTextField();
-		jtf_color.setBounds(205, 13, 89, 20);
+		jtf_color.setBounds(85, 62, 200, 20);
 		jtf_color.setColumns(10);
 		
 		jcb_estado = new JComboBox<EstadoLinea>();
 		jcb_estado.setModel(new DefaultComboBoxModel<EstadoLinea>(new EstadoLinea[] {null,EstadoLinea.ACTIVA,EstadoLinea.NO_ACTIVA}));
 		jcb_estado.setMaximumRowCount(3);
-		jcb_estado.setBounds(348, 11, 67, 24);
+		jcb_estado.setBounds(460, 11, 150, 24);
 		
 		lbl_color = new JLabel("Color:");
-		lbl_color.setBounds(171, 16, 48, 14);
+		lbl_color.setBounds(26, 65, 48, 14);
 		
 		lbl_nombre = new JLabel("Nombre:");
-		lbl_nombre.setBounds(26, 16, 48, 14);
+		lbl_nombre.setBounds(26, 16, 55, 14);
 		
 		lbl_estado = new JLabel("Estado:");
-		lbl_estado.setBounds(304, 16, 48, 14);
+		lbl_estado.setBounds(355, 16, 80, 14);
 		
 		jb_registrar_recorrido = new JButton("Registrar recorrido");
-		jb_registrar_recorrido.setBounds(314, 266, 123, 23);
+		jb_registrar_recorrido.setBounds(460, 266, 150, 23);
 		
 		jtable_lineas = new JTable();
 		jtable_lineas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -120,14 +123,14 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		objetos_en_tabla = new ArrayList<LineaDeTransporte>();
 		
 		jspane_lineas = new JScrollPane(jtable_lineas);
-		jspane_lineas.setSize(430, 150);
+		jspane_lineas.setSize(600, 150);
 		jspane_lineas.setLocation(10, 100);
 		
 		jtp_errores = new JTextPane();
 		jtp_errores.setEditable(false);
 		jtp_errores.setBackground(UIManager.getColor("Button.background"));
 		jtp_errores.setForeground(Color.RED);
-		jtp_errores.setBounds(10, 300, 427, 89);
+		jtp_errores.setBounds(10, 300, 600, 89);
 		
 		this.agregarActionListener();
 		add(jb_registrar_recorrido);
@@ -151,6 +154,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		
 		jb_buscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				inicializarBotones(false);
 				EstadoLinea estado = (EstadoLinea) jcb_estado.getSelectedItem();
 
 				//buscar datos en la BD
@@ -204,6 +208,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 						jtable_lineas_contenido.removeRow(i);	
 						objetos_en_tabla.remove(objetos_en_tabla.get(i));
 						VentanaPrincipal.popupInfo("Se elimino la Linea exitosamente.", "Baja Linea Existosa");
+						inicializarBotones(false);
 					}
 					
 					
@@ -218,8 +223,10 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 					String nombre = jtf_nombre.getText();
 					String color = jtf_color.getText();
 					EstadoLinea estado = (EstadoLinea) jcb_estado.getSelectedItem();
+					
 					GestorValidaciones.validarLineaDeTransporte(nombre,color,estado);
 					jtp_errores.setText("");
+					
 					GestorJDBC.agregarLineaDeTransporte(GestorEntidades.crearLineaDeTransporte(nombre,color,estado)); 
 					VentanaPrincipal.popupInfo("Se agrego la Linea exitosamente.", "Alta Existosa");
 					limpiarCampos();
@@ -227,6 +234,14 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 				}
 				catch(DatosDeLineaDeTransporteIncorrectosException exc) {
 					jtp_errores.setText(exc.errores);
+				}
+			}
+		});
+		
+		jtable_lineas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if(jtable_lineas.getSelectedRow() != -1) {
+					inicializarBotones(true);
 				}
 			}
 		});
@@ -242,5 +257,11 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 	public void limpiarTabla() {
 		jtable_lineas_contenido.setRowCount(0);
 		objetos_en_tabla.clear();
+	}
+	
+	public void inicializarBotones(boolean estado) {
+		jb_modificar.setEnabled(estado);
+		jb_eliminar.setEnabled(estado);
+		jb_registrar_recorrido.setEnabled(estado);
 	}
 }

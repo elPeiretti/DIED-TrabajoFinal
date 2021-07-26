@@ -85,66 +85,65 @@ public class MenuRegistrarRecorrido extends JPanel {
 		setLayout(null);
 		
 		lbl_estacion_origen = new JLabel("Estacion origen:");
-		lbl_estacion_origen.setBounds(20, 16, 92, 14);
+		lbl_estacion_origen.setBounds(10, 16, 92, 14);
 		
 		jcb_estacion_origen = new JComboBox<Estacion>();
-		jcb_estacion_origen.setBounds(109, 11, 99, 24);
+		jcb_estacion_origen.setBounds(115, 11, 155, 24);
 		
 		jcb_estacion_origen_contenido = new DefaultComboBoxModel<Estacion>();
 		jcb_estacion_origen.setModel(jcb_estacion_origen_contenido);
 		
 		jb_agregar_trayecto = new JButton("Agregar trayecto al recorrido");
 		jb_agregar_trayecto.setBackground(new Color(60, 179, 113));
-		jb_agregar_trayecto.setBounds(248, 109, 173, 23);
-		jb_agregar_trayecto.setEnabled(false);
+		jb_agregar_trayecto.setBounds(377, 109, 233, 23);
 		
 		jcb_estacion_destino = new JComboBox<Estacion>();
-		jcb_estacion_destino.setBounds(329, 11, 99, 24);
+		jcb_estacion_destino.setBounds(455, 11, 155, 24);
 		
 		jcb_estacion_destino_contenido = new DefaultComboBoxModel<Estacion>();
 		jcb_estacion_destino.setModel(jcb_estacion_destino_contenido);
 		
 		lbl_estacion_destino = new JLabel("Estacion destino:");
-		lbl_estacion_destino.setBounds(227, 16, 92, 14);
+		lbl_estacion_destino.setBounds(341, 16, 110, 14);
 		
 		jspin_distancia = new JSpinner();
 		jspin_distancia.setToolTipText("Distancia entre las estaciones en Km");
 		jspin_distancia.setModel(new SpinnerNumberModel(1, 1, 50, 1));
-		jspin_distancia.setBounds(159, 46, 49, 20);
+		jspin_distancia.setBounds(215, 46, 55, 20);
 		
 		lbl_distancia = new JLabel("Distancia [Km] :");
-		lbl_distancia.setBounds(20, 49, 82, 14);
+		lbl_distancia.setBounds(10, 49, 115, 14);
 		
 		lbl_duracion = new JLabel("Duracion [minutos]:");
-		lbl_duracion.setBounds(20, 80, 105, 14);
+		lbl_duracion.setBounds(10, 80, 115, 14);
 		
 		jspin_duracion = new JSpinner();
 		jspin_duracion.setModel(new SpinnerNumberModel(1, 1, 120, 1));
 		jspin_duracion.setToolTipText("Distancia entre las estaciones en Km");
-		jspin_duracion.setBounds(159, 77, 49, 20);
+		jspin_duracion.setBounds(215, 77, 55, 20);
 		
 		lbl_capacidad_maxima = new JLabel("Capacidad maxima [pasajeros]:");
-		lbl_capacidad_maxima.setBounds(227, 49, 151, 14);
+		lbl_capacidad_maxima.setBounds(341, 49, 180, 14);
 		
 		jspin_capacidad_maxima = new JSpinner();
 		jspin_capacidad_maxima.setModel(new SpinnerNumberModel(1, 1, 200, 1));
 		jspin_capacidad_maxima.setToolTipText("Distancia entre las estaciones en Km");
-		jspin_capacidad_maxima.setBounds(379, 46, 49, 20);
+		jspin_capacidad_maxima.setBounds(555, 46, 55, 20);
 		
 		jtf_costo = new JTextField();
-		jtf_costo.setBounds(329, 77, 99, 20);
+		jtf_costo.setBounds(555, 77, 55, 20);
 		jtf_costo.setColumns(10);
 		
 		lbl_costo = new JLabel("Costo [$]:");
-		lbl_costo.setBounds(227, 80, 57, 14);
+		lbl_costo.setBounds(341, 80, 155, 14);
 		
 		jcb_estado = new JComboBox<EstadoEstacion>();
 		jcb_estado.setModel(new DefaultComboBoxModel<EstadoEstacion>(new EstadoEstacion[] {EstadoEstacion.OPERATIVA, EstadoEstacion.EN_MANTENIMIENTO}));
 		jcb_estado.setMaximumRowCount(3);
-		jcb_estado.setBounds(109, 108, 99, 24);
+		jcb_estado.setBounds(115, 108, 155, 24);
 		
 		lbl_estado = new JLabel("Estado:");
-		lbl_estado.setBounds(20, 113, 46, 14);
+		lbl_estado.setBounds(10, 113, 46, 14);
 		
 		jtable_trayectos = new JTable();
 		jtable_trayectos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -163,25 +162,23 @@ public class MenuRegistrarRecorrido extends JPanel {
 		jtable_trayectos.setBorder(null);
 		
 		jspane_trayectos = new JScrollPane(jtable_trayectos);
-		jspane_trayectos.setSize(430, 100);
-		jspane_trayectos.setLocation(10, 150);
+		jspane_trayectos.setSize(600, 100);
+		jspane_trayectos.setLocation(10, 155);
 		
 		jb_guardar_recorrido = new JButton("Guardar recorrido");
-		jb_guardar_recorrido.setBounds(311, 254, 117, 23);
-		jb_guardar_recorrido.setEnabled(false);
+		jb_guardar_recorrido.setBounds(470, 266, 140, 23);
 		
 		jb_cancelar = new JButton("Cancelar");
-		jb_cancelar.setBounds(23, 254, 89, 23);
+		jb_cancelar.setBounds(20, 266, 89, 23);
 		
 		jtp_errores = new JTextPane();
 		jtp_errores.setForeground(Color.RED);
 		jtp_errores.setEditable(false);
 		jtp_errores.setBackground(UIManager.getColor("Button.background"));
-		jtp_errores.setBounds(10, 286, 418, 103);
+		jtp_errores.setBounds(10, 300, 600, 89);
 		
 		jb_eliminar_ultimo = new JButton("Eliminar ultimo trayecto");
-		jb_eliminar_ultimo.setBounds(129, 254, 173, 23);
-		jb_eliminar_ultimo.setEnabled(false);
+		jb_eliminar_ultimo.setBounds(288, 266, 173, 23);
 		
 		this.llenarComboBoxEstaciones();
 		this.agregarActionListener();
@@ -227,8 +224,6 @@ public class MenuRegistrarRecorrido extends JPanel {
 		
 		jb_cancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jcb_estacion_origen.setEnabled(true);
-				jb_eliminar_ultimo.setEnabled(false);
 				limpiarTabla();
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.GEST_LINEA);
 			}
@@ -263,11 +258,9 @@ public class MenuRegistrarRecorrido extends JPanel {
 					objetos_en_tabla.add(t);
 					
 					// fijar el combobox jcb_origen al destino seleccionado
-					jcb_estacion_origen_contenido.removeAllElements();
-					jcb_estacion_origen_contenido.addElement(destino);
+					jcb_estacion_origen_contenido.setSelectedItem(destino);
 					jcb_estacion_origen.setEnabled(false);
-					jb_eliminar_ultimo.setEnabled(true);
-					jb_guardar_recorrido.setEnabled(true);
+					inicializarBotones(true);
 					
 				}
 				catch(DatosDeTrayectoIncorrectosException exc){
@@ -278,14 +271,18 @@ public class MenuRegistrarRecorrido extends JPanel {
 		
 		jb_eliminar_ultimo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Integer ultimo_indice = jtable_trayectos_contenido.getRowCount();
-				jtable_trayectos_contenido.removeRow(ultimo_indice-1);
-				objetos_en_tabla.remove(ultimo_indice-1);
+				Integer ultimo_indice = jtable_trayectos_contenido.getRowCount()-1;
+				jtable_trayectos_contenido.removeRow(ultimo_indice);
+				objetos_en_tabla.remove(objetos_en_tabla.get(ultimo_indice));
+				ultimo_indice--;
 				
 				if(jtable_trayectos_contenido.getRowCount()==0) {
-					jb_eliminar_ultimo.setEnabled(false);
-					jb_guardar_recorrido.setEnabled(false);
+					inicializarBotones(false);
 					jcb_estacion_origen.setEnabled(true);
+				}
+				else {
+					jcb_estacion_origen.setSelectedItem(objetos_en_tabla.get(ultimo_indice).getDestino());
+					System.out.println(objetos_en_tabla.get(ultimo_indice).getDestino());
 				}
 			}
 		});
@@ -304,5 +301,10 @@ public class MenuRegistrarRecorrido extends JPanel {
 	public void limpiarTabla() {
 		jtable_trayectos_contenido.setRowCount(0);
 		objetos_en_tabla.clear();
+	}
+	
+	public void inicializarBotones(boolean estado) {
+		jb_eliminar_ultimo.setEnabled(estado);
+		jb_guardar_recorrido.setEnabled(estado);
 	}
 }

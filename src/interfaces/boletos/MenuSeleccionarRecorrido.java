@@ -27,6 +27,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.Color;
 
 public class MenuSeleccionarRecorrido extends JPanel {
@@ -59,23 +62,22 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		caminos_en_tabla = new ArrayList<Camino>();
 		
 		lbl_estacion_origen = new JLabel("Estacion origen:");
-		lbl_estacion_origen.setBounds(20, 16, 92, 14);
+		lbl_estacion_origen.setBounds(10, 16, 125, 14);
 		
 		jcb_estacion_origen = new JComboBox<Estacion>();
-		jcb_estacion_origen.setBounds(109, 11, 99, 24);
+		jcb_estacion_origen.setBounds(115, 11, 171, 24);
 	
 		jcb_estacion_destino = new JComboBox<Estacion>();
-		jcb_estacion_destino.setBounds(329, 11, 99, 24);
-		jcb_estacion_destino.setEnabled(true);
+		jcb_estacion_destino.setBounds(439, 11, 171, 24);
 		
 		lbl_estacion_destino = new JLabel("Estacion destino:");
-		lbl_estacion_destino.setBounds(227, 16, 92, 14);
+		lbl_estacion_destino.setBounds(324, 16, 125, 14);
 		
 		jb_siguiente = new JButton("Siguiente");
-		jb_siguiente.setBounds(311, 254, 117, 23);
+		jb_siguiente.setBounds(493, 254, 117, 23);
 		
 		jb_cancelar = new JButton("Cancelar");
-		jb_cancelar.setBounds(23, 254, 89, 23);
+		jb_cancelar.setBounds(10, 254, 89, 23);
 
 		jtable_recorridos_contenido = new DefaultTableModel();
 		jtable_recorridos_contenido.addColumn("");
@@ -89,11 +91,11 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		jtable_recorridos.setAutoCreateRowSorter(true);
 		
 		jspane_recorridos = new JScrollPane(jtable_recorridos);
-		jspane_recorridos.setSize(430, 140);
+		jspane_recorridos.setSize(600, 140);
 		jspane_recorridos.setLocation(10, 100);
 		
 		jb_buscar = new JButton("Buscar");
-		jb_buscar.setBounds(329, 46, 99, 23);
+		jb_buscar.setBounds(511, 53, 99, 23);
 		
 		this.agregarActionListener();
 		this.llenarComboBox();
@@ -110,7 +112,7 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		jtp_errores.setForeground(Color.RED);
 		jtp_errores.setEditable(false);
 		jtp_errores.setBackground(UIManager.getColor("Button.background"));
-		jtp_errores.setBounds(10, 299, 430, 74);
+		jtp_errores.setBounds(10, 299, 600, 74);
 		add(jtp_errores);
 
 	}
@@ -135,6 +137,7 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		
 		jb_buscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				inicializarBotones(false);
 				Estacion origen = (Estacion) jcb_estacion_origen.getSelectedItem();
 				Estacion destino = (Estacion) jcb_estacion_destino.getSelectedItem();
 				try {
@@ -149,7 +152,14 @@ public class MenuSeleccionarRecorrido extends JPanel {
 				}
 			}
 		});		
-
+		
+		jtable_recorridos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				if(jtable_recorridos.getSelectedRow() != -1){
+					inicializarBotones(true);
+				}
+			}
+		});
 	}
 	
 	private void buscarCaminosYCompletarTabla(Estacion origen, Estacion destino) {
@@ -174,5 +184,9 @@ public class MenuSeleccionarRecorrido extends JPanel {
 	public void limpiarTabla() {
 		jtable_recorridos_contenido.setRowCount(0);
 		caminos_en_tabla.clear();
+	}
+	
+	public void inicializarBotones(boolean estado) {
+		jb_siguiente.setEnabled(estado);
 	}
 }

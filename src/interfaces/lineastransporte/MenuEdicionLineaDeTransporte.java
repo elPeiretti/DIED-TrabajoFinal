@@ -49,32 +49,32 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 		setLayout(null);
 		
 		jb_guardar_cambios = new JButton("Guardar Cambios");
-		jb_guardar_cambios.setBounds(325, 266, 115, 23);
+		jb_guardar_cambios.setBounds(450, 266, 140, 23);
 		
 		jb_cancelar = new JButton("Cancelar");
 		jb_cancelar.setBounds(27, 266, 89, 23);
 		
 		jtf_nombre = new JTextField();
-		jtf_nombre.setBounds(183, 68, 86, 20);
+		jtf_nombre.setBounds(262, 84, 200, 20);
 		jtf_nombre.setColumns(10);
 		
 		jtf_color = new JTextField();
-		jtf_color.setBounds(183, 110, 86, 20);
+		jtf_color.setBounds(262, 115, 200, 20);
 		jtf_color.setColumns(10);
 		
 		lbl_nombre = new JLabel("Nombre:");
-		lbl_nombre.setBounds(70, 71, 46, 14);
+		lbl_nombre.setBounds(149, 87, 82, 14);
 		
 		lbl_color = new JLabel("Color:");
-		lbl_color.setBounds(70, 113, 102, 14);
+		lbl_color.setBounds(149, 118, 102, 14);
 		
 		lbl_estado = new JLabel("Estado:");
-		lbl_estado.setBounds(70, 150, 46, 14);
+		lbl_estado.setBounds(149, 151, 82, 14);
 		
 		jcb_estado = new JComboBox<EstadoLinea>();
 		jcb_estado.setModel(new DefaultComboBoxModel<EstadoLinea>(new EstadoLinea[] {EstadoLinea.ACTIVA,EstadoLinea.NO_ACTIVA}));
 		jcb_estado.setMaximumRowCount(2);
-		jcb_estado.setBounds(183, 145, 86, 24);
+		jcb_estado.setBounds(322, 146, 140, 24);
 		
 		jtp_errores = new JTextPane();
 		jtp_errores.setEditable(false);
