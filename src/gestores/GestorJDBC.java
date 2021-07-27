@@ -878,10 +878,10 @@ public static void agregarCamino(Camino nuevo_camino) {
 		
 }
 
-public static void agregarRecorrido(LineaDeTransporte linea_seleccionada, Trayecto[] recorrido) {
+public static void agregarRecorrido(LineaDeTransporte linea_seleccionada, Object[] recorrido) {
 	
-	for(Trayecto t : recorrido) {
-		agregarTrayecto(linea_seleccionada.getId(),t);
+	for(Object t : recorrido) {
+		agregarTrayecto(linea_seleccionada.getId(),(Trayecto)t);
 	}
 	
 }

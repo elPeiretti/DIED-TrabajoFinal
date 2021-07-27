@@ -21,7 +21,7 @@ public class GestorAlgoritmos {
 public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion destino) {
 		
 		List<List<Trayecto>> caminos = new ArrayList<List<Trayecto>>();
-		getRecorridosDesdeHastaAux(origen, destino, caminos, new ArrayList<Trayecto>());
+		getRecorridosDesdeHastaAux(origen, destino, caminos, new ArrayList<Trayecto>(), new ArrayList<Estacion>());
 		
 		List<Camino> recorridos = new ArrayList<Camino>();
 		for(List<Trayecto> c : caminos) {
@@ -44,20 +44,23 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 		return new Object[] {costo,durac,dist};
 	}
 	
-	private static void getRecorridosDesdeHastaAux(Estacion origen, Estacion destino, List<List<Trayecto>> caminos, List<Trayecto> camino) {
+	private static void getRecorridosDesdeHastaAux(Estacion origen, Estacion destino, List<List<Trayecto>> caminos, List<Trayecto> camino, List<Estacion> usadas) {
 		
 		if(origen.equals(destino)) {
 			caminos.add(camino);
+			System.out.println(camino);
 			return;
 		}
 		
 		List<Trayecto> trayectos = GestorJDBC.buscarTrayecto("","",origen.getId_estacion(),"", EstadoTrayecto.ACTIVO);
 	
 		for(Trayecto t : trayectos) {
-			List<Trayecto> copia = new ArrayList<Trayecto>(camino);
-			if(!copia.contains(t)) {
-				copia.add(t);
-				getRecorridosDesdeHastaAux(t.getDestino(),destino,caminos,copia);
+			List<Trayecto> copiaCamino = new ArrayList<Trayecto>(camino);
+			List<Estacion> copiaUsadas = new ArrayList<Estacion>(usadas);
+			if(!copiaCamino.contains(t) && !copiaUsadas.contains(t.getDestino())) {
+				copiaCamino.add(t);
+				copiaUsadas.add(t.getDestino());
+				getRecorridosDesdeHastaAux(t.getDestino(),destino,caminos,copiaCamino,copiaUsadas);
 			}
 		}
 	}
@@ -67,7 +70,7 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 		HashMap <String, Integer> arcos = incializarArcos();
 		Integer flujo_maximo = 0;
 		List<List<Trayecto>> caminos = new ArrayList<List<Trayecto>>();
-		getRecorridosDesdeHastaAux(origen, destino, caminos, new ArrayList<Trayecto>());
+		getRecorridosDesdeHastaAux(origen, destino, caminos, new ArrayList<Trayecto>(), new ArrayList<Estacion>());
 		
 		for (List<Trayecto> c : caminos) {
 			if(verficarCamino(c,arcos)) {

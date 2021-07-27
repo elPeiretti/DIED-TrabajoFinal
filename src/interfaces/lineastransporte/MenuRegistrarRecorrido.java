@@ -281,7 +281,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				Integer opcion = VentanaPrincipal.popupConfirmar("Esta seguro que desea registrar el recorrido?", "Guardar Recorrido");
 				if(opcion == JOptionPane.YES_OPTION) {
-					GestorJDBC.agregarRecorrido(linea_seleccionada, (Trayecto[]) objetos_en_tabla.toArray());
+					GestorJDBC.agregarRecorrido(linea_seleccionada, objetos_en_tabla.toArray());
 					VentanaPrincipal.popupInfo("Nuevo recorrido registrado exitosamente.","Registro exitoso");
 				}
 			}
