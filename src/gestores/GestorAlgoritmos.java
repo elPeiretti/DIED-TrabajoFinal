@@ -48,7 +48,6 @@ public static List<Camino> getRecorridosDesdeHasta(Estacion origen, Estacion des
 		
 		if(origen.equals(destino)) {
 			caminos.add(camino);
-			System.out.println(camino);
 			return;
 		}
 		

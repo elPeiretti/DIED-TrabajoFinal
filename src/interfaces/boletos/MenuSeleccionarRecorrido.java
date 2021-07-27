@@ -2,6 +2,7 @@ package interfaces.boletos;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -16,6 +17,7 @@ import gestores.GestorEntidades;
 import gestores.GestorJDBC;
 import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
+import interfaces.grafo.DrawingGraph;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -23,6 +25,7 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import javax.swing.JTextPane;
@@ -51,6 +54,7 @@ public class MenuSeleccionarRecorrido extends JPanel {
 	private List<Camino> caminos_en_tabla;
 	private JScrollPane jspane_recorridos;
 	private JTextPane jtp_errores;
+	private JButton jb_visualizar_grafo;
 
 	/**
 	 * Create the panel.
@@ -97,6 +101,15 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		jb_buscar = new JButton("Buscar");
 		jb_buscar.setBounds(511, 53, 99, 23);
 		
+		jb_visualizar_grafo = new JButton("Visualizar Grafo");
+		jb_visualizar_grafo.setBounds(334, 254, 149, 23);
+		
+		jtp_errores = new JTextPane();
+		jtp_errores.setForeground(Color.RED);
+		jtp_errores.setEditable(false);
+		jtp_errores.setBackground(UIManager.getColor("Button.background"));
+		jtp_errores.setBounds(10, 299, 600, 74);
+		
 		this.agregarActionListener();
 		this.llenarComboBox();
 		add(jcb_estacion_origen);
@@ -107,13 +120,8 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		add(lbl_estacion_origen);
 		add(jspane_recorridos);
 		add(jb_buscar);
-		
-		jtp_errores = new JTextPane();
-		jtp_errores.setForeground(Color.RED);
-		jtp_errores.setEditable(false);
-		jtp_errores.setBackground(UIManager.getColor("Button.background"));
-		jtp_errores.setBounds(10, 299, 600, 74);
 		add(jtp_errores);
+		add(jb_visualizar_grafo);
 
 	}
 	
@@ -140,12 +148,14 @@ public class MenuSeleccionarRecorrido extends JPanel {
 				inicializarBotones(false);
 				Estacion origen = (Estacion) jcb_estacion_origen.getSelectedItem();
 				Estacion destino = (Estacion) jcb_estacion_destino.getSelectedItem();
+				limpiarTabla();
 				try {
 					GestorValidaciones.validarEstaciones(origen, destino);
 					jtp_errores.setText("");
-					limpiarTabla();
 					
 					buscarCaminosYCompletarTabla(origen,destino);
+					if(jtable_recorridos.getRowCount()>0)
+						jb_visualizar_grafo.setEnabled(true);
 				} 
 				catch (DatosDeRecorridoIncorrectosException exc) {
 					jtp_errores.setText(exc.errores);
@@ -158,6 +168,19 @@ public class MenuSeleccionarRecorrido extends JPanel {
 				if(jtable_recorridos.getSelectedRow() != -1){
 					inicializarBotones(true);
 				}
+			}
+		});
+		
+		jb_visualizar_grafo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JDialog dialog = new JDialog();
+				DrawingGraph grafo = new DrawingGraph(GestorJDBC.buscarColoresTrayectos(caminos_en_tabla.stream()
+																										.map(c -> c.getCombinacion())
+																										.flatMap(c -> c.stream())
+																										.collect(Collectors.toList())));
+				dialog.add(grafo);
+				dialog.setSize(1280,720);
+				dialog.setVisible(true);
 			}
 		});
 	}
@@ -188,5 +211,6 @@ public class MenuSeleccionarRecorrido extends JPanel {
 	
 	public void inicializarBotones(boolean estado) {
 		jb_siguiente.setEnabled(estado);
+		jb_visualizar_grafo.setEnabled(estado);
 	}
 }

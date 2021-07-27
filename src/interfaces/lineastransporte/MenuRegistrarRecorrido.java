@@ -283,6 +283,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 				if(opcion == JOptionPane.YES_OPTION) {
 					GestorJDBC.agregarRecorrido(linea_seleccionada, objetos_en_tabla.toArray());
 					VentanaPrincipal.popupInfo("Nuevo recorrido registrado exitosamente.","Registro exitoso");
+					ventana_contenedora.cambiarPanel(VentanaPrincipal.GEST_LINEA);
 				}
 			}
 		});

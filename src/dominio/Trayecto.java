@@ -39,13 +39,11 @@ public class Trayecto {
 	}
 
 	public String toString() {
-		/*return origen.getNombre()+" --> "+destino.getNombre()
+		return origen.getNombre()+" --> "+destino.getNombre()
 				+" | $"+costo.toString()
 				+", "+distancia.toString()+" [km], "
 				+duracion.toString()+" [min], "
 				+cant_max_pasajeros.toString()+" pasajeros";
-				*/
-		return origen.getNombre()+" --> "+destino.getNombre();
 	}
 	
 	public static void setUltimo_id(Integer id) {
