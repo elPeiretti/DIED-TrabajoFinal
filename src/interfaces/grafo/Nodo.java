@@ -6,13 +6,12 @@ public class Nodo {
 
 	private Estacion estacion;
 	private Integer x;
-	
+	private Integer y;
+		
 	public int hashCode() {
 		return estacion.hashCode();
 	}
 
-	private Integer y;
-	
 	public Nodo(Estacion estacion, Integer x, Integer y) {
 		this.estacion = estacion;
 		this.x = x;

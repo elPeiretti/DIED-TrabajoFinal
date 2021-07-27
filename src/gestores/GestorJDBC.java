@@ -1327,6 +1327,61 @@ public static void actualizarTrayectos(List<Trayecto> trayectos) {
 	
 }
 
+public static Map<Trayecto, String> buscarColoresTrayectos(List<Trayecto> trayectos) {
+	
+	Connection conn = null;
+	PreparedStatement pstm = null;
+	ResultSet rs = null;
+	Map<Trayecto, String> resultado = new HashMap<Trayecto, String>();
+	Map<String, String> aux = new HashMap<String, String>();
+	
+	try {
+		//Defino motor de base de datos
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		//Carga el Driver Manager
+		conn = DriverManager.getConnection(url,user,password);
+		
+		String armadoStm = "SELECT t.id_trayecto, color FROM trayecto t, linea_transporte l WHERE "
+				+ "t.id_linea = l.id_linea; ";
+						
+		pstm = conn.prepareStatement(armadoStm);
+		
+		//conn.setAutoCommit(false);	
+		//conn.commit()
+		rs = pstm.executeQuery();
+		
+		while(rs.next()) {
+			aux.put(rs.getString("id_trayecto"), rs.getString("color"));	
+		}
+					
+	} catch (ClassNotFoundException e) {
+		
+		e.printStackTrace();
+	} catch (SQLException e) {
+		// conn.rollback();
+		e.printStackTrace();
+	} finally {
+		
+		if(rs!=null) try { rs.close(); }
+		catch (SQLException e) { e.printStackTrace(); }
+		
+		if(pstm!=null) try { pstm.close(); }
+		catch (SQLException e) {e.printStackTrace(); }
+		
+		if(conn!=null) try { conn.close(); }
+		catch (SQLException e) { e.printStackTrace(); }
+	}
+	
+	//Cargo estaciones Origen y Destino de los Trayecto
+	
+	for(Trayecto t : trayectos) {
+		resultado.put(t, aux.get(t.getId_trayecto()));
+	}
+
+	return resultado;
+	
+}
+
 
 
 

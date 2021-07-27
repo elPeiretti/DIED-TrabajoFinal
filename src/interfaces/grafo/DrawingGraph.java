@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.*;
 import dominio.Estacion;
@@ -14,43 +16,43 @@ import gestores.GestorJDBC;
 
 public class DrawingGraph extends JFrame {
 
-	private ArrayList<Nodo> nodos;
-	private ArrayList<Arista> aristas;
+	private List<Nodo> nodos;
+	private List<Arista> aristas;
 	private static int ancho = 30;
 	private static int alto = 30;
 	
-	public DrawingGraph(List<Trayecto> trayectos) {
+	public DrawingGraph(Map<Trayecto, String> trayectos) {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
-		setSize(1000, 1000);
-		setBackground(Color.white);
+		
+		setSize(1280, 720);
+				
+		int i = 1, j = 1;
+		int espaciado = 50;
+		//N1 -> N2 		H N1 N2 A1
+		//N2 -> N3		H -  N3 A2
 		nodos = new ArrayList<Nodo>();
 		aristas = new ArrayList<Arista>();
-		int i = 1, j = 1;
-				
-		for(Trayecto t : trayectos) {
-			if(i == 11) {
-				i = 1;
-				j++;
-			} 
+		for(Trayecto t : trayectos.keySet()) { 
+			Nodo inicio = new Nodo(t.getOrigen(),espaciado * i, espaciado * j);
+			j++;
+			Nodo fin = new Nodo(t.getDestino(),espaciado * i, espaciado * j);
 			
-			Nodo origen = new Nodo (t.getOrigen(), 200 * i, 200 * j);
-			nodos.add(new Nodo (t.getOrigen(), 200 * i, 200 * j));
-			i++;
+			if(!nodos.contains(inicio)) nodos.add(inicio); 
+			else inicio = nodos.get(nodos.indexOf(inicio));
 			
-			if(i == 11) {
-				i = 1;
-				j++;
-			} 
-			Nodo destino = new Nodo (t.getDestino(), 200 * i, 200 * j);
-			nodos.add(destino);
-			i++;
-			aristas.add(new Arista(t, Color.black, origen, destino));
+			if(!nodos.contains(fin)) nodos.add(fin);
+			else fin = nodos.get(nodos.indexOf(fin));
+			
+			aristas.add(new Arista(t, Color.decode(trayectos.get(t)), inicio, fin));
+			
 		}
 				
 	}
 	
 	public void paint(Graphics g) {
+		super.paint(g);
+		
 		FontMetrics f = g.getFontMetrics();
 		int nodeHeight = Math.max(alto, f.getHeight());
 		
@@ -74,10 +76,9 @@ public class DrawingGraph extends JFrame {
 		    g.drawString(n.getEstacion().getNombre(), n.getX()-f.stringWidth(n.getEstacion().getNombre())/2,
 				 n.getY()+f.getHeight()/2);
 		}
-		
-		
-		
-		
+				
 	}
+	
+	
 	
 }

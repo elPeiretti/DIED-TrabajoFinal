@@ -1,5 +1,6 @@
 package dominio;
 
+import java.util.Objects;
 import java.util.Vector;
 
 public class Trayecto {
@@ -95,6 +96,10 @@ public class Trayecto {
 	
 	public Boolean equals(Trayecto t) {
 		return this.id_trayecto.equals(t.id_trayecto);
+	}
+	
+	public int hashCode() {
+		return Objects.hash(id_trayecto);
 	}
 
 	public Vector<String> asVector() {
