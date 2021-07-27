@@ -98,8 +98,29 @@ public class Trayecto {
 		return this.id_trayecto.equals(t.id_trayecto);
 	}
 	
+	@Override
 	public int hashCode() {
-		return Objects.hash(id_trayecto);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id_trayecto == null) ? 0 : id_trayecto.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Trayecto other = (Trayecto) obj;
+		if (id_trayecto == null) {
+			if (other.id_trayecto != null)
+				return false;
+		} else if (!id_trayecto.equals(other.id_trayecto))
+			return false;
+		return true;
 	}
 
 	public Vector<String> asVector() {

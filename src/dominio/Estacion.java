@@ -59,8 +59,12 @@ public class Estacion {
 		return data;
 	}
 	
-	public int  hashCode() {
-		return Objects.hashCode(id_estacion);	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id_estacion == null) ? 0 : id_estacion.hashCode());
+		return result;
 	}
 	
 	public void agregarMantenimiento(TareaDeMantenimiento tarea) {
@@ -110,9 +114,22 @@ public class Estacion {
 	public List<TareaDeMantenimiento> getMantenimientos() {
 		return mantenimientos;
 	}
-	
-	public Boolean equals(Estacion e) {
-		return this.id_estacion.equals(e.id_estacion);
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Estacion other = (Estacion) obj;
+		if (id_estacion == null) {
+			if (other.id_estacion != null)
+				return false;
+		} else if (!id_estacion.equals(other.id_estacion))
+			return false;
+		return true;
 	}
 
 	public TareaDeMantenimiento getUltimoMantenimiento() {

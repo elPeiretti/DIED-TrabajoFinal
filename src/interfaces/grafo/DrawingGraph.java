@@ -14,7 +14,7 @@ import dominio.Estacion;
 import dominio.Trayecto;
 import gestores.GestorJDBC;
 
-public class DrawingGraph extends JFrame {
+public class DrawingGraph extends JPanel {
 
 	private List<Nodo> nodos;
 	private List<Arista> aristas;
@@ -22,30 +22,36 @@ public class DrawingGraph extends JFrame {
 	private static int alto = 30;
 	
 	public DrawingGraph(Map<Trayecto, String> trayectos) {
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
 		
 		setSize(1280, 720);
 				
 		int i = 1, j = 1;
-		int espaciado = 50;
+		int espaciado = 80;
 		//N1 -> N2 		H N1 N2 A1
 		//N2 -> N3		H -  N3 A2
 		nodos = new ArrayList<Nodo>();
 		aristas = new ArrayList<Arista>();
-		for(Trayecto t : trayectos.keySet()) { 
+		
+		for(Trayecto t : trayectos.keySet()) { // O(N^2)
+						
 			Nodo inicio = new Nodo(t.getOrigen(),espaciado * i, espaciado * j);
 			j++;
 			Nodo fin = new Nodo(t.getDestino(),espaciado * i, espaciado * j);
 			
-			if(!nodos.contains(inicio)) nodos.add(inicio); 
-			else inicio = nodos.get(nodos.indexOf(inicio));
+			if(!nodos.contains(inicio))
+				nodos.add(inicio); 
+			else {
+				inicio = nodos.get(nodos.indexOf(inicio));
+			}
 			
-			if(!nodos.contains(fin)) nodos.add(fin);
-			else fin = nodos.get(nodos.indexOf(fin));
-			
+			if(!nodos.contains(fin))
+				nodos.add(fin);
+			else {
+				fin = nodos.get(nodos.indexOf(fin));
+			}
 			aristas.add(new Arista(t, Color.decode(trayectos.get(t)), inicio, fin));
-			
+			i++;
 		}
 				
 	}
