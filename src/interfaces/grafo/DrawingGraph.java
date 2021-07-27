@@ -24,7 +24,7 @@ public class DrawingGraph extends JPanel {
 	public DrawingGraph(Map<Trayecto, String> trayectos) {
 		this.setVisible(true);
 		
-		setSize(1280, 720);
+		setSize(2000, 2000);
 				
 		int i = 1, j = 1;
 		int espaciado = 80;
@@ -81,6 +81,7 @@ public class DrawingGraph extends JPanel {
 		    
 		    g.drawString(n.getEstacion().getNombre(), n.getX()-f.stringWidth(n.getEstacion().getNombre())/2,
 				 n.getY()+f.getHeight()/2);
+		    
 		}
 				
 	}
