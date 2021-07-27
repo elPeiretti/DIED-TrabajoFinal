@@ -1,6 +1,8 @@
 package interfaces;
 
 import java.awt.EventQueue;
+
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -9,6 +11,8 @@ import javax.swing.border.EmptyBorder;
 import gestores.GestorJDBC;
 
 import java.awt.CardLayout;
+import java.awt.Color;
+
 import interfaces.algoritmos.*;
 import interfaces.boletos.*;
 import interfaces.estacion.*;
@@ -131,16 +135,29 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	public static void popupInfo (String mensaje, String titulo) {
-		
-		JOptionPane.showMessageDialog(null, mensaje, titulo, JOptionPane.INFORMATION_MESSAGE);
-		
+		JOptionPane.showMessageDialog(null, mensaje, titulo, JOptionPane.INFORMATION_MESSAGE);	
 	}
 	
-public static Integer popupConfirmar (String mensaje, String titulo) {
-		
+	public static Integer popupConfirmar (String mensaje, String titulo) {
 		return JOptionPane.showConfirmDialog(null, mensaje, titulo, JOptionPane.YES_NO_OPTION);
-		
 	}
 	
+	public static Color popupSeleccionarColor() {
+		
+		Color color;
+		
+		JFrame frm = null; //sino el compilador da error poniendo null directamente
+		JDialog jdialog_colores = new JDialog(frm,"Seleccionar Color",true);
+		ColorPickerPane colores = new ColorPickerPane(jdialog_colores);
+		jdialog_colores.add(colores);
+		jdialog_colores.setSize(640,480);
+		jdialog_colores.setLocation(100,100);
+		jdialog_colores.setVisible(true);
+		
+		color = colores.getSelectedColor();
+		jdialog_colores.dispose();
+		
+		return color;
+	}
 	
 }

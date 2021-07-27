@@ -42,6 +42,7 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 	private VentanaPrincipal ventana_contenedora;
 	private JTextPane jtp_errores;
 	protected static LineaDeTransporte linea_seleccionada;
+	private JButton jb_seleccionar_color;
 	/**
 	 * Create the panel.
 	 */
@@ -60,7 +61,8 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 		jtf_nombre.setColumns(10);
 		
 		jtf_color = new JTextField();
-		jtf_color.setBounds(262, 115, 200, 20);
+		jtf_color.setEditable(false);
+		jtf_color.setBounds(329, 115, 100, 20);
 		jtf_color.setColumns(10);
 		
 		lbl_nombre = new JLabel("Nombre:");
@@ -82,6 +84,10 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 		jtp_errores.setForeground(Color.RED);
 		jtp_errores.setBackground(UIManager.getColor("Button.background"));
 		jtp_errores.setBounds(10, 303, 430, 86);
+
+		jb_seleccionar_color = new JButton("...");
+		jb_seleccionar_color.setToolTipText("Seleccionar Color");
+		jb_seleccionar_color.setBounds(439, 115, 23, 20);
 		
 		this.agregarActionListener();
 		add(lbl_estado);
@@ -93,8 +99,7 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 		add(jb_guardar_cambios);
 		add(jcb_estado);
 		add(jtp_errores);
-		
-		
+		add(jb_seleccionar_color);
 	}
 	
 	private void agregarActionListener() {
@@ -126,6 +131,13 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 				catch(DatosDeLineaDeTransporteIncorrectosException exc) {
 					jtp_errores.setText(exc.errores);
 				}
+			}
+		});
+		
+		jb_seleccionar_color.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Color c = VentanaPrincipal.popupSeleccionarColor();
+				jtf_color.setText(String.format("#%02X%02X%02X",c.getRed(),c.getGreen(),c.getBlue()));
 			}
 		});
 	}
