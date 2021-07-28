@@ -243,7 +243,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 					jtp_errores.setText("");
 					
 					Trayecto t = GestorEntidades.crearTrayecto(origen,destino,(Integer)jspin_duracion.getValue(),
-								(Integer)jspin_capacidad_maxima.getValue(),(Integer)jspin_duracion.getValue(),jtf_costo.getText());
+								(Integer)jspin_capacidad_maxima.getValue(),(Integer)jspin_duracion.getValue(),jtf_costo.getText(),linea_seleccionada.getEstado());
 					jtable_trayectos_contenido.addRow(t.asVector());
 					objetos_en_tabla.add(t);
 					

@@ -24,7 +24,7 @@ public class Arista {
 		Stroke grosor_anterior = g2d.getStroke();
 		g2d.setStroke(new BasicStroke(2));
 		g.setColor(color);
-		g.drawLine(origen.getX(),origen.getY(),destino.getX(),destino.getY());
+		g.drawLine(origen.getX(), origen.getY(), destino.getX(), destino.getY());
 		g2d.setStroke(grosor_anterior);
 	}
 	

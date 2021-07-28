@@ -185,4 +185,10 @@ public class GestorValidaciones {
 		
 	}
 
+	public static void lineaNoPoseeRecorrido(LineaDeTransporte linea) throws RecorridoLineaExistenteException {
+		List<Trayecto> recorrido = GestorJDBC.buscarTrayecto("",linea.getId_linea(),"","", null); 
+		
+		if(!recorrido.isEmpty()) throw new RecorridoLineaExistenteException();
+	}
+
 }

@@ -42,22 +42,30 @@ public class PanelDeGrafo extends JPanel {
 		for(Trayecto t : trayectos.keySet()) { // O(N^2)
 						
 			Nodo inicio = new Nodo(t.getOrigen(),espaciado * i, espaciado * j);
-			j++;
-			Nodo fin = new Nodo(t.getDestino(),espaciado * i, espaciado * j);
-			
-			if(!nodos.contains(inicio))
+		
+			if(!nodos.contains(inicio)) {
 				nodos.add(inicio); 
+				i++;
+			}				
 			else {
-				inicio = nodos.get(nodos.indexOf(inicio));
+				inicio = nodos.get(nodos.indexOf(inicio));	
 			}
 			
-			if(!nodos.contains(fin))
+			Nodo fin = new Nodo(t.getDestino(),espaciado * i, espaciado * j);
+			
+			if(!nodos.contains(fin)) {
 				nodos.add(fin);
+				i++;
+			}
 			else {
 				fin = nodos.get(nodos.indexOf(fin));
 			}
+			
 			aristas.add(new Arista(t, Color.decode(trayectos.get(t)), inicio, fin));
-			i++;
+			
+			if(i == 8) {
+				j++; i = 1;
+			}
 		}
 		this.setVisible(true);
 				

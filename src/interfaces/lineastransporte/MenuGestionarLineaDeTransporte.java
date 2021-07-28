@@ -31,6 +31,8 @@ import javax.swing.table.DefaultTableModel;
 import dominio.EstadoLinea;
 import dominio.LineaDeTransporte;
 import excepciones.DatosDeLineaDeTransporteIncorrectosException;
+import excepciones.LineaNoEliminableException;
+import excepciones.RecorridoLineaExistenteException;
 import gestores.GestorEntidades;
 import gestores.GestorJDBC;
 import gestores.GestorValidaciones;
@@ -207,8 +209,14 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				Integer i = jtable_lineas.getSelectedRow();
 				if(i != -1){
-					MenuRegistrarRecorrido.linea_seleccionada = objetos_en_tabla.get(i);
-					ventana_contenedora.cambiarPanel(VentanaPrincipal.REG_RECORRIDO);
+					try {
+						GestorValidaciones.lineaNoPoseeRecorrido(objetos_en_tabla.get(i));
+						MenuRegistrarRecorrido.linea_seleccionada = objetos_en_tabla.get(i);
+						ventana_contenedora.cambiarPanel(VentanaPrincipal.REG_RECORRIDO);
+					} catch (RecorridoLineaExistenteException exp) {
+						jtp_errores.setText(exp.getMessage());
+					}
+					
 				}
 			}
 		});
@@ -221,11 +229,18 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 					Integer opcion = VentanaPrincipal.popupConfirmar("Esta seguro que desea eliminar la linea " + objetos_en_tabla.get(i).getNombre() + "?", "Confirmar Baja");
 					
 					if(opcion == JOptionPane.YES_OPTION) {
-						GestorJDBC.eliminarLineaDeTransporte(objetos_en_tabla.get(i));
-						jtable_lineas_contenido.removeRow(i);	
-						objetos_en_tabla.remove(objetos_en_tabla.get(i));
-						VentanaPrincipal.popupInfo("Se elimino la Linea exitosamente.", "Baja Linea Existosa");
-						inicializarBotones(false);
+						try {
+							GestorValidaciones.validarEliminacionLineaDeTransporte(objetos_en_tabla.get(i));
+							jtp_errores.setText("");
+							GestorJDBC.eliminarLineaDeTransporte(objetos_en_tabla.get(i));
+							jtable_lineas_contenido.removeRow(i);	
+							objetos_en_tabla.remove(objetos_en_tabla.get(i));
+							VentanaPrincipal.popupInfo("Se elimino la Linea exitosamente.", "Baja Linea Existosa");
+							inicializarBotones(false);
+						} catch (LineaNoEliminableException exp) {
+							jtp_errores.setText(exp.errores);
+						}
+						
 					}
 					
 					
@@ -290,6 +305,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 	}
 	
 	public void inicializarBotones(boolean estado) {
+		jtp_errores.setText("");
 		jb_modificar.setEnabled(estado);
 		jb_eliminar.setEnabled(estado);
 		jb_registrar_recorrido.setEnabled(estado);

@@ -14,6 +14,18 @@ public class GestorEntidades {
 		return new Cliente(nombre, email);
 	}
 	
+	public static Trayecto crearTrayecto(Estacion origen, Estacion destino, Integer dist, Integer capacidad, Integer duracion, String costo, EstadoLinea estado_linea) {
+		
+		EstadoTrayecto estado; 
+		if(estado_linea.equals(EstadoLinea.NO_ACTIVA)) {
+			estado = EstadoTrayecto.INACTIVO;
+		} else {
+			estado = (origen.getEstado().equals(EstadoEstacion.EN_MANTENIMIENTO) || destino.getEstado().equals(EstadoEstacion.EN_MANTENIMIENTO)?
+					EstadoTrayecto.INACTIVO : EstadoTrayecto.ACTIVO);
+		}
+		return new Trayecto(dist,duracion,capacidad,Double.parseDouble(costo),origen,destino, estado);
+	}
+	
 	public static Trayecto crearTrayecto(Estacion origen, Estacion destino, Integer dist, Integer capacidad, Integer duracion, String costo) {
 		return new Trayecto(dist,duracion,capacidad,Double.parseDouble(costo),origen,destino, 
 				(origen.getEstado().equals(EstadoEstacion.EN_MANTENIMIENTO) || destino.getEstado().equals(EstadoEstacion.EN_MANTENIMIENTO)?

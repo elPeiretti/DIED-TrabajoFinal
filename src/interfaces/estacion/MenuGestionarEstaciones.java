@@ -105,7 +105,7 @@ public class MenuGestionarEstaciones extends JPanel {
 		lbl_horario_cierre.setBounds(354, 42, 106, 14);
 		
 		lbl_nombre = new JLabel("Nombre:");
-		lbl_nombre.setBounds(10, 11, 48, 14);
+		lbl_nombre.setBounds(10, 11, 69, 14);
 		
 		lbl_horario_apertura = new JLabel("Horario de Apertura:");
 		lbl_horario_apertura.setBounds(10, 42, 145, 14);
