@@ -1,6 +1,7 @@
 package interfaces.grafo;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 import dominio.Trayecto;
 
@@ -17,6 +18,11 @@ public class Arista {
 		this.color = color;
 		this.origen = origen;
 		this.destino = destino;
+	}
+	
+	public void dibujar(Graphics g) {
+		g.setColor(color);
+		g.drawLine(origen.getX(),origen.getY(),destino.getX(),destino.getY());
 	}
 	
 	public void setOrigen(Nodo origen) {
@@ -38,8 +44,6 @@ public class Arista {
 	}
 	public Color getColor() {
 		return color;
-	}
-	
-	
+	}	
 	
 }

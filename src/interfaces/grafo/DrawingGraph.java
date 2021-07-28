@@ -1,8 +1,11 @@
 package interfaces.grafo;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,18 +21,21 @@ public class DrawingGraph extends JPanel {
 
 	private List<Nodo> nodos;
 	private List<Arista> aristas;
-	private static int ancho = 30;
-	private static int alto = 30;
+	static int ancho = 30;
+	static int alto = 30;
+	private Boolean seleccionando = false;
+	private Point mousePt;
+	private Nodo moviendo;
 	
 	public DrawingGraph(Map<Trayecto, String> trayectos) {
-		this.setVisible(true);
+		
+		this.agregarCapturadoresDeEventos();
 		
 		setSize(2000, 2000);
 				
 		int i = 1, j = 1;
 		int espaciado = 80;
-		//N1 -> N2 		H N1 N2 A1
-		//N2 -> N3		H -  N3 A2
+
 		nodos = new ArrayList<Nodo>();
 		aristas = new ArrayList<Arista>();
 		
@@ -53,39 +59,62 @@ public class DrawingGraph extends JPanel {
 			aristas.add(new Arista(t, Color.decode(trayectos.get(t)), inicio, fin));
 			i++;
 		}
+		this.setVisible(true);
 				
 	}
 	
 	public void paint(Graphics g) {
 		super.paint(g);
 		
-		FontMetrics f = g.getFontMetrics();
-		int nodeHeight = Math.max(alto, f.getHeight());
-		
 		g.setColor(Color.white);
 		
 		for(Arista a : aristas) {
-			g.setColor(a.getColor());
-			g.drawLine(a.getOrigen().getX(),a.getOrigen().getY(),
-					a.getDestino().getX(),a.getDestino().getY());
+			a.dibujar(g);
 		}
 		
 		for (Nodo n : nodos) {
-		    int nodeWidth = f.stringWidth(n.getEstacion().getNombre())+ancho/2;
-		    g.setColor(Color.white);
-		    g.fillOval(n.getX()-nodeWidth/2, n.getY()-nodeHeight/2, 
-			       nodeWidth, nodeHeight);
-		    g.setColor(Color.black);
-		    g.drawOval(n.getX()-nodeWidth/2, n.getY()-nodeHeight/2, 
-			       nodeWidth, nodeHeight);
-		    
-		    g.drawString(n.getEstacion().getNombre(), n.getX()-f.stringWidth(n.getEstacion().getNombre())/2,
-				 n.getY()+f.getHeight()/2);
-		    
+			n.dibujar(g);
 		}
-				
 	}
 	
-	
-	
+	private void agregarCapturadoresDeEventos() {
+		
+		this.addMouseListener(new MouseAdapter() {
+				
+				public void mousePressed(MouseEvent e) {
+					mousePt = e.getPoint();
+					
+					if((moviendo = Nodo.haySeleccionado(nodos,mousePt))!= null) {
+						seleccionando = true;
+						//System.out.println("tocando el "+moviendo.getEstacion().getNombre());
+					}
+					e.getComponent().repaint();
+				}
+				
+				public void mouseReleased(MouseEvent e) {
+					seleccionando = false;
+					moviendo = null;
+					e.getComponent().repaint();
+				}
+				
+				
+			});
+		
+		this.addMouseMotionListener(new MouseAdapter() {
+						
+			public void mouseDragged(MouseEvent e) {
+				Point delta = new Point();
+				delta.x = (int) (e.getX() - mousePt.getX());
+				delta.y = (int) (e.getY() - mousePt.getY());
+				if(seleccionando) {
+					moviendo.actualizarPosicion(delta);
+				}
+				mousePt = e.getPoint();
+				e.getComponent().repaint();
+			}
+		});
+		
+	}
+
+		
 }
