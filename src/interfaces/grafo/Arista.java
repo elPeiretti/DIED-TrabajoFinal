@@ -1,7 +1,6 @@
 package interfaces.grafo;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 
 import dominio.Trayecto;
 
@@ -21,8 +20,12 @@ public class Arista {
 	}
 	
 	public void dibujar(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g;
+		Stroke grosor_anterior = g2d.getStroke();
+		g2d.setStroke(new BasicStroke(2));
 		g.setColor(color);
 		g.drawLine(origen.getX(),origen.getY(),destino.getX(),destino.getY());
+		g2d.setStroke(grosor_anterior);
 	}
 	
 	public void setOrigen(Nodo origen) {

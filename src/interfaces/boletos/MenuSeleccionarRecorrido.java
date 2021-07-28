@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 
 import dominio.Camino;
 import dominio.Estacion;
+import dominio.EstadoEstacion;
 import excepciones.DatosDeRecorridoIncorrectosException;
 import gestores.GestorAlgoritmos;
 import gestores.GestorEntidades;
@@ -111,7 +112,6 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		jtp_errores.setBounds(10, 299, 600, 74);
 		
 		this.agregarActionListener();
-		this.llenarComboBox();
 		add(jcb_estacion_origen);
 		add(jb_cancelar);
 		add(jb_siguiente);
@@ -129,6 +129,8 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		jb_cancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				limpiarTabla();
+				jcb_estacion_origen.removeAllItems();
+				jcb_estacion_destino.removeAllItems();
 				ventana_contenedora.cambiarPanel(VentanaPrincipal.MENU_PPAL);
 			}
 		});
@@ -200,7 +202,9 @@ public class MenuSeleccionarRecorrido extends JPanel {
 	}
 	
 	public void llenarComboBox() {
-		for(Estacion e : GestorJDBC.buscarEstacion("","","","",null)) {
+		jcb_estacion_origen.removeAllItems();
+		jcb_estacion_destino.removeAllItems();
+		for(Estacion e : GestorJDBC.buscarEstacion("","","","",EstadoEstacion.OPERATIVA)) {
 			jcb_estacion_origen.addItem(e);
 			jcb_estacion_destino.addItem(e);
 		}

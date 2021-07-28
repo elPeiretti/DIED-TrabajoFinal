@@ -214,6 +214,7 @@ public class MenuGestionarEstaciones extends JPanel {
 					GestorJDBC.agregarEstacion(GestorEntidades.crearEstacion(nombre,apertura,cierre,estado));
 					VentanaPrincipal.popupInfo("Se agrego la Estacion con Exito", "Alta Estacion Exitosa");	
 					limpiarCampos();
+					limpiarTabla();
 				}
 				catch(DatosDeEstacionIncorrectosException exp) {
 					jtp_errores.setText(exp.errores);

@@ -88,6 +88,12 @@ public class MenuEdicionEstacion extends JPanel {
 		jcb_estado.setMaximumRowCount(2);
 		jcb_estado.setBounds(330, 191, 120, 24);
 		
+		jtp_errores = new JTextPane();
+		jtp_errores.setEditable(false);
+		jtp_errores.setForeground(Color.RED);
+		jtp_errores.setBackground(UIManager.getColor("Button.background"));
+		jtp_errores.setBounds(10, 301, 600, 88);
+		
 		this.agregarActionListener();
 		add(jb_guardar_cambios);
 		add(jb_regresar);
@@ -98,13 +104,7 @@ public class MenuEdicionEstacion extends JPanel {
 		add(lbl_horario_apertura);
 		add(lbl_horario_cierre);
 		add(lbl_estado);
-		add(jcb_estado);
-		
-		jtp_errores = new JTextPane();
-		jtp_errores.setEditable(false);
-		jtp_errores.setForeground(Color.RED);
-		jtp_errores.setBackground(UIManager.getColor("Button.background"));
-		jtp_errores.setBounds(10, 301, 600, 88);
+		add(jcb_estado);	
 		add(jtp_errores);
 	}
 	
