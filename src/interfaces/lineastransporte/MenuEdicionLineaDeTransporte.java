@@ -43,6 +43,7 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 	private JTextPane jtp_errores;
 	protected static LineaDeTransporte linea_seleccionada;
 	private JButton jb_seleccionar_color;
+	private JButton jb_quitar_color;
 	/**
 	 * Create the panel.
 	 */
@@ -57,12 +58,12 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 		jb_cancelar.setBounds(27, 266, 89, 23);
 		
 		jtf_nombre = new JTextField();
-		jtf_nombre.setBounds(262, 84, 200, 20);
+		jtf_nombre.setBounds(261, 84, 212, 20);
 		jtf_nombre.setColumns(10);
 		
 		jtf_color = new JTextField();
 		jtf_color.setEditable(false);
-		jtf_color.setBounds(329, 115, 100, 20);
+		jtf_color.setBounds(261, 115, 100, 20);
 		jtf_color.setColumns(10);
 		
 		lbl_nombre = new JLabel("Nombre:");
@@ -77,7 +78,7 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 		jcb_estado = new JComboBox<EstadoLinea>();
 		jcb_estado.setModel(new DefaultComboBoxModel<EstadoLinea>(new EstadoLinea[] {EstadoLinea.ACTIVA,EstadoLinea.NO_ACTIVA}));
 		jcb_estado.setMaximumRowCount(2);
-		jcb_estado.setBounds(322, 146, 140, 24);
+		jcb_estado.setBounds(322, 146, 151, 24);
 		
 		jtp_errores = new JTextPane();
 		jtp_errores.setEditable(false);
@@ -87,7 +88,11 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 
 		jb_seleccionar_color = new JButton("...");
 		jb_seleccionar_color.setToolTipText("Seleccionar Color");
-		jb_seleccionar_color.setBounds(439, 115, 23, 20);
+		jb_seleccionar_color.setBounds(371, 115, 23, 20);
+		
+		jb_quitar_color = new JButton("Quitar");
+		jb_quitar_color.setToolTipText("Elimina el color seleccionado");
+		jb_quitar_color.setBounds(404, 115, 69, 20);
 		
 		this.agregarActionListener();
 		add(lbl_estado);
@@ -100,6 +105,7 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 		add(jcb_estado);
 		add(jtp_errores);
 		add(jb_seleccionar_color);
+		add(jb_quitar_color);
 	}
 	
 	private void agregarActionListener() {
@@ -138,6 +144,12 @@ public class MenuEdicionLineaDeTransporte extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				Color c = VentanaPrincipal.popupSeleccionarColor();
 				jtf_color.setText(String.format("#%02X%02X%02X",c.getRed(),c.getGreen(),c.getBlue()));
+			}
+		});
+		
+		jb_quitar_color.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				jtf_color.setText("");
 			}
 		});
 	}

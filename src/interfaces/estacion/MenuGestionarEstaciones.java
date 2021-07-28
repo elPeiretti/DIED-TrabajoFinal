@@ -187,7 +187,7 @@ public class MenuGestionarEstaciones extends JPanel {
 						try {
 							GestorValidaciones.validarEliminacionEstacion(objetos_en_tabla.get(i));
 							jtp_errores.setText("");
-							//GestorJDBC.eliminarEstacion(objetos_en_tabla.get(i));
+							GestorJDBC.eliminarEstacion(objetos_en_tabla.get(i));
 							VentanaPrincipal.popupInfo("Se elimino la Estacion con Exito", "Baja Estacion Exitosa");	
 							objetos_en_tabla.remove(objetos_en_tabla.get(i));
 							jtable_estaciones_contenido.removeRow(i);

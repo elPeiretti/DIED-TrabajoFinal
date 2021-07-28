@@ -180,6 +180,8 @@ public class MenuSeleccionarRecorrido extends JPanel {
 																										.collect(Collectors.toList())));
 				dialog.add(grafo);
 				dialog.setSize(1280,720);
+				dialog.setTitle("Recorridos Desde: '"+((Estacion)jcb_estacion_origen.getSelectedItem()).getNombre()
+								+ "', Hasta: '"+((Estacion)jcb_estacion_destino.getSelectedItem()).getNombre()+"'");
 				dialog.setVisible(true);
 			}
 		});

@@ -65,6 +65,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 	private List<LineaDeTransporte> objetos_en_tabla;
 	private JScrollPane jspane_lineas;
 	private JButton jb_seleccionar_color;
+	private JButton jb_quitar_color;
 	
 	/**
 	 * Create the panel.
@@ -142,6 +143,10 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		jb_seleccionar_color.setToolTipText("Seleccionar Color");
 		jb_seleccionar_color.setBounds(190, 62, 20, 20);
 		
+		jb_quitar_color = new JButton("Quitar");
+		jb_quitar_color.setToolTipText("Elimina el color seleccionado");
+		jb_quitar_color.setBounds(216, 62, 69, 20);
+		
 		this.agregarActionListener();
 		add(jb_registrar_recorrido);
 		add(lbl_estado);
@@ -158,6 +163,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 		add(jspane_lineas);
 		add(jtp_errores);
 		add(jb_seleccionar_color);
+		add(jb_quitar_color);
 
 	}
 	
@@ -215,7 +221,7 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 					Integer opcion = VentanaPrincipal.popupConfirmar("Esta seguro que desea eliminar la linea " + objetos_en_tabla.get(i).getNombre() + "?", "Confirmar Baja");
 					
 					if(opcion == JOptionPane.YES_OPTION) {
-						//GestorJDBC.eliminarLinea(jlist_lineas.getSelectedValue()); TODO
+						GestorJDBC.eliminarLineaDeTransporte(objetos_en_tabla.get(i));
 						jtable_lineas_contenido.removeRow(i);	
 						objetos_en_tabla.remove(objetos_en_tabla.get(i));
 						VentanaPrincipal.popupInfo("Se elimino la Linea exitosamente.", "Baja Linea Existosa");
@@ -261,6 +267,12 @@ public class MenuGestionarLineaDeTransporte extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				Color c = VentanaPrincipal.popupSeleccionarColor();
 				jtf_color.setText(String.format("#%02X%02X%02X",c.getRed(),c.getGreen(),c.getBlue()));
+			}
+		});
+		
+		jb_quitar_color.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				jtf_color.setText("");
 			}
 		});
 		
