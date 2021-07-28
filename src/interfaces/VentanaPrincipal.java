@@ -131,7 +131,9 @@ public class VentanaPrincipal extends JFrame {
 		if(panel.equals(REG_RECORRIDO)) {
 			m_reg_rec.inicializarBotones(false);
 		}
+		
 		c.show(contentPane,panel);
+		this.setTitle(panel);
 	}
 	
 	public static void popupInfo (String mensaje, String titulo) {

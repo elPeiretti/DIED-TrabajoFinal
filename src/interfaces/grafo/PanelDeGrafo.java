@@ -17,7 +17,7 @@ import dominio.Estacion;
 import dominio.Trayecto;
 import gestores.GestorJDBC;
 
-public class DrawingGraph extends JPanel {
+public class PanelDeGrafo extends JPanel {
 
 	private List<Nodo> nodos;
 	private List<Arista> aristas;
@@ -27,7 +27,7 @@ public class DrawingGraph extends JPanel {
 	private Point mousePt;
 	private Nodo moviendo;
 	
-	public DrawingGraph(Map<Trayecto, String> trayectos) {
+	public PanelDeGrafo(Map<Trayecto, String> trayectos) {
 		
 		this.agregarCapturadoresDeEventos();
 		

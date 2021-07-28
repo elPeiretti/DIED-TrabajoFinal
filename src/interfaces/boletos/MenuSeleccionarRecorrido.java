@@ -17,7 +17,7 @@ import gestores.GestorEntidades;
 import gestores.GestorJDBC;
 import gestores.GestorValidaciones;
 import interfaces.VentanaPrincipal;
-import interfaces.grafo.DrawingGraph;
+import interfaces.grafo.PanelDeGrafo;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -174,7 +174,7 @@ public class MenuSeleccionarRecorrido extends JPanel {
 		jb_visualizar_grafo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JDialog dialog = new JDialog();
-				DrawingGraph grafo = new DrawingGraph(GestorJDBC.buscarColoresTrayectos(caminos_en_tabla.stream()
+				PanelDeGrafo grafo = new PanelDeGrafo(GestorJDBC.buscarColoresTrayectos(caminos_en_tabla.stream()
 																										.map(c -> c.getCombinacion())
 																										.flatMap(c -> c.stream())
 																										.collect(Collectors.toList())));

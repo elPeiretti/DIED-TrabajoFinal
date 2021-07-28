@@ -9,7 +9,7 @@ import excepciones.LineaNoEliminableException;
 import excepciones.TrayectoNoEliminableException;
 import gestores.GestorJDBC;
 import gestores.GestorValidaciones;
-import interfaces.grafo.DrawingGraph;
+import interfaces.grafo.PanelDeGrafo;
 
 public class Test {
 
@@ -27,7 +27,7 @@ public class Test {
 			System.out.println(e.errores);
 		}
 				
-		DrawingGraph grafo = new DrawingGraph(GestorJDBC.buscarColoresTrayectos(GestorJDBC.buscarTrayecto("", "", "", "", null)));
+		PanelDeGrafo grafo = new PanelDeGrafo(GestorJDBC.buscarColoresTrayectos(GestorJDBC.buscarTrayecto("", "", "", "", null)));
 		JFrame ventana = new JFrame();
 		ventana.setSize(1280, 720);
 		JScrollPane scroll = new JScrollPane(grafo);

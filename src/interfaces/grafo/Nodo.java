@@ -27,8 +27,8 @@ public class Nodo {
 	
 	public void dibujar(Graphics g) {
 		FontMetrics f = g.getFontMetrics();
-		int alto = DrawingGraph.alto;
-		int ancho = DrawingGraph.ancho;
+		int alto = PanelDeGrafo.alto;
+		int ancho = PanelDeGrafo.ancho;
 		int nodeHeight = Math.max(alto, f.getHeight());
 		int nodeWidth = f.stringWidth(estacion.getNombre())+ancho/2;
 		setLimites(nodeWidth, nodeHeight);
