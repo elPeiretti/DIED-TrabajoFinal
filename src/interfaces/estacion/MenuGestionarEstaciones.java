@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 import dominio.Estacion;
 import dominio.EstadoEstacion;
 import excepciones.DatosDeEstacionIncorrectosException;
+import excepciones.EstacionNoEliminableException;
 import gestores.GestorEntidades;
 import gestores.GestorJDBC;
 import gestores.GestorValidaciones;
@@ -183,12 +184,18 @@ public class MenuGestionarEstaciones extends JPanel {
 					Integer opcion = VentanaPrincipal.popupConfirmar("Esta seguro que desea eliminar la estacion " + objetos_en_tabla.get(i).getNombre() + "?", "Confirmar Baja");
 					
 					if(opcion == JOptionPane.YES_OPTION) {
-						//GestorValidaciones.validarEliminacionEstacion(objetos_en_tabla.get(i));
-						//GestorJDBC.eliminarEstacion(objetos_en_tabla.get(i));
-						VentanaPrincipal.popupInfo("Se elimino la Estacion con Exito", "Baja Estacion Exitosa");	
-						objetos_en_tabla.remove(objetos_en_tabla.get(i));
-						jtable_estaciones_contenido.removeRow(i);
-						inicializarBotones(false);
+						try {
+							GestorValidaciones.validarEliminacionEstacion(objetos_en_tabla.get(i));
+							jtp_errores.setText("");
+							//GestorJDBC.eliminarEstacion(objetos_en_tabla.get(i));
+							VentanaPrincipal.popupInfo("Se elimino la Estacion con Exito", "Baja Estacion Exitosa");	
+							objetos_en_tabla.remove(objetos_en_tabla.get(i));
+							jtable_estaciones_contenido.removeRow(i);
+							inicializarBotones(false);
+						} catch (EstacionNoEliminableException exp) {
+							jtp_errores.setText(exp.errores);	
+						}
+						
 					}
 				}
 			}

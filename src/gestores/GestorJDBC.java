@@ -388,6 +388,155 @@ public class GestorJDBC {
 		return resultado;
 	}
 	
+public static List<Camino> buscarCamino (String id_camino, String id_boleto, String id_origen, String id_destino) {
+		
+		ResultSet rs = null;
+		List<Camino> resultado = new ArrayList<Camino>();
+		List<String> origenes = new ArrayList<String>();
+		List<String> destinos = new ArrayList<String>();
+		
+		try {
+			String armadoStm = "SELECT c.* FROM camino c, boleto b WHERE "
+					+ "c.id_camino LIKE ? AND "
+					+ "b.id_boleto LIKE ? AND "
+					+ "c.id_origen LIKE ? AND "
+					+ "c.id_destino LIKE ? AND "
+					+ "c.id_camino = b.id_camino";
+			
+					
+			conectarYPrepararConsulta(armadoStm);
+			
+			//conn.setAutoCommit(false);
+			
+			pstm.setString(1, (id_camino.isEmpty()? "%" : id_camino));
+			pstm.setString(2, (id_boleto.isEmpty()? "%" : id_boleto));
+			pstm.setString(3, (id_origen.isEmpty()? "%" : id_origen));
+			pstm.setString(4, (id_destino.isEmpty()? "%" : id_destino));
+			
+				
+			//conn.commit()
+			rs = pstm.executeQuery();
+			
+			while(rs.next()) {
+				Camino aux = GestorEntidades.crearCamino(rs.getString("id_camino"),rs.getInt("distancia"),rs.getInt("duracion"), rs.getDouble("costo"),null,null); //las estaciones se agregan mas adelante
+				resultado.add(aux);
+				
+				origenes.add(rs.getString("id_origen"));
+				destinos.add(rs.getString("id_destino"));
+			}
+						
+		} catch (ClassNotFoundException e) {
+			
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// conn.rollback();
+			e.printStackTrace();
+		} finally {
+			cerrarConexion(rs);
+		}
+		
+		//Cargo estaciones Origen y Destino de los Trayectos
+		for(int i = 0; i < resultado.size(); i++) {
+			resultado.get(i).setOrigen(buscarEstacion(origenes.get(i),"","","",null).get(0));
+			resultado.get(i).setDestino(buscarEstacion(destinos.get(i),"","","",null).get(0));
+		}
+	
+		return resultado;
+	}
+
+	public static List<Boleto> buscarBoleto (String id_boleto, String id_origen, String id_destino) {
+	
+	ResultSet rs = null;
+	List<Boleto> resultado = new ArrayList<Boleto>();
+	List<String> origenes = new ArrayList<String>();
+	List<String> destinos = new ArrayList<String>();
+	
+	try {
+		String armadoStm = "SELECT b.* FROM boleto b WHERE "
+				+ "b.id_boleto LIKE ? AND "
+				+ "b.id_origen LIKE ? AND "
+				+ "b.id_destino LIKE ? ;";
+		
+				
+		conectarYPrepararConsulta(armadoStm);
+		
+		//conn.setAutoCommit(false);
+		
+		pstm.setString(1, (id_boleto.isEmpty()? "%" : id_boleto));
+		pstm.setString(2, (id_origen.isEmpty()? "%" : id_origen));
+		pstm.setString(3, (id_destino.isEmpty()? "%" : id_destino));
+		
+			
+		//conn.commit()
+		rs = pstm.executeQuery();
+		
+		while(rs.next()) {
+			Boleto aux = GestorEntidades.crearBoleto(rs.getString("id_boleto"),rs.getString("fecha_venta"), null, null,null,null); //las estaciones se agregan mas adelante
+			resultado.add(aux);
+			origenes.add(rs.getString("id_origen"));
+			destinos.add(rs.getString("id_destino"));
+		}
+					
+	} catch (ClassNotFoundException e) {
+		
+		e.printStackTrace();
+	} catch (SQLException e) {
+		// conn.rollback();
+		e.printStackTrace();
+	} finally {
+		cerrarConexion(rs);
+	}
+	
+	//Cargo estaciones Origen y Destino de los Trayectos
+	for(int i = 0; i < resultado.size(); i++) {
+		resultado.get(i).setOrigen(buscarEstacion(origenes.get(i),"","","",null).get(0));
+		resultado.get(i).setDestino(buscarEstacion(destinos.get(i),"","","",null).get(0));
+		
+	}
+	
+	return resultado;
+}
+	
+	public static Map<Trayecto, String> buscarColoresTrayectos(List<Trayecto> trayectos) {
+
+		ResultSet rs = null;
+		Map<Trayecto, String> resultado = new HashMap<Trayecto, String>();
+		Map<String, String> aux = new HashMap<String, String>();
+		
+		try {
+			String armadoStm = "SELECT t.id_trayecto, color FROM trayecto t, linea_transporte l WHERE "
+					+ "t.id_linea = l.id_linea; ";
+
+			conectarYPrepararConsulta(armadoStm);
+			
+			//conn.setAutoCommit(false);	
+			//conn.commit()
+			rs = pstm.executeQuery();
+			
+			while(rs.next()) {
+				aux.put(rs.getString("id_trayecto"), rs.getString("color"));	
+			}
+						
+		} catch (ClassNotFoundException e) {
+			
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// conn.rollback();
+			e.printStackTrace();
+		} finally {
+			cerrarConexion(rs);
+		}
+		
+		//Cargo estaciones Origen y Destino de los Trayecto
+		
+		for(Trayecto t : trayectos) {
+			resultado.put(t, aux.get(t.getId_trayecto()));
+		}
+	
+		return resultado;
+		
+	}
+	
 	public static void agregarCliente(Cliente nuevo_cliente) {
 		
 		try {
@@ -1031,25 +1180,29 @@ public class GestorJDBC {
 		}
 		
 	}
-	
-	public static Map<Trayecto, String> buscarColoresTrayectos(List<Trayecto> trayectos) {
 
+	public static Boolean trayectoPerteneceACamino(String id_trayecto, String id_camino) {
 		ResultSet rs = null;
-		Map<Trayecto, String> resultado = new HashMap<Trayecto, String>();
-		Map<String, String> aux = new HashMap<String, String>();
-		
+		Boolean pertenece = false;
+				
 		try {
-			String armadoStm = "SELECT t.id_trayecto, color FROM trayecto t, linea_transporte l WHERE "
-					+ "t.id_linea = l.id_linea; ";
-
+			String armadoStm = "SELECT * FROM trayecto_camino WHERE "
+					+ "id_trayecto LIKE ? AND "
+					+ "id_camino LIKE ?;";
+			
+				
 			conectarYPrepararConsulta(armadoStm);
 			
-			//conn.setAutoCommit(false);	
+			//conn.setAutoCommit(false);
+			
+			pstm.setString(1, (id_trayecto.isEmpty()? "%" : id_trayecto));
+			pstm.setString(2, (id_camino.isEmpty()? "%" : id_camino));
+						
 			//conn.commit()
 			rs = pstm.executeQuery();
 			
-			while(rs.next()) {
-				aux.put(rs.getString("id_trayecto"), rs.getString("color"));	
+			while(rs.next() && !pertenece) {
+				pertenece = true;
 			}
 						
 		} catch (ClassNotFoundException e) {
@@ -1062,13 +1215,8 @@ public class GestorJDBC {
 			cerrarConexion(rs);
 		}
 		
-		//Cargo estaciones Origen y Destino de los Trayecto
-		
-		for(Trayecto t : trayectos) {
-			resultado.put(t, aux.get(t.getId_trayecto()));
-		}
 	
-		return resultado;
-		
+		return pertenece;
 	}
+	
 }

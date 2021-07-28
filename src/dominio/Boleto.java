@@ -1,6 +1,7 @@
 package dominio;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Boleto {
 	
@@ -15,6 +16,16 @@ public class Boleto {
 	public Boleto(Cliente cliente, Estacion origen, Estacion destino, Camino camino) {
 		this.id_boleto = "BOL"+(++ultimo_id).toString();
 		this.fecha_venta = LocalDate.now();
+		this.cliente = cliente;
+		this.origen = origen;
+		this.destino = destino;
+		this.camino = camino;
+	}
+	
+	public Boleto(String id_boleto, String fecha_venta, Camino camino, Cliente cliente, Estacion origen, Estacion destino) {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		this.id_boleto = id_boleto;
+		this.fecha_venta = LocalDate.parse(fecha_venta, dtf);
 		this.cliente = cliente;
 		this.origen = origen;
 		this.destino = destino;
@@ -47,6 +58,14 @@ public class Boleto {
 
 	public Camino getCamino() {
 		return camino;
+	}
+
+	public void setOrigen(Estacion estacion) {
+		this.origen = estacion;
+	}
+
+	public void setDestino(Estacion estacion) {
+		this.destino = estacion;
 	}
 	
 	

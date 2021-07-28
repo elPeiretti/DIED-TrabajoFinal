@@ -1,5 +1,6 @@
 package dominio;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Camino {
@@ -32,6 +33,16 @@ public class Camino {
 		this.distancia = (Integer)data[2];
 	}
 
+	public Camino(String id_camino, Integer distancia, Integer duracion, Double costo, Estacion origen, Estacion destino) {
+		this.combinacion = new ArrayList<Trayecto>();
+		this.id_camino = id_camino;
+		this.origen = origen;
+		this.destino = destino;
+		this.costo = costo;
+		this.duracion = duracion;
+		this.distancia = distancia;
+	}
+	
 	public Estacion getOrgien() {
 		return this.origen;
 	}
@@ -68,6 +79,14 @@ public class Camino {
 
 	public void asignarUltimoId() {
 		this.id_camino = "PAT"+(++ultimo_id).toString();		
+	}
+
+	public void setOrigen(Estacion estacion) {
+		this.origen = estacion;		
+	}
+	
+	public void setDestino(Estacion estacion) {
+		this.destino = estacion;
 	}
 	
 	

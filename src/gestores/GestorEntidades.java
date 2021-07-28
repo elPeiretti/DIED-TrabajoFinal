@@ -136,4 +136,12 @@ public class GestorEntidades {
 		return new TareaDeMantenimiento();
 	}
 
+	public static Camino crearCamino(String id_camino, Integer distancia, Integer duracion, Double costo,  Estacion origen, Estacion destino) {
+		return new Camino(id_camino, distancia, duracion, costo, origen, destino);
+	}
+
+	public static Boleto crearBoleto(String id_boleto, String fecha_venta, Camino camino, Cliente cliente, Estacion origen, Estacion destino) {
+		return new Boleto(id_boleto, fecha_venta, camino, cliente, origen, destino);
+	}
+
 }

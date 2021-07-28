@@ -1,8 +1,12 @@
 package gestores;
 
+import java.util.List;
+
 import dominio.Estacion;
 import dominio.EstadoEstacion;
 import dominio.EstadoLinea;
+import dominio.LineaDeTransporte;
+import dominio.Trayecto;
 import excepciones.*;
 
 public class GestorValidaciones {
@@ -135,9 +139,49 @@ public class GestorValidaciones {
 		
 	}
 
-	public static void validarEliminacionEstacion(Estacion estacion) {
+	public static void validarEliminacionEstacion(Estacion estacion) throws EstacionNoEliminableException {
 		
+		String errores = "";
 		
+		if(!GestorJDBC.buscarTrayecto("","",estacion.getId_estacion(),"",null).isEmpty()) errores += "Existen trayectos registrados que tienen su origen en la estacion.\n";
+		
+		if(!GestorJDBC.buscarTrayecto("","","",estacion.getId_estacion(),null).isEmpty()) errores += "Existen trayectos registrados que tienen su destino en la estacion.\n";
+		
+		if(!GestorJDBC.buscarCamino("","",estacion.getId_estacion(),"").isEmpty()) errores += "Existen caminos registrados que tienen su origen en la estacion.\n";
+		
+		if(!GestorJDBC.buscarCamino("","","",estacion.getId_estacion()).isEmpty()) errores += "Existen caminos registrados que tienen su destino en la estacion.\n";
+		
+		if(!GestorJDBC.buscarBoleto("", estacion.getId_estacion(),"").isEmpty()) errores += "Existen boletos registrados que tienen su origen en la estacion.\n";
+		
+		if(!GestorJDBC.buscarBoleto("","",estacion.getId_estacion()).isEmpty()) errores += "Existen boletos registrados que tienen su destino en la estacion.\n";
+				
+		if(!errores.isEmpty()) throw new EstacionNoEliminableException(errores);
+	}
+	
+	public static void validarEliminacionTrayecto(Trayecto trayecto) throws TrayectoNoEliminableException {
+		
+		String errores = "";
+		
+		if(GestorJDBC.trayectoPerteneceACamino(trayecto.getId_trayecto(),"")) errores += "Existen caminos registrados contienen al trayecto.\n";
+				
+		if(!errores.isEmpty()) throw new TrayectoNoEliminableException(errores);
+	}
+	
+	public static void validarEliminacionLineaDeTransporte(LineaDeTransporte linea) throws LineaNoEliminableException {
+		
+		String errores = "";
+		
+		//Una linea es eliminable si todos sus trayectos lo son
+		
+		List<Trayecto> recorrido = GestorJDBC.buscarTrayecto("", linea.getId_linea(), "", "", null);
+		
+		for(int i = 0; i < recorrido.size() && errores.isEmpty(); i++) {
+			if(GestorJDBC.trayectoPerteneceACamino(recorrido.get(i).getId_trayecto(),"")) {
+				errores += "Existen caminos registrados contienen a trayectos del recorrido.\n";	
+			}	
+		}
+		
+		if(!errores.isEmpty()) throw new LineaNoEliminableException(errores);
 		
 	}
 
