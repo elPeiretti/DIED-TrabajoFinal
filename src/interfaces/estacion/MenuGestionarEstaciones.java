@@ -1,39 +1,20 @@
 package interfaces.estacion;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JButton;
+import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
-import javax.swing.JTable;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import java.awt.Color;
-import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-
 import dominio.Estacion;
 import dominio.EstadoEstacion;
 import excepciones.DatosDeEstacionIncorrectosException;
 import excepciones.EstacionNoEliminableException;
-import gestores.GestorEntidades;
-import gestores.GestorJDBC;
-import gestores.GestorValidaciones;
+import gestores.*;
 import interfaces.VentanaPrincipal;
-import java.awt.Font;
-import javax.swing.SwingConstants;
-import javax.swing.JTextPane;
-import javax.swing.UIManager;
 
 public class MenuGestionarEstaciones extends JPanel {
 	/**

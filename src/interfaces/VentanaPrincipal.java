@@ -1,18 +1,11 @@
 package interfaces;
 
 import java.awt.EventQueue;
-
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 import gestores.GestorJDBC;
-
 import java.awt.CardLayout;
 import java.awt.Color;
-
 import interfaces.algoritmos.*;
 import interfaces.boletos.*;
 import interfaces.estacion.*;

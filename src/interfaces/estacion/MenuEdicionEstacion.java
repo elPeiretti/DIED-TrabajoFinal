@@ -1,30 +1,12 @@
 package interfaces.estacion;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
+import javax.swing.*;
 import interfaces.VentanaPrincipal;
-
-import javax.swing.JComboBox;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTextPane;
-import javax.swing.UIManager;
-
-import dominio.Estacion;
 import dominio.EstadoEstacion;
-import dominio.TareaDeMantenimiento;
 import excepciones.DatosDeEstacionIncorrectosException;
-import gestores.GestorEntidades;
-import gestores.GestorJDBC;
-import gestores.GestorValidaciones;
-
+import gestores.*;
 import java.awt.Color;
 
 public class MenuEdicionEstacion extends JPanel {

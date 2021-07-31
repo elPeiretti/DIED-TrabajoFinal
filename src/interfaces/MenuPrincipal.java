@@ -1,17 +1,10 @@
 package interfaces;
 
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-
+import javax.swing.*;
 import java.awt.event.ActionListener;
-import java.awt.CardLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import java.awt.Color;
+
 
 public class MenuPrincipal extends JPanel {
 	/**

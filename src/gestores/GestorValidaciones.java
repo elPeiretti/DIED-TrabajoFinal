@@ -1,12 +1,7 @@
 package gestores;
 
 import java.util.List;
-
-import dominio.Estacion;
-import dominio.EstadoEstacion;
-import dominio.EstadoLinea;
-import dominio.LineaDeTransporte;
-import dominio.Trayecto;
+import dominio.*;
 import excepciones.*;
 
 public class GestorValidaciones {

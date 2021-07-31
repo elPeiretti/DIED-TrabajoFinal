@@ -1,39 +1,22 @@
 package interfaces.boletos;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import dominio.Camino;
 import dominio.Estacion;
 import dominio.EstadoEstacion;
 import excepciones.DatosDeRecorridoIncorrectosException;
-import gestores.GestorAlgoritmos;
-import gestores.GestorEntidades;
-import gestores.GestorJDBC;
-import gestores.GestorValidaciones;
+import gestores.*;
 import interfaces.VentanaPrincipal;
 import interfaces.grafo.PanelDeGrafo;
-
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
-import javax.swing.ListSelectionModel;
-import javax.swing.JTextPane;
-import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import java.awt.Color;
 
 public class MenuSeleccionarRecorrido extends JPanel {

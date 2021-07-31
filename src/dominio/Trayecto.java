@@ -1,6 +1,5 @@
 package dominio;
 
-import java.util.Objects;
 import java.util.Vector;
 
 public class Trayecto {

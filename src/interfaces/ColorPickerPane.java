@@ -1,12 +1,13 @@
 package interfaces;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ColorPickerPane extends JPanel{
+	
+	private static final long serialVersionUID = 9160807192079204636L;
 	
 	private JColorChooser jcolor_paleta;
 	private JButton jb_aceptar;

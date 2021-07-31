@@ -1,23 +1,14 @@
 package interfaces.boletos;
 
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
+import javax.swing.*;
 import dominio.Camino;
 import dominio.Cliente;
 import excepciones.DatosDeClienteIncorrectosException;
-import gestores.GestorEntidades;
-import gestores.GestorJDBC;
-import gestores.GestorValidaciones;
+import gestores.*;
 import interfaces.VentanaPrincipal;
-
-import javax.swing.JLabel;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextPane;
 import java.awt.Color;
-import javax.swing.UIManager;
 
 public class MenuRegistrarComprador extends JPanel {
 	/**

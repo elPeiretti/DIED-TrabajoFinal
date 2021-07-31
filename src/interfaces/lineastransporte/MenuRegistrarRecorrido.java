@@ -1,48 +1,20 @@
 package interfaces.lineastransporte;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
-
+import javax.swing.*;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-
-import dominio.Camino;
 import dominio.Estacion;
-import dominio.EstadoEstacion;
-import dominio.EstadoTrayecto;
 import dominio.LineaDeTransporte;
 import dominio.Trayecto;
 import excepciones.DatosDeTrayectoIncorrectosException;
-import gestores.GestorEntidades;
-import gestores.GestorJDBC;
-import gestores.GestorValidaciones;
+import gestores.*;
 import interfaces.VentanaPrincipal;
-
-import javax.swing.AbstractListModel;
-import javax.swing.ListSelectionModel;
-import javax.swing.JTextPane;
-import javax.swing.ListCellRenderer;
-import javax.swing.UIManager;
 
 public class MenuRegistrarRecorrido extends JPanel {
 	/**
@@ -107,7 +79,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 		
 		jspin_distancia = new JSpinner();
 		jspin_distancia.setToolTipText("Distancia entre las estaciones en Km");
-		jspin_distancia.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+		jspin_distancia.setModel(new SpinnerNumberModel(1, 1, 1000, 1));
 		jspin_distancia.setBounds(215, 46, 55, 20);
 		
 		lbl_distancia = new JLabel("Distancia [Km] :");
@@ -117,7 +89,7 @@ public class MenuRegistrarRecorrido extends JPanel {
 		lbl_duracion.setBounds(10, 80, 115, 14);
 		
 		jspin_duracion = new JSpinner();
-		jspin_duracion.setModel(new SpinnerNumberModel(1, 1, 120, 1));
+		jspin_duracion.setModel(new SpinnerNumberModel(1, 1, 500, 1));
 		jspin_duracion.setToolTipText("Distancia entre las estaciones en Km");
 		jspin_duracion.setBounds(215, 77, 55, 20);
 		

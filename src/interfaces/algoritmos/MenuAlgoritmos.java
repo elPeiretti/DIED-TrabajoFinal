@@ -5,22 +5,13 @@ import javax.swing.JPanel;
 import dominio.Estacion;
 import excepciones.DatosDeRecorridoIncorrectosException;
 import excepciones.NoHayDatosDeEstacionesException;
-import gestores.GestorAlgoritmos;
-import gestores.GestorJDBC;
-import gestores.GestorValidaciones;
+import gestores.*;
 import interfaces.VentanaPrincipal;
-
-import javax.swing.JButton;
+import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.awt.event.ActionEvent;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextPane;
-import javax.swing.UIManager;
 import java.awt.Color;
 
 public class MenuAlgoritmos extends JPanel {

@@ -1,24 +1,18 @@
 package interfaces.grafo;
 
 import java.awt.*;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.*;
-import dominio.Estacion;
 import dominio.Trayecto;
-import gestores.GestorJDBC;
 
 public class PanelDeGrafo extends JPanel {
 
+	private static final long serialVersionUID = 514328595308885933L;
+	
 	private List<Nodo> nodos;
 	private List<Arista> aristas;
 	static int ancho = 30;

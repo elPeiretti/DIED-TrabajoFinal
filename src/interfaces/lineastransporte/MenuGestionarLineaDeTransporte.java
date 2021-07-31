@@ -3,43 +3,18 @@ package interfaces.lineastransporte;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
-
-import javax.swing.JButton;
-import javax.swing.JColorChooser;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
-import javax.swing.JTable;
-import javax.swing.border.LineBorder;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import java.awt.Color;
-import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-
-
-
 import dominio.EstadoLinea;
 import dominio.LineaDeTransporte;
 import excepciones.DatosDeLineaDeTransporteIncorrectosException;
 import excepciones.LineaNoEliminableException;
 import excepciones.RecorridoLineaExistenteException;
-import gestores.GestorEntidades;
-import gestores.GestorJDBC;
-import gestores.GestorValidaciones;
-import interfaces.ColorPickerPane;
+import gestores.*;
 import interfaces.VentanaPrincipal;
-import javax.swing.JTextPane;
-import javax.swing.UIManager;
 
 public class MenuGestionarLineaDeTransporte extends JPanel {
 	
